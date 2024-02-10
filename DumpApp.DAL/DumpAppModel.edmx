@@ -1,0 +1,518 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="DumpAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="admAuditTrail">
+          <Key>
+            <PropertyRef Name="auditlogid" />
+          </Key>
+          <Property Name="auditlogid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="userId" Type="int" Nullable="false" />
+          <Property Name="eventdateutc" Type="datetime" Nullable="false" />
+          <Property Name="eventtype" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="tablename" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="recordid" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="columnname" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="originalvalue" Type="nvarchar(max)" />
+          <Property Name="newvalue" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="admClientProfile">
+          <Key>
+            <PropertyRef Name="BankCode" />
+          </Key>
+          <Property Name="BankCode" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="BankName" Type="varchar" MaxLength="100" />
+          <Property Name="BankAddress" Type="varchar" MaxLength="100" />
+          <Property Name="EnforcePasswordChangeDays" Type="int" Nullable="false" />
+          <Property Name="EnforceStrngPwd" Type="bit" />
+          <Property Name="SystemIdleTimeout" Type="int" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="DateCreated" Type="datetime" />
+          <Property Name="Status" Type="varchar" MaxLength="20" />
+          <Property Name="LoginCount" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'DumpApp.dbo.admMenuControl' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="admMenuControl">
+          <Key>
+            <PropertyRef Name="menu_id" />
+          </Key>
+          <Property Name="menu_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="menu_name" Type="varchar" MaxLength="100" />
+          <Property Name="action" Type="varchar" MaxLength="30" />
+          <Property Name="controller" Type="varchar" MaxLength="100" />
+          <Property Name="parent" Type="int" />
+          <Property Name="priority" Type="smallint" />
+          <Property Name="status" Type="varchar" MaxLength="10" />
+          <Property Name="css_class" Type="nvarchar" MaxLength="70" />
+          <Property Name="flag" Type="bit" />
+        </EntityType>
+        <EntityType Name="admRole">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="256" />
+          <Property Name="Description" Type="nvarchar" MaxLength="256" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="Status" Type="varchar" MaxLength="10" />
+          <Property Name="DateCreated" Type="datetime" />
+          <Property Name="Flag" Type="bit" />
+        </EntityType>
+        <EntityType Name="admRoleAssignment">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="role_id" Type="int" />
+          <Property Name="menu_id" Type="int" />
+          <Property Name="can_view" Type="smallint" />
+          <Property Name="can_add" Type="smallint" />
+          <Property Name="can_edit" Type="smallint" />
+          <Property Name="can_auth" Type="smallint" />
+          <Property Name="can_delete" Type="smallint" />
+          <Property Name="is_global_supervisor" Type="smallint" />
+        </EntityType>
+        <EntityType Name="admStatusItem">
+          <Key>
+            <PropertyRef Name="ItbId" />
+          </Key>
+          <Property Name="ItbId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StatusValue" Type="varchar" MaxLength="10" />
+          <Property Name="Status" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="admUserLogin">
+          <Key>
+            <PropertyRef Name="RowGuid" />
+          </Key>
+          <Property Name="RowGuid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="loginDate" Type="datetime" />
+          <Property Name="logoutDate" Type="datetime" />
+          <Property Name="ipAddress" Type="varchar" MaxLength="30" />
+          <Property Name="macAddress" Type="varchar" MaxLength="50" />
+          <Property Name="status" Type="varchar" MaxLength="5" />
+        </EntityType>
+        <EntityType Name="admUserProfile">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FullName" Type="varchar" MaxLength="50" />
+          <Property Name="LoginId" Type="varchar" MaxLength="100" />
+          <Property Name="IsFirstLogin" Type="bit" Nullable="false" />
+          <Property Name="IsSupervisor" Type="char" MaxLength="1" />
+          <Property Name="LoggedOn" Type="bit" Nullable="false" />
+          <Property Name="RoleId" Type="int" />
+          <Property Name="PasswordExpiryDate" Type="date" Nullable="false" />
+          <Property Name="Status" Type="varchar(max)" />
+          <Property Name="RoleName" Type="varchar(max)" />
+          <Property Name="EmailAddress" Type="varchar" MaxLength="100" />
+          <Property Name="MobileNo" Type="varchar" MaxLength="20" />
+          <Property Name="EnforcePswdChange" Type="char" MaxLength="1" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="DateCreated" Type="datetime" />
+          <Property Name="Password" Type="varchar(max)" />
+          <Property Name="loginstatus" Type="smallint" />
+          <Property Name="lockcount" Type="smallint" />
+          <Property Name="logincount" Type="smallint" />
+        </EntityType>
+        <Function Name="Isp_MenuSystemAdmin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="role_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Isp_MenuSystemOperations" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="role_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Isp_MenuSystemReports" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="role_id" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="DumpAppModelStoreContainer">
+          <EntitySet Name="admAuditTrail" EntityType="Self.admAuditTrail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="admClientProfile" EntityType="Self.admClientProfile" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="admRole" EntityType="Self.admRole" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="admRoleAssignment" EntityType="Self.admRoleAssignment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="admStatusItem" EntityType="Self.admStatusItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="admUserLogin" EntityType="Self.admUserLogin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="admUserProfile" EntityType="Self.admUserProfile" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="admMenuControl" EntityType="Self.admMenuControl" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [admMenuControl].[menu_id] AS [menu_id], 
+    [admMenuControl].[menu_name] AS [menu_name], 
+    [admMenuControl].[action] AS [action], 
+    [admMenuControl].[controller] AS [controller], 
+    [admMenuControl].[parent] AS [parent], 
+    [admMenuControl].[priority] AS [priority], 
+    [admMenuControl].[status] AS [status], 
+    [admMenuControl].[css_class] AS [css_class], 
+    [admMenuControl].[flag] AS [flag]
+    FROM [dbo].[admMenuControl] AS [admMenuControl]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DumpAppModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="admAuditTrail">
+          <Key>
+            <PropertyRef Name="auditlogid" />
+          </Key>
+          <Property Name="auditlogid" Type="Guid" Nullable="false" />
+          <Property Name="userId" Type="Int32" Nullable="false" />
+          <Property Name="eventdateutc" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="eventtype" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="tablename" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="recordid" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="columnname" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="originalvalue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="newvalue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityContainer Name="DumpAppEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="admAuditTrails" EntityType="Self.admAuditTrail" />
+          <EntitySet Name="admClientProfiles" EntityType="DumpAppModel.admClientProfile" />
+          <EntitySet Name="admRoles" EntityType="DumpAppModel.admRole" />
+          <EntitySet Name="admRoleAssignments" EntityType="DumpAppModel.admRoleAssignment" />
+          <EntitySet Name="admStatusItems" EntityType="DumpAppModel.admStatusItem" />
+          <EntitySet Name="admUserProfiles" EntityType="DumpAppModel.admUserProfile" />
+          <EntitySet Name="admMenuControls" EntityType="DumpAppModel.admMenuControl" />
+          <FunctionImport Name="Isp_MenuSystemAdmin" ReturnType="Collection(DumpAppModel.Isp_MenuSystemAdmin_Result)">
+          <Parameter Name="role_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Isp_MenuSystemOperations" ReturnType="Collection(DumpAppModel.Isp_MenuSystemOperations_Result)">
+          <Parameter Name="role_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Isp_MenuSystemReports" ReturnType="Collection(DumpAppModel.Isp_MenuSystemReports_Result)">
+          <Parameter Name="role_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="admUserLogins" EntityType="DumpAppModel.admUserLogin" />
+        </EntityContainer>
+        <EntityType Name="admClientProfile">
+          <Key>
+            <PropertyRef Name="BankCode" />
+          </Key>
+          <Property Name="BankCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="BankName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="BankAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="EnforcePasswordChangeDays" Type="Int32" Nullable="false" />
+          <Property Name="EnforceStrngPwd" Type="Boolean" />
+          <Property Name="SystemIdleTimeout" Type="Int32" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="DateCreated" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="LoginCount" Type="Int32" />
+        </EntityType>
+        <EntityType Name="admRole">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DateCreated" Type="DateTime" Precision="3" />
+          <Property Name="Flag" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="admRoleAssignment">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="role_id" Type="Int32" />
+          <Property Name="menu_id" Type="Int32" />
+          <Property Name="can_view" Type="Int16" />
+          <Property Name="can_add" Type="Int16" />
+          <Property Name="can_edit" Type="Int16" />
+          <Property Name="can_auth" Type="Int16" />
+          <Property Name="can_delete" Type="Int16" />
+          <Property Name="is_global_supervisor" Type="Int16" />
+        </EntityType>
+        <EntityType Name="admStatusItem">
+          <Key>
+            <PropertyRef Name="ItbId" />
+          </Key>
+          <Property Name="ItbId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StatusValue" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="admUserProfile">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FullName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LoginId" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IsFirstLogin" Type="Boolean" Nullable="false" />
+          <Property Name="IsSupervisor" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="LoggedOn" Type="Boolean" Nullable="false" />
+          <Property Name="RoleId" Type="Int32" />
+          <Property Name="PasswordExpiryDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Status" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="RoleName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="EmailAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="MobileNo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="EnforcePswdChange" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="DateCreated" Type="DateTime" Precision="3" />
+          <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="loginstatus" Type="Int16" />
+          <Property Name="lockcount" Type="Int16" />
+          <Property Name="logincount" Type="Int16" />
+        </EntityType>
+        <EntityType Name="admMenuControl">
+          <Key>
+            <PropertyRef Name="menu_id" />
+          </Key>
+          <Property Name="menu_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="menu_name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="action" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="controller" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="parent" Type="Int32" />
+          <Property Name="priority" Type="Int16" />
+          <Property Name="status" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="css_class" Type="String" MaxLength="70" FixedLength="false" Unicode="true" />
+          <Property Name="flag" Type="Boolean" />
+        </EntityType>
+        <ComplexType Name="Isp_MenuSystemAdmin_Result">
+          <Property Type="Int32" Name="AssignId" Nullable="false" />
+          <Property Type="Int32" Name="menu_id" Nullable="false" />
+          <Property Type="String" Name="menu_name" Nullable="true" MaxLength="100" />
+          <Property Type="Boolean" Name="can_add" Nullable="true" />
+          <Property Type="Boolean" Name="can_auth" Nullable="true" />
+          <Property Type="Boolean" Name="can_delete" Nullable="true" />
+          <Property Type="Boolean" Name="can_edit" Nullable="true" />
+          <Property Type="Boolean" Name="can_view" Nullable="true" />
+          <Property Type="Boolean" Name="Is_Global_Supervisor" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="Isp_MenuSystemOperations_Result">
+          <Property Type="Int32" Name="AssignId" Nullable="false" />
+          <Property Type="Int32" Name="menu_id" Nullable="false" />
+          <Property Type="String" Name="menu_name" Nullable="true" MaxLength="100" />
+          <Property Type="Boolean" Name="can_add" Nullable="true" />
+          <Property Type="Boolean" Name="can_auth" Nullable="true" />
+          <Property Type="Boolean" Name="can_delete" Nullable="true" />
+          <Property Type="Boolean" Name="can_edit" Nullable="true" />
+          <Property Type="Boolean" Name="can_view" Nullable="true" />
+          <Property Type="Boolean" Name="Is_Global_Supervisor" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="Isp_MenuSystemReports_Result">
+          <Property Type="Int32" Name="AssignId" Nullable="false" />
+          <Property Type="Int32" Name="menu_id" Nullable="false" />
+          <Property Type="String" Name="menu_name" Nullable="true" MaxLength="100" />
+          <Property Type="Boolean" Name="can_add" Nullable="true" />
+          <Property Type="Boolean" Name="can_auth" Nullable="true" />
+          <Property Type="Boolean" Name="can_delete" Nullable="true" />
+          <Property Type="Boolean" Name="can_edit" Nullable="true" />
+          <Property Type="Boolean" Name="can_view" Nullable="true" />
+          <Property Type="Boolean" Name="Is_Global_Supervisor" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="admUserLogin">
+          <Key>
+            <PropertyRef Name="RowGuid" />
+          </Key>
+          <Property Name="RowGuid" Type="Guid" Nullable="false" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="loginDate" Type="DateTime" Precision="3" />
+          <Property Name="logoutDate" Type="DateTime" Precision="3" />
+          <Property Name="ipAddress" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="macAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DumpAppModelStoreContainer" CdmEntityContainer="DumpAppEntities">
+          <EntitySetMapping Name="admAuditTrails">
+            <EntityTypeMapping TypeName="DumpAppModel.admAuditTrail">
+              <MappingFragment StoreEntitySet="admAuditTrail">
+                <ScalarProperty Name="auditlogid" ColumnName="auditlogid" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="eventdateutc" ColumnName="eventdateutc" />
+                <ScalarProperty Name="eventtype" ColumnName="eventtype" />
+                <ScalarProperty Name="tablename" ColumnName="tablename" />
+                <ScalarProperty Name="recordid" ColumnName="recordid" />
+                <ScalarProperty Name="columnname" ColumnName="columnname" />
+                <ScalarProperty Name="originalvalue" ColumnName="originalvalue" />
+                <ScalarProperty Name="newvalue" ColumnName="newvalue" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="admClientProfiles">
+            <EntityTypeMapping TypeName="DumpAppModel.admClientProfile">
+              <MappingFragment StoreEntitySet="admClientProfile">
+                <ScalarProperty Name="LoginCount" ColumnName="LoginCount" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="SystemIdleTimeout" ColumnName="SystemIdleTimeout" />
+                <ScalarProperty Name="EnforceStrngPwd" ColumnName="EnforceStrngPwd" />
+                <ScalarProperty Name="EnforcePasswordChangeDays" ColumnName="EnforcePasswordChangeDays" />
+                <ScalarProperty Name="BankAddress" ColumnName="BankAddress" />
+                <ScalarProperty Name="BankName" ColumnName="BankName" />
+                <ScalarProperty Name="BankCode" ColumnName="BankCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="admRoles">
+            <EntityTypeMapping TypeName="DumpAppModel.admRole">
+              <MappingFragment StoreEntitySet="admRole">
+                <ScalarProperty Name="Flag" ColumnName="Flag" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="admRoleAssignments">
+            <EntityTypeMapping TypeName="DumpAppModel.admRoleAssignment">
+              <MappingFragment StoreEntitySet="admRoleAssignment">
+                <ScalarProperty Name="is_global_supervisor" ColumnName="is_global_supervisor" />
+                <ScalarProperty Name="can_delete" ColumnName="can_delete" />
+                <ScalarProperty Name="can_auth" ColumnName="can_auth" />
+                <ScalarProperty Name="can_edit" ColumnName="can_edit" />
+                <ScalarProperty Name="can_add" ColumnName="can_add" />
+                <ScalarProperty Name="can_view" ColumnName="can_view" />
+                <ScalarProperty Name="menu_id" ColumnName="menu_id" />
+                <ScalarProperty Name="role_id" ColumnName="role_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="admStatusItems">
+            <EntityTypeMapping TypeName="DumpAppModel.admStatusItem">
+              <MappingFragment StoreEntitySet="admStatusItem">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="StatusValue" ColumnName="StatusValue" />
+                <ScalarProperty Name="ItbId" ColumnName="ItbId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="admUserProfiles">
+            <EntityTypeMapping TypeName="DumpAppModel.admUserProfile">
+              <MappingFragment StoreEntitySet="admUserProfile">
+                <ScalarProperty Name="logincount" ColumnName="logincount" />
+                <ScalarProperty Name="lockcount" ColumnName="lockcount" />
+                <ScalarProperty Name="loginstatus" ColumnName="loginstatus" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="EnforcePswdChange" ColumnName="EnforcePswdChange" />
+                <ScalarProperty Name="MobileNo" ColumnName="MobileNo" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="PasswordExpiryDate" ColumnName="PasswordExpiryDate" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="LoggedOn" ColumnName="LoggedOn" />
+                <ScalarProperty Name="IsSupervisor" ColumnName="IsSupervisor" />
+                <ScalarProperty Name="IsFirstLogin" ColumnName="IsFirstLogin" />
+                <ScalarProperty Name="LoginId" ColumnName="LoginId" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="admMenuControls">
+            <EntityTypeMapping TypeName="DumpAppModel.admMenuControl">
+              <MappingFragment StoreEntitySet="admMenuControl">
+                <ScalarProperty Name="flag" ColumnName="flag" />
+                <ScalarProperty Name="css_class" ColumnName="css_class" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="priority" ColumnName="priority" />
+                <ScalarProperty Name="parent" ColumnName="parent" />
+                <ScalarProperty Name="controller" ColumnName="controller" />
+                <ScalarProperty Name="action" ColumnName="action" />
+                <ScalarProperty Name="menu_name" ColumnName="menu_name" />
+                <ScalarProperty Name="menu_id" ColumnName="menu_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Isp_MenuSystemAdmin" FunctionName="DumpAppModel.Store.Isp_MenuSystemAdmin">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DumpAppModel.Isp_MenuSystemAdmin_Result">
+                <ScalarProperty Name="AssignId" ColumnName="AssignId" />
+                <ScalarProperty Name="menu_id" ColumnName="menu_id" />
+                <ScalarProperty Name="menu_name" ColumnName="menu_name" />
+                <ScalarProperty Name="can_add" ColumnName="can_add" />
+                <ScalarProperty Name="can_auth" ColumnName="can_auth" />
+                <ScalarProperty Name="can_delete" ColumnName="can_delete" />
+                <ScalarProperty Name="can_edit" ColumnName="can_edit" />
+                <ScalarProperty Name="can_view" ColumnName="can_view" />
+                <ScalarProperty Name="Is_Global_Supervisor" ColumnName="Is_Global_Supervisor" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Isp_MenuSystemOperations" FunctionName="DumpAppModel.Store.Isp_MenuSystemOperations">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DumpAppModel.Isp_MenuSystemOperations_Result">
+                <ScalarProperty Name="AssignId" ColumnName="AssignId" />
+                <ScalarProperty Name="menu_id" ColumnName="menu_id" />
+                <ScalarProperty Name="menu_name" ColumnName="menu_name" />
+                <ScalarProperty Name="can_add" ColumnName="can_add" />
+                <ScalarProperty Name="can_auth" ColumnName="can_auth" />
+                <ScalarProperty Name="can_delete" ColumnName="can_delete" />
+                <ScalarProperty Name="can_edit" ColumnName="can_edit" />
+                <ScalarProperty Name="can_view" ColumnName="can_view" />
+                <ScalarProperty Name="Is_Global_Supervisor" ColumnName="Is_Global_Supervisor" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Isp_MenuSystemReports" FunctionName="DumpAppModel.Store.Isp_MenuSystemReports">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DumpAppModel.Isp_MenuSystemReports_Result">
+                <ScalarProperty Name="AssignId" ColumnName="AssignId" />
+                <ScalarProperty Name="menu_id" ColumnName="menu_id" />
+                <ScalarProperty Name="menu_name" ColumnName="menu_name" />
+                <ScalarProperty Name="can_add" ColumnName="can_add" />
+                <ScalarProperty Name="can_auth" ColumnName="can_auth" />
+                <ScalarProperty Name="can_delete" ColumnName="can_delete" />
+                <ScalarProperty Name="can_edit" ColumnName="can_edit" />
+                <ScalarProperty Name="can_view" ColumnName="can_view" />
+                <ScalarProperty Name="Is_Global_Supervisor" ColumnName="Is_Global_Supervisor" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="admUserLogins">
+            <EntityTypeMapping TypeName="DumpAppModel.admUserLogin">
+              <MappingFragment StoreEntitySet="admUserLogin">
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="macAddress" ColumnName="macAddress" />
+                <ScalarProperty Name="ipAddress" ColumnName="ipAddress" />
+                <ScalarProperty Name="logoutDate" ColumnName="logoutDate" />
+                <ScalarProperty Name="loginDate" ColumnName="loginDate" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="RowGuid" ColumnName="RowGuid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

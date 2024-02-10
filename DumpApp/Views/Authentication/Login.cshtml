@@ -1,0 +1,137 @@
+﻿@model DumpApp.BAL.LoginModel.ViewModel.LoginViewModel
+@{
+    ViewData["Title"] = "Login Simple";
+    Layout = "~/Views/Shared/_SimpleLayout.cshtml";
+}
+@{
+    AjaxOptions options = new AjaxOptions();
+    options.HttpMethod = "POST";
+    options.OnBegin = "OnBegin";
+    options.OnComplete = "OnComplete";
+    options.OnFailure = "OnFailure";
+    options.OnSuccess = "OnSuccess";
+    options.LoadingElementId = "divProgress";
+    options.LoadingElementDuration = 1000;
+    options.UpdateTargetId = "divResponse";
+    options.InsertionMode = InsertionMode.InsertAfter;
+}
+<div class="row m-0">
+    <div class="col-12 p-0">
+    @using (Ajax.BeginForm("AutheticateUserLogin", "Authentication", new { id = "login" }, options))
+    {
+        @Html.AntiForgeryToken()
+       
+        <div class="login-card">
+            <div>
+                <div><a class="logo"><img class="img-fluid for-light" src="~/assets/images/logo/logo.png" alt="loginpage"><img class="img-fluid for-dark" src="~/assets/images/logo/logo_dark.png" alt="looginpage"></a></div>
+                <div class="login-main">
+                    <div class="alert alert-danger dark alert-dismissible fade show" role="alert" id="ErrorDiv" style="display:none;">
+                        <p id="error"> <strong> </strong> </p>
+                        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <form class="theme-form">
+                        <h4>Sign in to account</h4>
+                        <p>Enter your Username & password to login</p>
+                        <div class="form-group">
+                            <label class="col-form-label">Username</label>
+                            @Html.TextBoxFor(model => model.LoginPwdModel.Username, new { autocomplete = "off", @placeholder = "Username", @class = "form-control", @id = "username", @name = "username" })
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label">Password</label>
+                            <div class="form-input position-relative">
+                                @Html.PasswordFor(model => model.LoginPwdModel.Password, new {  @placeholder = "Password", @autocomplete = "off", @class = "form-control", @id = "pwd", @name = "pwd" })
+                            </div>
+                        </div>
+                        <div class="form-group mb-0">
+                            <div class="checkbox p-0">
+                                <input id="checkbox1" type="checkbox">
+                                <label class="text-muted" for="checkbox1">Remember password</label>
+                            </div><a class="link" asp-controller="Authentication" asp-action="ForgetPassword">Forgot password?</a>
+                            <div class="text-end mt-3">
+                                <button type="submit" id="btnLogin" class="btn btn-primary btn-block w-100">Sign in</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+    </div>
+</div>
+<script>
+    function OnBegin() {
+        //alert("rrr")
+        $("#spinner").show();
+        $('#btnLogin').attr('disabled', true);
+        $("#imgLoad").show();
+        $('#error').hide(0);
+    }
+    function OnComplete() {
+        $("#spinner").hide();
+        $('#btnLogin').attr('disabled', false);
+        $("#imgLoad").html("");
+        $("#imgLoad").hide();
+
+    }
+    function OnFailure() {
+
+        console.log("Error");
+        $("#spinner").hide();
+        $('#btnLogin').attr('disabled', false);
+        var result = data.Object;
+        round_error_noti(result.oErrorDisplay.ErrorText)
+        if (result.oErrorDisplay.ErrorCode == -1) {
+
+            $("#imgLoad").hide();
+            $('#BtnLoginPass').attr('disabled', false);
+            return;
+        }
+        $("#imgLoad").hide();
+        $('#ErrorDiv').show(0);
+        $('#BtnLoginPass').attr('disabled', false);
+
+    }
+
+
+    function OnSuccess(data) {
+        console.log("Success");
+        $("#spinner").hide();
+        $('#btnLogin').attr('disabled', false);
+        var result = data.Object;
+
+        if (data.Success)
+        {
+            console.log("Data",data.Object)
+            if (result.ErrorDisplay.ErrorCode == 0) {
+
+                $('#loading').html('')
+                window.location = result.Url
+                $("#imgLoad").hide();
+
+                return;
+            }
+
+            else if (result.ErrorDisplay.ErrorCode == -5) {
+                $("#ChangeLoginId").val($("#username").val());
+                $("#hiddenUserId").val(result.UserId);
+                $('#BtnHidChangePass')[0].click();
+            }
+            else {
+                $('#ErrorDiv').show();
+                $('#error').delay(800).slideDown(500);
+                $('#error').html(result.ErrorDisplay.ErrorText)
+
+                $('[id=BtnLogin]').prop('disabled', false);
+
+                $("#imgLoad").hide();
+
+                return;
+            }
+
+
+        }
+
+    }
+
+</script>
