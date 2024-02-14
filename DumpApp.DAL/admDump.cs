@@ -16,10 +16,13 @@ namespace DumpApp.DAL
     {
         public int Id { get; set; }
         public string TapeIdentifier { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public string TapeDescription { get; set; }
+        public string DumpName { get; set; }
+        public string DumpDescription { get; set; }
         public Nullable<int> DumpType { get; set; }
+        public string Filename { get; set; }
         public string TapeType { get; set; }
+        public string Password { get; set; }
         public Nullable<System.DateTime> DumpDate { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public string Status { get; set; }

@@ -21,65 +21,67 @@
         </div>
     </div>
     <div class="panel-body">
+        <div id="example-3_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+            <script type="text/javascript">
+                jQuery(document).ready(function ($) {
+                    $("#example-4").dataTable().yadcf([
+                        { column_number: 1, filter_type: 'text' },
+                        { column_number: 2, filter_type: 'text' },
+                        { column_number: 3, filter_type: 'text' },
+                        { column_number: 4, filter_type: 'text' },
+                        { column_number: 5, filter_type: 'text' },
+                        { column_number: 6, filter_type: 'text' },
+                        { column_number: 7, filter_type: 'text' }
+                    ]);
+                });
+            </script>
+            @Html.ActionLink("Load New Dump", "AddNewDump", new { menuid = @Model.menuid}, new { @class = "btn btn-success" })
 
-        <script type="text/javascript">
-					jQuery(document).ready(function($)
-					{
-						$("#example-4").dataTable().yadcf([
-							{column_number : 1, filter_type: 'text'},
-							{column_number : 2, filter_type: 'text'},
-                            { column_number: 3, filter_type: 'text' },
-                            { column_number: 4, filter_type: 'text' },
-                            { column_number: 5, filter_type: 'text' },
-                            { column_number: 6, filter_type: 'text' },
-                            { column_number: 7, filter_type: 'text' }
-						]);
-					});
-        </script>
-        @Html.ActionLink("Load New Dump", "AddNewDump", new { menuid = 2 }, new { @class = "btn btn-danger btn-sm waves-effect waves-light m-1", @style = "color:white; height:25px; font-size:9px" })
-
-        <br />
-        <table class="table table-striped table-bordered" id="example-4">
-            <thead>
-                <tr class="replace-inputs">
-                    <th>SNo</th>
-                    <th>Name</th>
-                    <th>Tape Id</th>
-                    <th>Dump Type</th>
-                    <th>Tape Type</th>
-                    <th>Dump Date</th>
-                    <th>Status</th>
-                    <th>Created By</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @{int count = 0;}
-                @foreach (var row in Model.ListOfDumps)
-                {
-                    count = count + 1;
-
-                    <tr>
-                        <td>@count</td>
-                        <td>@row.Name</td>
-                        <td>@row.TapeIdentifier</td>
-                        <td>@row.DumpType</td>
-                        <td>@row.TapeType</td>
-                        <td>@row.DumpDate</td>
-                        <td>@row.Status</td>
-                        <td>@row.CreatedBy</td>
-
-                        <td>
-                            @Html.ActionLink(" Edit", "EditDump", new { h = row.Id, menuid = Model.menuid }, htmlAttributes: new { @Class = "fa fa-edit", @style = "color: red" }) &nbsp;
-                        </td>
+            <br />
+            <table class="table uk-responsive-width table-striped table-bordered dataTable" id="example-4" role="grid" aria-describedby="example-4_info">
+                <thead>
+                    <tr class="replace-inputs">
+                        <th>SNo</th>
+                        <th>Dump Name</th>
+                        <th>Tape Name</th>
+                        <th>File Name</th>
+                        <th>Dump Type</th>
+                        <th>Tape Type</th>
+                        <th>Dump Date</th>
+                        <th>Status</th>
+                        <th>Created By</th>
+                        <th>Action</th>
                     </tr>
-                }
-            </tbody>
+                </thead>
+                <tbody>
+                    @{int count = 0;}
+                    @foreach (var row in Model.ListOfDumps)
+                    {
+                        count = count + 1;
+
+                        <tr>
+                            <td>@count</td>
+                            <td>@row.DumpName</td>
+                            <td>@row.TapeIdentifier</td>
+                            <td>@row.Filename</td>
+                            <td>@row.DumpType</td>
+                            <td>@row.TapeType</td>
+                            <td>@row.DumpDate</td>
+                            <td>@row.Status</td>
+                            <td>@row.CreatedBy</td>
+
+                            <td>
+                                @Html.ActionLink("Load", "EditDump", new { h = row.Id, menuid = Model.menuid }, htmlAttributes: new { @Class = "btn btn-success btn-sm btn-icon icon-left" })&nbsp;
+                                @Html.ActionLink("Edit", "EditDump", new { h = row.Id, menuid = Model.menuid }, htmlAttributes: new { @Class = "btn btn-info btn-sm btn-icon icon-left" })&nbsp;
+                                @Html.ActionLink("View", "EditDump", new { h = row.Id, menuid = Model.menuid }, htmlAttributes: new { @Class = "btn btn-info btn-sm btn-icon icon-left" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
 
 
-        </table>
+            </table>
 
+        </div>
     </div>
 </div>
-
-

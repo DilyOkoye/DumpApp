@@ -10,5 +10,6 @@ namespace DumpApp.BAL.OperationsModel.ViewModel
         public ReturnValues rv { get; set; }
         public List<Dumps> ListOfDumps { set; get; }
         public int menuid { get; set; }
+        public string Url { get; set; }
     }
 }

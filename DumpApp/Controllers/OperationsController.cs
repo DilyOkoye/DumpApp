@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using DumpApp.BAL.AdminModel;
@@ -56,6 +57,31 @@ namespace DumpApp.Controllers
         public ActionResult AddNewDump(int menuid)
         {
             return View(operationsViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> AddNewDump(OperationsViewModel p)
+        {
+            var rtv = new ReturnValues();
+            try
+            {
+                //if (ModelState.IsValid)
+                //{
+                //    p.admUserProfile.Status = "Active";
+                //    p.rv = await userprofilemodel.AddUserProfile(p, _userId);
+
+                //    return (Json(JsonResponseFactory.SuccessResponse(p), JsonRequestBehavior.DenyGet));
+                //}
+            }
+            catch (Exception ex)
+            {
+                rtv.nErrorCode = -1001;
+                rtv.sErrorText = ex.Message == null ? ex.InnerException.Message : ex.Message;
+                p.rv = rtv;
+                return (Json(JsonResponseFactory.SuccessResponse(p), JsonRequestBehavior.DenyGet));
+            }
+            return (Json(JsonResponseFactory.ErrorResponse("Error"), JsonRequestBehavior.DenyGet));
         }
 
         public ActionResult EditDump(int menuid)

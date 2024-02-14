@@ -13,7 +13,7 @@ namespace DumpApp.BAL.OperationsModel
         private readonly IDumpRepository repoDumpRepository;
         private readonly IUnitOfWork unitOfWork;
         private readonly IDbFactory idbfactory;
-        
+         
         public DumpModel()
         {
             idbfactory = new DbFactory();
@@ -30,9 +30,11 @@ namespace DumpApp.BAL.OperationsModel
             var d = (from h in repoDumpRepository.GetAllNonAsync()
                 select new Dumps()
                 {
-                   Name = h.Name,
+                   DumpName = h.DumpName,
+                   DumpDescription = h.DumpDescription,
+                   TapeDescription = h.TapeDescription,
                    Status = h.Status,
-                   Description = h.Description,
+                   Filename = h.Filename,
                    DumpType = h.DumpType == null? "": GetDumpTypeName((int)h.DumpType),
                    DumpDate = h.DumpDate == null?"": $"{h.DumpDate:F}",
                    TapeType = h.TapeType,

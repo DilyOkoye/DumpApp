@@ -40,10 +40,13 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TapeIdentifier" Type="varchar" MaxLength="300" />
-          <Property Name="Name" Type="varchar" MaxLength="300" />
-          <Property Name="Description" Type="varchar" MaxLength="500" />
+          <Property Name="TapeDescription" Type="varchar" MaxLength="300" />
+          <Property Name="DumpName" Type="varchar" MaxLength="300" />
+          <Property Name="DumpDescription" Type="varchar" MaxLength="500" />
           <Property Name="DumpType" Type="int" />
+          <Property Name="Filename" Type="varchar" MaxLength="300" />
           <Property Name="TapeType" Type="varchar" MaxLength="20" />
+          <Property Name="Password" Type="varchar(max)" />
           <Property Name="DumpDate" Type="datetime" />
           <Property Name="DateCreated" Type="datetime" />
           <Property Name="Status" Type="varchar" MaxLength="20" />
@@ -361,10 +364,13 @@ warning 6002: The table/view 'DumpApp.dbo.admMenuControl' does not have a primar
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TapeIdentifier" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
-          <Property Name="Name" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="TapeDescription" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="DumpName" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="DumpDescription" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Name="DumpType" Type="Int32" />
+          <Property Name="Filename" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
           <Property Name="TapeType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="DumpDate" Type="DateTime" Precision="3" />
           <Property Name="DateCreated" Type="DateTime" Precision="3" />
           <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
@@ -558,10 +564,13 @@ warning 6002: The table/view 'DumpApp.dbo.admMenuControl' does not have a primar
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
                 <ScalarProperty Name="DumpDate" ColumnName="DumpDate" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="TapeType" ColumnName="TapeType" />
+                <ScalarProperty Name="Filename" ColumnName="Filename" />
                 <ScalarProperty Name="DumpType" ColumnName="DumpType" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="DumpDescription" ColumnName="DumpDescription" />
+                <ScalarProperty Name="DumpName" ColumnName="DumpName" />
+                <ScalarProperty Name="TapeDescription" ColumnName="TapeDescription" />
                 <ScalarProperty Name="TapeIdentifier" ColumnName="TapeIdentifier" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
