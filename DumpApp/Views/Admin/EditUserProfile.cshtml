@@ -1,0 +1,143 @@
+﻿@model DumpApp.BAL.AdminModel.ViewModel.AdminViewModel
+
+@{
+    ViewBag.Title = "AddUserProfile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    AjaxOptions options = new AjaxOptions();
+    options.HttpMethod = "POST";
+    options.OnBegin = "OnBegin";
+    options.OnComplete = "OnComplete";
+    options.OnFailure = "OnFailure";
+    options.OnSuccess = "OnSuccess";
+    options.LoadingElementId = "divProgress";
+    options.LoadingElementDuration = 1000;
+    options.UpdateTargetId = "divResponse";
+    options.InsertionMode = InsertionMode.InsertAfter;
+}
+<script type='text/javascript'>
+    function foo() {
+        window.location = '@Model.Url';
+    }
+</script>
+
+<div class="row">
+    <div class="col-sm-12">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">EDIT USER(S)</h3>
+                <div class="panel-options">
+                    <a href="#" data-toggle="panel">
+                        <span class="collapse-icon">&ndash;</span>
+                        <span class="expand-icon">+</span>
+                    </a>
+                    <a href="#" data-toggle="remove">
+                        &times;
+                    </a>
+                </div>
+            </div>
+            @using (Ajax.BeginForm("EditUserProfile", "Admin", options, new { @class = "form parsley-form" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="panel-body">
+
+                    <div role="form" class="form-horizontal">
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="field-1">Login Id</label>
+
+                            <div class="col-sm-10">
+                                @Html.HiddenFor(model => model.admUserProfile.UserId, new { @autocomplete = "off", @style = "text-transform:uppercase", @class = "form-control", @id = "LoginId", required = "required" })
+
+
+                                @Html.TextBoxFor(model => model.admUserProfile.LoginId, new { @autocomplete = "off", @style = "text-transform:uppercase", @class = "form-control", @id = "LoginId", required = "required" })
+                            </div>
+                        </div>
+
+                        <div class="form-group-separator"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="field-2">FullName</label>
+
+                            <div class="col-sm-10">
+                                @Html.TextBoxFor(model => model.admUserProfile.FullName, new { @autocomplete = "off", @class = "form-control", @id = "FullName", required = "required" })
+
+
+                            </div>
+                        </div>
+
+                        <div class="form-group-separator"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Role</label>
+
+                            <div class="col-sm-10">
+                                @Html.DropDownListFor(model => model.admUserProfile.RoleId, new SelectList(Model.drpRole, "Value", "Text"), "Select Role", new { @autocomplete = "off", @class = "form-control single-select", @id = "ddRole", required = "required" })
+                            </div>
+                        </div>
+
+                        <div class="form-group-separator"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="field-3">Email</label>
+
+                            <div class="col-sm-10">
+                                @Html.TextBoxFor(model => model.admUserProfile.EmailAddress, new { @autocomplete = "off", @class = "form-control", @id = "EmailAddress" })
+                            </div>
+                        </div>
+
+                        <div class="form-group-separator"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="field-3">Status</label>
+
+                            <div class="col-sm-10">
+                                @Html.DropDownListFor(model => model.admUserProfile.Status, new SelectList(Model.drpStatus, "Value", "Text"), "Select Status", new { @autocomplete = "off", @class = "form-control single-select", @id = "ddStatus" })
+                            </div>
+                        </div>
+
+
+                        <div class="form-group-separator"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="field-3">Date Created</label>
+
+                            <div class="col-sm-10">
+                                @Html.TextBoxFor(model => model.dateCreated, new { @readonly = "true", @autocomplete = "off", @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="form-group-separator"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="field-3">Created By</label>
+
+                            <div class="col-sm-10">
+                                @Html.TextBoxFor(model => model.createdby, new { @readonly = "true", @autocomplete = "off", @class = "form-control" })
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="field-3"></label>
+                            <div class="col-sm-10">
+
+                                <button type="submit" class="btn btn-success"><i class="fa-check"></i>Update</button>
+
+                                <input type="button" id="Return" value="Return " class="btn btn-info" onclick="foo()">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+        </div>
+
+    </div>
+</div>
+

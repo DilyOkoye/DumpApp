@@ -55,12 +55,12 @@ namespace DumpApp.Controllers
                 menuview.UsersRole = oHeader.GetRole(_RoleId);
                 menuview.MenuAssign = oMenuModel.GetMenuAssignmentAdmin();
                 menuview.roleid = _RoleId;
-                return PartialView("_SidePenal", menuview);
+                return PartialView("_MenuControl", menuview);
 
             }
             catch (Exception ex)
             {
-                return PartialView("_SidePenal", menuview);
+                return PartialView("_MenuControl", menuview);
 
             }
 

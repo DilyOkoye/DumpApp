@@ -88,6 +88,9 @@
     <Compile Include="LoginModel\LoginPasswordModel.cs" />
     <Compile Include="LoginModel\LoginReturnProperty.cs" />
     <Compile Include="LoginModel\ViewModel\LoginViewModel.cs" />
+    <Compile Include="OperationsModel\DumpModel.cs" />
+    <Compile Include="OperationsModel\Dumps.cs" />
+    <Compile Include="OperationsModel\ViewModel\OperationsViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\Cryptors.cs" />
     <Compile Include="Utilities\JsonResponseFactory.cs" />

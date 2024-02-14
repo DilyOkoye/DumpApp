@@ -1,0 +1,420 @@
+﻿@model DumpApp.BAL.AdminModel.ViewModel.AdminViewModel
+@{
+    ViewBag.Title = "AssignPrivilege";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    AjaxOptions options = new AjaxOptions();
+    options.HttpMethod = "POST";
+    options.OnBegin = "OnBegin";
+    options.OnComplete = "OnComplete";
+    options.OnFailure = "OnFailure";
+    options.OnSuccess = "OnSuccess";
+    options.LoadingElementId = "divProgress";
+    options.LoadingElementDuration = 1000;
+    options.UpdateTargetId = "divResponse";
+    options.InsertionMode = InsertionMode.InsertAfter;
+}
+
+
+<script type='text/javascript'>
+    function foo() {
+        //var user_choice = window.confirm('Would you like to continue?');
+        //if (user_choice == true) {
+        //    window.location = '@Model.Url';  // you can also use element.submit() if your input type='submit'
+        //} else {
+        //    return false;
+        //}
+        window.location = '@Model.Url';
+    }
+</script>
+@using (Ajax.BeginForm("AssignPrivilege", "Admin", options, new { @class = "form parsley-form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.menuid)
+    @Html.HiddenFor(model => model.RoleIds)
+    <br>
+    <div class="row">
+
+        <div class="col-md-12">
+            <h4 class="header-title mb-4">ROLE PRIVILEDGE FOR <i style="color:#6658dd">@Model.RoleNames.ToUpper()</i></h4>
+
+            <button type="submit" class="btn btn-success waves-effect waves-light"><i class="mdi mdi-content-save"></i>Save</button>
+
+            <button type="button" onclick="foo()" class="btn btn-secondary waves-effect"><i class="mdi mdi-step-backward"></i> RETURN</button>
+
+
+            <p></p>
+
+            <ul class="nav nav-tabs nav-tabs-justified">
+                <li class="active">
+                    <a href="#home-3" data-toggle="tab">
+                        <span class="visible-xs"><i class="fa-home"></i></span>
+                        <span class="hidden-xs"> SYSTEM ADMIN</span>
+                    </a>
+                   
+                </li>
+                <li>
+                    <a href="#profile-3" data-toggle="tab">
+                        <span class="visible-xs"><i class="fa-user"></i></span>
+                        <span class="hidden-xs">OPERATIONS</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#messages-3" data-toggle="tab">
+                        <span class="visible-xs"><i class="fa-envelope-o"></i></span>
+                        <span class="hidden-xs">REPORTS</span>
+                    </a>
+                </li>
+               
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="home-3">
+
+                    <div class="table-responsive">
+                        <table class="table table-striped" id="assignPriviledge">
+                            <thead class="thead-secondary shadow-secondary">
+                                <tr>
+
+                                    <th>MENU NAME<span style="float:right;"> <input type="checkbox" id="checkAllSystemAdmin" class="myinput large custom" /> <text style="color:red">(Check All)</text></span></th>
+                                    <th> <input type="checkbox" id="checkViewSystemAdmin" class="myinput large custom" /> Can View </th>
+                                    <th> <input type="checkbox" id="checkAddSystemAdmin" class="myinput large custom" /> Can Add </th>
+                                    <th> <input type="checkbox" id="checkEditSystemAdmin" class="myinput large custom" /> Can Edit </th>
+                                    <th> <input type="checkbox" id="checkAuthSystemAdmin" class="myinput large custom" /> Global View </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{int counter = 0;}
+
+                                @for (int i = 0; i < Model.AssignAdmin.Count; i++)
+                                {
+                                    counter++;
+                                    <tr>
+                                        <td>
+                                            @Html.HiddenFor(m => m.AssignAdmin[i].MenuId)
+                                            @Html.DisplayFor(m => m.AssignAdmin[i].MenuName)
+
+                                        </td>
+                                        <td>
+
+                                            @Html.CheckBoxFor(m => Model.AssignAdmin[i].CanView, new { id = "childCanView", @name = "chkAdmin", @class = "myinput large custom" })
+
+                                        </td>
+                                        <td>
+
+                                            @Html.CheckBoxFor(m => Model.AssignAdmin[i].CanAdd, new { id = "childCanAdd", @name = "chkAdmin", @class = "myinput large custom" })
+
+                                        </td>
+                                        <td>
+
+                                            @Html.CheckBoxFor(m => Model.AssignAdmin[i].CanEdit, new { id = "childCanEdit", @name = "chkAdmin", @class = "myinput large custom" })
+
+                                        </td>
+                                        <td>
+
+                                            @Html.CheckBoxFor(m => Model.AssignAdmin[i].IsGlobalSupervisor, new { id = "childCanAuth", @name = "chkAdmin", @class = "myinput large custom" })
+
+                                        </td>
+
+
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+                <div class="tab-pane" id="profile-3">
+                    <table class="table table-striped" id="assignPriviledgeOpr">
+                        <thead class="thead-secondary shadow-secondary">
+                            <tr>
+                                <th>MENU NAME<span style="float:right;"> <input type="checkbox" id="checkAllOperations" class="myinput large custom" /> <text style="color:red">(Check All)</text> </span></th>
+                                <th> <input type="checkbox" id="checkViewOperations" class="myinput large custom" /> Can View </th>
+                                <th> <input type="checkbox" id="checkAddOperations" class="myinput large custom" /> Can Add </th>
+                                <th> <input type="checkbox" id="checkEditOperations" class="myinput large custom" /> Can Edit </th>
+                                <th> <input type="checkbox" id="checkAuthOperations" class="myinput large custom" /> Global View </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @for (int i = 0; i < Model.AssignOperations.Count; i++)
+                            {
+                                counter++;
+                                <tr>
+                                    <td>
+                                        @Html.HiddenFor(m => m.AssignOperations[i].MenuId)
+                                        @Html.DisplayFor(m => m.AssignOperations[i].MenuName)
+
+                                    </td>
+                                    <td>
+                                        @Html.CheckBoxFor(m => Model.AssignOperations[i].CanView, new { id = "childCanOprView", @name = "chkOpr", @class = "myinput2 large custom" })
+                                    </td>
+                                    <td>
+                                        @Html.CheckBoxFor(m => Model.AssignOperations[i].CanAdd, new { id = "childCanOprAdd", @name = "chkOpr", @class = "myinput2 large custom" })
+                                    </td>
+                                    <td>
+                                        @Html.CheckBoxFor(m => Model.AssignOperations[i].CanEdit, new { id = "childCanOprEdit", @name = "chkOpr", @class = "myinput2 large custom" })
+                                    </td>
+                                    <td>
+                                        @Html.CheckBoxFor(m => Model.AssignOperations[i].IsGlobalSupervisor, new { id = "childCanOprAuth", @name = "chkOpr", @class = "myinput2 large custom" })
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <div class="tab-pane" id="messages-3">
+                    <table class="table table-striped" id="assignPriviledgeRpt">
+                        <thead class="thead-secondary shadow-secondary">
+                            <tr>
+                                <th>MENU NAME<span style="float:right;"> <input type="checkbox" id="checkAllReports" class="myinput large custom" /> <text style="color:red">(Check All)</text> </span></th>
+                                <th> <input type="checkbox" id="checkViewReports" class="myinput large custom" /> Can View </th>
+                                <th> <input type="checkbox" id="checkAddReports" class="myinput large custom" /> Can Add </th>
+                                <th> <input type="checkbox" id="checkEditReports" class="myinput large custom" /> Can Edit </th>
+                                <th> <input type="checkbox" id="checkAuthReports" class="myinput large custom" /> Global View </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @for (int i = 0; i < Model.AssignReports.Count; i++)
+                            {
+                                counter++;
+                                <tr>
+                                    <td>
+                                        @Html.HiddenFor(m => m.AssignReports[i].MenuId)
+                                        @Html.DisplayFor(m => m.AssignReports[i].MenuName)
+
+                                    </td>
+                                    <td>
+                                        @Html.CheckBoxFor(m => Model.AssignReports[i].CanView, new { id = "childCanRptView", @name = "chkRpt", @class = "myinput3 large custom" })
+                                    </td>
+                                    <td>
+                                        @Html.CheckBoxFor(m => Model.AssignReports[i].CanAdd, new { id = "childCanRptAdd", @name = "chkRpt", @class = "myinput3 large custom" })
+                                    </td>
+                                    <td>
+                                        @Html.CheckBoxFor(m => Model.AssignReports[i].CanEdit, new { id = "childCanRptEdit", @name = "chkRpt", @class = "myinput3 large custom" })
+                                    </td>
+                                    <td>
+                                        @Html.CheckBoxFor(m => Model.AssignReports[i].IsGlobalSupervisor, new { id = "childCanRptAuth", @name = "chkRpt", @class = "myinput3 large custom" })
+                                    </td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+
+                </div>
+            </div>
+        </div> <!-- end card-box-->
+    </div> <!-- end col -->
+
+
+
+
+                                    }
+
+
+<script src="~/assets/js/vendor.min.js"></script>
+
+<script>
+
+    $('#checkAllSystemAdmin').click(function () {
+
+        if (this.checked) {
+            // alert("test")
+            $(".myinput").prop('checked', true);
+        }
+        else {
+
+            $(".myinput").prop('checked', false);
+        }
+
+    });
+
+    $('#checkAllOperations').click(function () {
+
+        if (this.checked) {
+            // alert("test")
+            $(".myinput2").prop('checked', true);
+        }
+        else {
+
+            $(".myinput2").prop('checked', false);
+        }
+
+    });
+
+    $('#checkAllReports').click(function () {
+
+        if (this.checked) {
+            // alert("test")
+            $(".myinput3").prop('checked', true);
+        }
+        else {
+
+            $(".myinput3").prop('checked', false);
+        }
+
+    });
+
+    $('#checkViewSystemAdmin').click(function () {
+
+        if (this.checked) {
+            // alert("test")
+            $("input[id='childCanView']").prop('checked', true);
+        }
+        else {
+
+            $("input[id='childCanView']").prop('checked', false);
+        }
+
+    });
+
+    $('#checkAddSystemAdmin').click(function () {
+
+        if (this.checked) {
+            // alert("test")
+            $("input[id='childCanAdd']").prop('checked', true);
+        }
+        else {
+
+            $("input[id='childCanAdd']").prop('checked', false);
+        }
+
+    });
+
+    $('#checkEditSystemAdmin').click(function () {
+
+        if (this.checked) {
+            $("input[id='childCanEdit']").prop('checked', true);
+        }
+        else {
+
+            $("input[id='childCanEdit']").prop('checked', false);
+        }
+
+    });
+
+    $('#checkAuthSystemAdmin').click(function () {
+
+        if (this.checked) {
+            $("input[id='childCanAuth']").prop('checked', true);
+        }
+        else {
+
+            $("input[id='childCanAuth']").prop('checked', false);
+        }
+
+    });
+
+
+    $('#checkViewOperations').click(function () {
+
+        if (this.checked) {
+            // alert("test")
+            $("input[id='childCanOprView']").prop('checked', true);
+        }
+        else {
+
+            $("input[id='childCanOprView']").prop('checked', false);
+        }
+
+    });
+
+    $('#checkAddOperations').click(function () {
+
+        if (this.checked) {
+            // alert("test")
+            $("input[id='childCanOprAdd']").prop('checked', true);
+        }
+        else {
+
+            $("input[id='childCanOprAdd']").prop('checked', false);
+        }
+
+    });
+
+    $('#checkEditOperations').click(function () {
+
+        if (this.checked) {
+            $("input[id='childCanOprEdit']").prop('checked', true);
+        }
+        else {
+
+            $("input[id='childCanOprEdit']").prop('checked', false);
+        }
+
+    });
+
+    $('#checkAuthOperations').click(function () {
+
+        if (this.checked) {
+            $("input[id='childCanOprAuth']").prop('checked', true);
+        }
+        else {
+
+            $("input[id='childCanOprAuth']").prop('checked', false);
+        }
+
+    });
+
+
+
+    $('#checkViewReports').click(function () {
+
+        if (this.checked) {
+            // alert("test")
+            $("input[id='childCanRptView']").prop('checked', true);
+        }
+        else {
+
+            $("input[id='childCanRptView']").prop('checked', false);
+        }
+
+    });
+
+    $('#checkAddReports').click(function () {
+
+        if (this.checked) {
+            // alert("test")
+            $("input[id='childCanRptAdd']").prop('checked', true);
+        }
+        else {
+
+            $("input[id='childCanRptAdd']").prop('checked', false);
+        }
+
+    });
+
+    $('#checkEditReports').click(function () {
+
+        if (this.checked) {
+            $("input[id='childCanRptEdit']").prop('checked', true);
+        }
+        else {
+
+            $("input[id='childCanRptEdit']").prop('checked', false);
+        }
+
+    });
+
+    $('#checkAuthReports').click(function () {
+
+        if (this.checked) {
+            $("input[id='childCanRptAuth']").prop('checked', true);
+        }
+        else {
+
+            $("input[id='childCanRptAuth']").prop('checked', false);
+        }
+
+    });
+</script>

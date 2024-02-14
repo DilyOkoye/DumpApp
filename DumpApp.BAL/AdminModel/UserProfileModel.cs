@@ -207,9 +207,25 @@ namespace DumpApp.BAL.AdminModel
 
             return d;
         }
+        public string RoleName(int roleId)
+        {
+            try
+            {
+                var res = reporole.GetNonAsync(o => o.RoleId == roleId);
+                if (res != null)
+                {
+                    return res.RoleName;
+
+                }
+
+            }
+            catch (Exception)
+            {
 
 
-
+            }
+            return null;
+        }
 
         public List<admUserProfile> ListOfUserProfile()
         {
@@ -223,7 +239,7 @@ namespace DumpApp.BAL.AdminModel
                          LoginId = h.LoginId,
                          FullName = h.FullName,
                          DateCreated = h.DateCreated,
-                         RoleName = h.RoleName,
+                         RoleName = h.RoleId == null?"":RoleName((int)h.RoleId),
                          MobileNo = h.MobileNo,
                          Status = h.Status,
                          EmailAddress = h.EmailAddress,

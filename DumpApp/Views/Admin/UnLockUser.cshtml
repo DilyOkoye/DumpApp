@@ -1,0 +1,96 @@
+﻿@model DumpApp.BAL.AdminModel.ViewModel.AdminViewModel
+
+@{
+    ViewBag.Title = "ManageUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    AjaxOptions options = new AjaxOptions();
+    options.HttpMethod = "POST";
+    options.OnBegin = "OnBegin";
+    options.OnComplete = "OnComplete";
+    options.OnFailure = "OnFailure";
+    options.OnSuccess = "OnSuccess";
+    options.LoadingElementId = "divProgress";
+    options.LoadingElementDuration = 1000;
+    options.UpdateTargetId = "divResponse";
+    options.InsertionMode = InsertionMode.InsertAfter;
+}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">UnLock User(s)</h3>
+
+        <div class="panel-options">
+            <a href="#" data-toggle="panel">
+                <span class="collapse-icon">&ndash;</span>
+                <span class="expand-icon">+</span>
+            </a>
+            <a href="#" data-toggle="remove">
+                &times;
+            </a>
+        </div>
+    </div>
+    <div class="panel-body">
+
+        <script type="text/javascript">
+					jQuery(document).ready(function($)
+					{
+						$("#example-3").dataTable().yadcf([
+                            { column_number: 0, filter_type: 'text' },
+							{column_number : 1, filter_type: 'text'},
+							{column_number : 2, filter_type: 'text'},
+							{column_number : 3, filter_type: 'range_number'},
+							{column_number : 4},
+						]);
+					});
+        </script>
+
+        <br />
+@using (Ajax.BeginForm("ResetLockout", "Admin", options, new { @class = "form parsley-form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <button type="submit" name="ResetLockoutBtn" id="ResetLockoutBtn" style="font-size:12px;margin-top:-20px;margin-left:15px;height:32px" class="btn btn-success ">Reset Lockout</button>
+        <table class="table table-striped table-bordered" id="example-3">
+            <thead>
+                <tr class="replace-inputs">
+                    <th>
+                        #
+                    </th>
+                    <th>Login Id</th>
+                    <th>Fullname</th>
+                    <th>Role Name</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{int count = 0;}
+                @foreach (var row in Model.ListadmUserProfile)
+                {
+                    count = count + 1;
+
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="chk" name="chk" class="myinput large custom chkd" value="@row.UserId" />
+                            <label for="md_checkbox_1"></label>
+                        </td>
+                        <td>@row.LoginId</td>
+                        <td>@row.FullName</td>
+                        <td>@row.RoleName</td>
+                        <td>@row.Status</td>
+
+
+                       
+                    </tr>
+                }
+            </tbody>
+
+
+        </table>
+
+                    }
+    </div>
+</div>
+
+

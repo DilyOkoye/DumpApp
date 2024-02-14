@@ -1,0 +1,78 @@
+﻿@model DumpApp.BAL.AdminModel.ViewModel.AdminViewModel
+
+@{
+    ViewBag.Title = "ManageUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Manage User(s)</h3>
+
+        <div class="panel-options">
+            <a href="#" data-toggle="panel">
+                <span class="collapse-icon">&ndash;</span>
+                <span class="expand-icon">+</span>
+            </a>
+            <a href="#" data-toggle="remove">
+                &times;
+            </a>
+        </div>
+    </div>
+    <div class="panel-body">
+
+        <script type="text/javascript">
+					jQuery(document).ready(function($)
+					{
+						$("#example-3").dataTable().yadcf([
+                            { column_number: 0, filter_type: 'text' },
+							{column_number : 1, filter_type: 'text'},
+							{column_number : 2, filter_type: 'text'},
+                            { column_number: 3, filter_type: 'text'},
+							{column_number : 4},
+						]);
+					});
+        </script>
+        @Html.ActionLink(" Add New User", "AddUserProfile", new { menuid =2 }, new { @class = "btn btn-success"})
+<br />
+        <table class="table table-striped table-bordered" id="example-3">
+            <thead>
+                <tr class="replace-inputs">
+                    <th>SNo</th>
+                    <th>Login Id</th>
+                    <th>Fullname</th>
+                    <th>Role Name</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{int count = 0;}
+                @foreach (var row in Model.ListadmUserProfile)
+                {
+                    count = count + 1;
+
+                    <tr>
+                        <td>@count</td>
+                        <td>@row.LoginId</td>
+                        <td>@row.FullName</td>
+                        <td>@row.RoleName</td>
+                        <td>@row.Status</td>
+
+
+                        <td>
+
+                            @Html.ActionLink(" Edit", "EditUserProfile", new { h = row.UserId, menuid = Model.menuid }, htmlAttributes: new { @Class = "fa fa-edit", @style = "color: red" }) &nbsp;
+                         </td>
+                    </tr>
+                }
+            </tbody>
+
+          
+        </table>
+
+    </div>
+</div>
+
+

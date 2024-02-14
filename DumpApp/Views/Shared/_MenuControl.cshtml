@@ -1,0 +1,217 @@
+﻿
+@model DumpApp.BAL.AdminModel.ViewModel.MenuViewModel
+
+@{
+    List<int> inta = new List<int>();
+
+    var rst2 = (Model.Menu.Join(Model.MenuAssign, a => a.menu_id, b => b.menu_id,
+         (a, b) => new { ag = a, bg = b })
+                  .Where(f => f.ag.parent != null && f.bg.role_id == Model.roleid && f.ag.flag == true)
+                  .Select(a => new { a.ag.parent })).ToList();
+
+
+    int count = 0;
+    int val = 0;
+    bool suc = false;
+    foreach (var gh in rst2)
+    {
+
+        suc = int.TryParse(gh.parent.ToString(), out val);
+        inta.Add(val);
+
+        count++;
+    }
+
+
+    var rst = Model.Menu.Where(d => d.parent == null && inta.Contains(d.menu_id) && d.flag == true).OrderBy(m => m.priority)
+        .Select(f => new
+        {
+            parent = f.menu_id,
+            parentname = f.menu_name.ToUpper(),
+            act = f.action,
+            ctrler = f.controller,
+            ResourceKey = f.css_class
+        });
+
+
+}
+
+
+<div class="sidebar-menu-inner">
+
+    <header class="logo-env">
+
+        <!-- logo -->
+        <div class="logo">
+            <a href="#" class="logo-expanded">
+                <img src="~/assets/images/idms2.png" width="100" />
+            </a>
+
+            <a href="#" class="logo-collapsed">
+                <img src="~/assets/images/idms2.png" width="60" />
+
+            </a>
+        </div>
+
+        <!-- This will toggle the mobile menu and will be visible only on mobile devices -->
+        <div class="mobile-menu-toggle visible-xs">
+            <a href="#" data-toggle="user-info-menu">
+                <i class="fa-bell-o"></i>
+                <span class="badge badge-success">7</span>
+            </a>
+
+            <a href="#" data-toggle="mobile-menu">
+                <i class="fa-bars"></i>
+            </a>
+        </div>
+
+        <!-- This will open the popup with user profile settings, you can use for any purpose, just be creative -->
+        <div class="settings-icon">
+            <a href="#" data-toggle="settings-pane" data-animate="true">
+                <i class="linecons-cog"></i>
+            </a>
+        </div>
+
+
+    </header>
+
+    <ul id="main-menu" class="main-menu">
+        <li class="menu-title">Navigation</li>
+        <li class="active opened active">
+            <a href="#">
+                <i class="linecons-cog"></i>
+                <span class="title">Dashboard</span>
+            </a>
+
+        </li>
+        @foreach (var item in rst)
+        {
+            <li>
+                <a href="javascript: void(0);">
+                    <i class="fe-pocket"></i>
+                    <span> @item.parentname </span>
+                    <span class="menu-arrow"></span>
+                </a>
+
+                @{
+                    var rst24u = Model.Menu.Join(Model.MenuAssign, a => a.menu_id, b => b.menu_id,
+                       (a, b) => new { ag = a, bg = b })
+                       .Where(n => n.ag.parent != null && n.ag.menu_id == n.bg.menu_id && n.ag.flag == true
+                           && n.bg.role_id == Model.roleid && n.ag.parent == item.parent)
+                       .OrderBy(a => a.ag.priority)
+                       .Select(a => new
+                       {
+                           parent = a.ag.menu_id,
+                           menuname = a.ag.menu_name,
+                           actn = a.ag.action,
+                           cntrler = a.ag.controller,
+                           ResourceKey = a.ag.css_class
+                       });
+
+                }
+
+
+                <ul class="nav-second-level" aria-expanded="false">
+                    @foreach (var i in rst24u)
+                    {
+                        <li>
+                            <a href="@Url.Action(i.actn, i.cntrler, new { menuid = i.parent })">@i.menuname</a>
+                        </li>
+                    }
+                </ul>
+            </li>
+                    }
+
+        <li>
+            <a href="@Url.Action("Logout", "Authentication")">
+                <i class="fe-log-out"></i>
+                <span> Log Out </span>
+            </a>
+
+    </ul>
+
+
+
+    @*<ul id="main-menu" class="main-menu">
+        <!-- add class "multiple-expanded" to allow multiple submenus to open -->
+        <!-- class "auto-inherit-active-class" will automatically add "active" class for parent elements who are marked already with class "active" -->
+        <li class="active opened active">
+            <a href="#">
+                <i class="linecons-cog"></i>
+                <span class="title">Dashboard</span>
+            </a>
+
+        </li>
+        <li>
+            <a href="#">
+                <i class="linecons-desktop"></i>
+                <span class="title">OPERATIONS</span>
+            </a>
+            <ul>
+                <li>
+                    <a href='@Url.Action("ManageClientProfile", "Admin", new { menuid = 1 })'>
+                        <span class="title">Client Set Up</span>
+                    </a>
+                </li>
+                <li>
+                    <a href='@Url.Action("ManageUser", "Admin", new { menuid = 2 })'>
+                        <span class="title">User(s) Set Up</span>
+                    </a>
+                </li>
+                <li>
+
+                    <a href='@Url.Action("ServiceConfiguration", "Admin", new { menuid = 3 })'>
+                        <span class="title">Service Set Up</span>
+                    </a>
+                </li>
+                <li>
+                    <a href='@Url.Action("ManageEmail", "Admin", new { menuid = 4 })'>
+                        <span class="title">Email Set Up</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href='@Url.Action("SysAudit", "Admin", new { menuid = 5 })'>
+                        <span class="title">Sys. Audit</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href='@Url.Action("ServerConfiguration", "Admin", new { menuid = 6 })'>
+                        <span class="title">Server Configuration</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href='@Url.Action("UnLockUser", "Admin", new { menuid = 6 })'>
+                        <span class="title">Unlock User</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="layout-variants.html">
+                <i class="linecons-note"></i>
+                <span class="title">REPORTS</span>
+            </a>
+            <ul>
+                <li>
+                    <a href='@Url.Action("SysAuditReport", "Admin", new { menuid = 6 })'>
+                        <span class="title">Sys Audit Report</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href='@Url.Action("AuditTrail", "Admin", new { menuid = 6 })'>
+                        <span class="title">Application Audit Trail Report</span>
+                    </a>
+                </li>
+
+            </ul>
+        </li>
+
+    </ul>*@
+
+</div>
+
+

@@ -13,6 +13,8 @@
         <EntityTypeShape EntityType="DumpAppModel.admUserProfile" Width="1.5" PointX="6.75" PointY="0.75" />
         <EntityTypeShape EntityType="DumpAppModel.admMenuControl" Width="1.5" PointX="6.75" PointY="6.75" />
         <EntityTypeShape EntityType="DumpAppModel.admUserLogin" Width="1.5" PointX="0.75" PointY="8.75" />
+        <EntityTypeShape EntityType="DumpAppModel.admDumpType" Width="1.5" PointX="9.375" PointY="0.75" />
+        <EntityTypeShape EntityType="DumpAppModel.admDump" Width="1.5" PointX="3.375" PointY="8.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

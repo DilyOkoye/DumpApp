@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using DumpApp.BAL.AdminModel.ViewModel;
@@ -189,7 +188,7 @@ namespace DumpApp.BAL.AdminModel
             DataSet ds = new DataSet();
             DataTable dt = new DataTable();
             //SqlParameter sl = new SqlParameter("roleid", roleid);
-            using (var con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString()))
+            using (var con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnectionProc"].ToString()))
             {
                 con.Open();
                 using (var cmd = new SqlCommand())
@@ -237,7 +236,7 @@ namespace DumpApp.BAL.AdminModel
             DataSet ds = new DataSet();
             DataTable dt = new DataTable();
             //SqlParameter sl = new SqlParameter("roleid", roleid);
-            using (var con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString()))
+            using (var con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnectionProc"].ToString()))
             {
                 con.Open();
                 using (var cmd = new SqlCommand())
@@ -284,7 +283,7 @@ namespace DumpApp.BAL.AdminModel
             DataSet ds = new DataSet();
             DataTable dt = new DataTable();
             //SqlParameter sl = new SqlParameter("roleid", roleid);
-            using (var con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString()))
+            using (var con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnectionProc"].ToString()))
             {
                 con.Open();
                 using (var cmd = new SqlCommand())

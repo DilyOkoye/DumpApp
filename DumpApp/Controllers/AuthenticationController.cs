@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Web.Configuration;
 using System.Web;
@@ -126,5 +127,33 @@ namespace DumpApp.Controllers
             return null;
         }
 
+
+        public ActionResult Logout()
+        {
+            loginview = new LoginViewModel();
+            loginview.LoginModel = new Login();
+            var guidNo = Session["guidNo"];
+            if (guidNo != null)
+            {
+
+                Guid gNo = Guid.Parse(guidNo.ToString());
+                loginview.LoginModel.LogUserLogOut(gNo,
+                    Convert.ToInt32(new ProfileHelper().GetProfile(HttpContext.User.Identity.Name, "User")));
+
+            }
+            FormsAuthentication.SignOut();
+            HttpContext.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);
+            Session.Abandon();
+            HttpCookie cookie1 = new HttpCookie(FormsAuthentication.FormsCookieName, "");
+            cookie1.Expires = DateTime.Now.AddYears(-1);
+            Response.Cookies.Add(cookie1);
+            HttpCookie cookie2 = new HttpCookie("ASP.NET_SessionId", "");
+            cookie2.Expires = DateTime.Now.AddYears(-1);
+            Response.Cookies.Add(cookie2);
+
+            return RedirectToAction("Login");
+
+
+        }
     }
 }

@@ -1,580 +1,71 @@
-﻿@{
-    ViewData["Title"] = "Dashboard";
+﻿
+@{
+    ViewBag.Title = "DashBoard";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="page-body">
-    <div class="container-fluid">
-        <div class="page-title">
-            <div class="row">
-                <div class="col-6">
-                    <h3>Default</h3>
-                </div>
-                <div class="col-6">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a asp-controller="Dashboard" asp-action="Index">
-                                <svg class="stroke-icon">
-                                    <use href="../assets/svg/icon-sprite.svg#stroke-home"></use>
-                                </svg>
-                            </a>
-                        </li>
-                        <li class="breadcrumb-item">Dashboard</li>
-                        <li class="breadcrumb-item active">Default      </li>
-                    </ol>
-                </div>
+
+<div class="row">
+    <div class="row"> <div class="col-sm-12"> <div class="chart-item-bg-2"> <div class="chart-item-num" data-count="this" data-from="0" data-to="98" data-suffix="%" data-duration="2">98%</div> <div class="chart-item-desc"> <p class="col-lg-7">Carriage quitting securing be appetite it declared. High eyes kept so busy feel call in.</p> </div> <div class="chart-item-env"> <div id="doughnut-1" style="width: 200px; user-select: none;" class="dx-visibility-change-handler"><svg width="200" height="130" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" stroke="none" stroke-width="0" fill="none" class="dxc dxc-chart" direction="ltr" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: block; overflow: hidden;"><defs><clipPath id="DevExpress_1"><rect x="0" y="0" width="200" height="130" rx="0" ry="0" fill="none" stroke="none" stroke-width="0"></rect></clipPath><pattern id="DevExpress_2" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#68b828" opacity="0.75"></rect><path stroke-width="4" stroke="#68b828" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_3" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#68b828" opacity="0.5"></rect><path stroke-width="4" stroke="#68b828" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_4" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#7c38bc" opacity="0.75"></rect><path stroke-width="4" stroke="#7c38bc" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_5" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#7c38bc" opacity="0.5"></rect><path stroke-width="4" stroke="#7c38bc" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_6" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#0e62c7" opacity="0.75"></rect><path stroke-width="4" stroke="#0e62c7" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_7" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#0e62c7" opacity="0.5"></rect><path stroke-width="4" stroke="#0e62c7" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_8" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#fcd036" opacity="0.75"></rect><path stroke-width="4" stroke="#fcd036" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_9" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#fcd036" opacity="0.5"></rect><path stroke-width="4" stroke="#fcd036" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_10" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#4fcdfc" opacity="0.75"></rect><path stroke-width="4" stroke="#4fcdfc" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_11" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#4fcdfc" opacity="0.5"></rect><path stroke-width="4" stroke="#4fcdfc" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_12" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#00b19d" opacity="0.75"></rect><path stroke-width="4" stroke="#00b19d" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_13" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#00b19d" opacity="0.5"></rect><path stroke-width="4" stroke="#00b19d" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_14" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#ff6264" opacity="0.75"></rect><path stroke-width="4" stroke="#ff6264" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_15" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#ff6264" opacity="0.5"></rect><path stroke-width="4" stroke="#ff6264" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_16" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#f7aa47" opacity="0.75"></rect><path stroke-width="4" stroke="#f7aa47" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_17" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#f7aa47" opacity="0.5"></rect><path stroke-width="4" stroke="#f7aa47" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_18" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#9aea5a" opacity="0.75"></rect><path stroke-width="4" stroke="#9aea5a" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_19" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#9aea5a" opacity="0.5"></rect><path stroke-width="4" stroke="#9aea5a" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_20" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#ae6aee" opacity="0.75"></rect><path stroke-width="4" stroke="#ae6aee" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_21" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#ae6aee" opacity="0.5"></rect><path stroke-width="4" stroke="#ae6aee" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><filter id="DevExpress_22" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" result="gaussianBlurResult" stdDeviation="2"></feGaussianBlur><feOffset in="gaussianBlurResult" result="offsetResult" dx="0" dy="4"></feOffset><feFlood result="floodResult" flood-color="#000000" flood-opacity="0.4"></feFlood><feComposite in="floodResult" in2="offsetResult" operator="in" result="compositeResult"></feComposite><feComposite in="SourceGraphic" in2="compositeResult" operator="over"></feComposite></filter></defs><g class="dxc-legend" clip-path="url(#DevExpress_1)"></g><g class="dxc-series-group"><g class="dxc-series"><g class="dxc-markers"><path stroke-linejoin="round" fill="#68b828" stroke="#ffffff" stroke-width="0" d="M 42.45253929419554 95.22068441173845 A 65 65 0 0 0 165 65.00000000000001 L 132 65.00000000000001 A 32 32 0 0 1 71.6689424217578 79.877875402702 Z"></path><path stroke-linejoin="round" fill="#7c38bc" stroke="#ffffff" stroke-width="0" d="M 35.9371217445065 54.00238072936612 A 65 65 0 0 0 42.45253929419554 95.22068441173845 L 71.6689424217578 79.877875402702 A 32 32 0 0 1 68.46135224344935 59.585787435995634 Z"></path><path stroke-linejoin="round" fill="#0e62c7" stroke="#ffffff" stroke-width="0" d="M 39.931580671694995 40.16484347947625 A 65 65 0 0 0 35.9371217445065 54.00238072936612 L 68.46135224344935 59.585787435995634 A 32 32 0 0 1 70.42785509991138 52.773461405280614 Z"></path><path stroke-linejoin="round" fill="#fcd036" stroke="#ffffff" stroke-width="0" d="M 53.48679482995417 19.596016201117088 A 65 65 0 0 0 39.931580671694995 40.16484347947625 L 70.42785509991138 52.773461405280614 A 32 32 0 0 1 77.10119130090051 42.6472695143961 Z"></path><path stroke-linejoin="round" fill="#4fcdfc" stroke="#ffffff" stroke-width="0" d="M 79.03913209598424 3.472428808619455 A 65 65 0 0 0 53.48679482995417 19.596016201117088 L 77.10119130090051 42.6472695143961 A 32 32 0 0 1 89.68080349340762 34.709503413474195 Z"></path><path stroke-linejoin="round" fill="#00b19d" stroke="#ffffff" stroke-width="0" d="M 80.43798988447506 3.0134872715031733 A 65 65 0 0 0 79.03913209598424 3.472428808619455 L 89.68080349340762 34.709503413474195 A 32 32 0 0 1 90.36947194312619 34.48356296443233 Z"></path><path stroke-linejoin="round" fill="#ff6264" stroke="#ffffff" stroke-width="0" d="M 110.57568745559664 0.8661178873324786 A 65 65 0 0 0 80.43798988447506 3.0134872715031733 L 90.36947194312619 34.48356296443233 A 32 32 0 0 1 105.2064922858322 33.42639649837906 Z"></path><path stroke-linejoin="round" fill="#f7aa47" stroke="#ffffff" stroke-width="0" d="M 138.42830559945935 12.5760996419137 A 65 65 0 0 0 110.57568745559664 0.8661178873324786 L 105.2064922858322 33.42639649837906 A 32 32 0 0 1 118.91855044896461 39.19131059294213 Z"></path><path stroke-linejoin="round" fill="#9aea5a" stroke="#ffffff" stroke-width="0" d="M 157.97775376799646 35.613267142848755 A 65 65 0 0 0 138.42830559945935 12.5760996419137 L 118.91855044896461 39.19131059294213 A 32 32 0 0 1 128.54289416270595 50.53268536263323 Z"></path><path stroke-linejoin="round" fill="#ae6aee" stroke="#ffffff" stroke-width="0" d="M 165 65 A 65 65 0 0 0 157.97775376799646 35.613267142848755 L 128.54289416270595 50.53268536263323 A 32 32 0 0 1 132 65 Z"></path></g></g></g><g class="dxc-labels-group"></g><g class="dxc-labels" visibility="hidden" opacity="1"></g><g class="dxc-tooltip"><path d="M 0 0 Z" filter="url(#DevExpress_22)" stroke-width="1" stroke="#d3d3d3" visibility="hidden"></path><g text-anchor="middle" visibility="hidden" style="font-family: &quot;Segoe UI&quot;, &quot;Helvetica Neue&quot;, &quot;Trebuchet MS&quot;, Verdana; font-weight: 400; font-size: 12px; fill: rgb(35, 35, 35); cursor: default;"><text x="0" y="0" style="font-size: 12px;"></text></g></g><g class="dxc-trackers" opacity="0.0001" stroke="gray" fill="gray"><g class="dxc-crosshair-trackers" stroke="none" fill="grey"></g><g class="dxc-series-trackers"></g><g class="dxc-markers-trackers" stroke="none" fill="grey"><g><path stroke-linejoin="round" d="M 42.45253929419554 95.22068441173845 A 65 65 0 0 0 165 65.00000000000001 L 132 65.00000000000001 A 32 32 0 0 1 71.6689424217578 79.877875402702 Z"></path><path stroke-linejoin="round" d="M 35.9371217445065 54.00238072936612 A 65 65 0 0 0 42.45253929419554 95.22068441173845 L 71.6689424217578 79.877875402702 A 32 32 0 0 1 68.46135224344935 59.585787435995634 Z"></path><path stroke-linejoin="round" d="M 39.931580671694995 40.16484347947625 A 65 65 0 0 0 35.9371217445065 54.00238072936612 L 68.46135224344935 59.585787435995634 A 32 32 0 0 1 70.42785509991138 52.773461405280614 Z"></path><path stroke-linejoin="round" d="M 53.48679482995417 19.596016201117088 A 65 65 0 0 0 39.931580671694995 40.16484347947625 L 70.42785509991138 52.773461405280614 A 32 32 0 0 1 77.10119130090051 42.6472695143961 Z"></path><path stroke-linejoin="round" d="M 79.03913209598424 3.472428808619455 A 65 65 0 0 0 53.48679482995417 19.596016201117088 L 77.10119130090051 42.6472695143961 A 32 32 0 0 1 89.68080349340762 34.709503413474195 Z"></path><path stroke-linejoin="round" d="M 80.43798988447506 3.0134872715031733 A 65 65 0 0 0 79.03913209598424 3.472428808619455 L 89.68080349340762 34.709503413474195 A 32 32 0 0 1 90.36947194312619 34.48356296443233 Z"></path><path stroke-linejoin="round" d="M 110.57568745559664 0.8661178873324786 A 65 65 0 0 0 80.43798988447506 3.0134872715031733 L 90.36947194312619 34.48356296443233 A 32 32 0 0 1 105.2064922858322 33.42639649837906 Z"></path><path stroke-linejoin="round" d="M 138.42830559945935 12.5760996419137 A 65 65 0 0 0 110.57568745559664 0.8661178873324786 L 105.2064922858322 33.42639649837906 A 32 32 0 0 1 118.91855044896461 39.19131059294213 Z"></path><path stroke-linejoin="round" d="M 157.97775376799646 35.613267142848755 A 65 65 0 0 0 138.42830559945935 12.5760996419137 L 118.91855044896461 39.19131059294213 A 32 32 0 0 1 128.54289416270595 50.53268536263323 Z"></path><path stroke-linejoin="round" d="M 165 65 A 65 65 0 0 0 157.97775376799646 35.613267142848755 L 128.54289416270595 50.53268536263323 A 32 32 0 0 1 132 65 Z"></path></g></g></g><g></g></svg></div> </div> </div> </div> </div>
+    <div class="col-sm-6"> <div class="panel panel-default"> <div class="panel-heading">This Week Analytics</div> <table class="table"> <thead> <tr> <th>Type</th> <th width="20%">Sum</th> <th width="50%">Weekly Chart</th> </tr> </thead> <tbody> <tr> <td>Visits</td> <td>23,670</td> <td> <div class="sparkline line2010 dx-visibility-change-handler"><svg width="164" height="30" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" stroke="none" stroke-width="0" fill="none" class="dxsl dxsl-sparkline" direction="ltr" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: block; overflow: hidden;"><g class="dxc-labels" visibility="hidden"></g><g class="dxsl-series"><g class="dxc-series"><g class="dxc-elements" stroke="#f7aa47" stroke-width="2"><path stroke-width="2" d="M 5 19 L 19 24 L 33 17 L 47 13 L 61 9 L 75 23 L 89 23 L 103 19 L 117 20 L 131 14 L 145 12 L 159 6"></path></g><g fill="#ffffff" stroke="#ffffff" stroke-width="2" r="3" visibility="hidden" class="dxc-markers" opacity="1"><circle cx="0" cy="0" r="3" fill="#ffffff" stroke="#666666" stroke-width="2" visibility="visible" transform="translate(5,19)"></circle><circle cx="0" cy="0" r="3" fill="#ffffff" stroke="#4fcdfc" stroke-width="2" visibility="visible" transform="translate(19,24)"></circle><circle cx="0" cy="0" r="3" fill="#ffffff" stroke="#d5080f" stroke-width="2" visibility="visible" transform="translate(159,6)"></circle></g></g></g></svg><div style="position: relative"><svg width="164" height="30" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" stroke="none" stroke-width="0" fill="none" class="dxsl dxsl-tooltip" direction="ltr" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: block; overflow: hidden; left: 0px; top: -30px; position: absolute;"><g class="dxsl-tooltip-group" style="z-index: 1;"></g><g class="dxsl-tooltip-tracker-group"><rect x="0" y="0" width="164" height="30" rx="0" ry="0" fill="grey" opacity="0"></rect></g></svg></div></div> </td> </tr> <tr> <td>Bounce Rate</td> <td>37,5%</td> <td> <div class="sparkline spline2010 dx-visibility-change-handler"><svg width="164" height="30" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" stroke="none" stroke-width="0" fill="none" class="dxsl dxsl-sparkline" direction="ltr" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: block; overflow: hidden;"><g class="dxc-labels" visibility="hidden"></g><g class="dxsl-series"><g class="dxc-series"><g class="dxc-elements" stroke="#68b828" stroke-width="3"><path stroke-width="3" d="M 5 23 C 5 23 12 24 19 24 C 26 24 28.333333333333332 23.5 33 23 C 37.666666666666664 22.5 42.333333333333336 21.833333333333332 47 21 C 51.666666666666664 20.166666666666668 56.333333333333336 18.833333333333332 61 18 C 65.66666666666667 17.166666666666668 68 16 75 16 C 82 16 82 18 89 18 C 96 18 98.33333333333333 17.833333333333332 103 17 C 107.66666666666667 16.166666666666668 112.33333333333333 14.333333333333334 117 13 C 121.66666666666667 11.666666666666666 126.33333333333333 10 131 9 C 135.66666666666666 8 140.33333333333334 7.5 145 7 C 149.66666666666666 6.5 159 6 159 6"></path></g><g fill="#ffffff" stroke="#ffffff" stroke-width="2" r="3" visibility="hidden" class="dxc-markers" opacity="1"><circle cx="0" cy="0" r="3" fill="#ffffff" stroke="#00b19d" stroke-width="2" visibility="visible" transform="translate(19,24)"></circle><circle cx="0" cy="0" r="3" fill="#ffffff" stroke="#7c38bc" stroke-width="2" visibility="visible" transform="translate(159,6)"></circle></g></g></g></svg><div style="position: relative"><svg width="164" height="30" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" stroke="none" stroke-width="0" fill="none" class="dxsl dxsl-tooltip" direction="ltr" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: block; overflow: hidden; left: 0px; top: -30px; position: absolute;"><g class="dxsl-tooltip-group" style="z-index: 1;"></g><g class="dxsl-tooltip-tracker-group"><rect x="0" y="0" width="164" height="30" rx="0" ry="0" fill="grey" opacity="0"></rect></g></svg></div></div> </td> </tr> <tr> <td>Page views</td> <td>107,221</td> <td> <div class="sparkline stepline2010 dx-visibility-change-handler"><svg width="164" height="30" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" stroke="none" stroke-width="0" fill="none" class="dxsl dxsl-sparkline" direction="ltr" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: block; overflow: hidden;"><g class="dxc-labels" visibility="hidden"></g><g class="dxsl-series"><g class="dxc-series"><g class="dxc-elements" stroke="#7c38bc" stroke-width="2"><path stroke-width="2" d="M 5 24 L 19 24 L 19 17 L 33 17 L 33 14 L 47 14 L 47 12 L 61 12 L 61 6 L 75 6 L 75 12 L 89 12 L 89 14 L 103 14 L 103 10 L 117 10 L 117 9 L 131 9 L 131 16 L 145 16 L 145 14 L 159 14 L 159 15"></path></g><g fill="#333" stroke="#333" stroke-width="2" r="4" visibility="hidden" class="dxc-markers" opacity="1"><path fill="#333" stroke="#ccc" stroke-width="2" r="4" visibility="visible" d="M -4 -4 L 4 -4 L 4 4 L -4 4 L -4 -4 Z" transform="translate(5,24)"></path><path fill="#333" stroke="#ccc" stroke-width="2" r="4" visibility="visible" d="M -4 -4 L 4 -4 L 4 4 L -4 4 L -4 -4 Z" transform="translate(159,15)"></path></g></g></g></svg><div style="position: relative"><svg width="164" height="30" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" stroke="none" stroke-width="0" fill="none" class="dxsl dxsl-tooltip" direction="ltr" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: block; overflow: hidden; left: 0px; top: -30px; position: absolute;"><g class="dxsl-tooltip-group" style="z-index: 1;" transform="translate(0,0) scale(1,1)"><path d="M 82 118 L 92 108.5 L 128.5 108.5 L 128.5 16.5 L 35.5 16.5 L 35.5 108.5 L 72 108.5 Z" filter="url(#DevExpress_28)" stroke-width="1" stroke="#d3d3d3" visibility="hidden" fill="#ffffff"></path><g text-anchor="middle" visibility="hidden" style="fill: rgb(35, 35, 35); font-family: &quot;Segoe UI&quot;, &quot;Helvetica Neue&quot;, &quot;Trebuchet MS&quot;, Verdana; font-size: 12px; font-weight: 400;"><text x="54" y="44" text-anchor="start"><tspan x="54" dy="0">Start:</tspan></text><text x="111" y="44" text-anchor="end"><tspan x="111" dy="0">17</tspan></text><text x="54" y="59" text-anchor="start"><tspan x="54" dy="0">End:</tspan></text><text x="111" y="59" text-anchor="end"><tspan x="111" dy="0">32</tspan></text><text x="54" y="74" text-anchor="start"><tspan x="54" dy="0">Min:</tspan></text><text x="111" y="74" text-anchor="end"><tspan x="111" dy="0">17</tspan></text><text x="54" y="89" text-anchor="start"><tspan x="54" dy="0">Max:</tspan></text><text x="111" y="89" text-anchor="end"><tspan x="111" dy="0">47</tspan></text></g></g><g class="dxsl-tooltip-tracker-group"><rect x="0" y="0" width="164" height="30" rx="0" ry="0" fill="grey" opacity="0"></rect></g><defs><filter id="DevExpress_28" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" result="gaussianBlurResult" stdDeviation="2"></feGaussianBlur><feOffset in="gaussianBlurResult" result="offsetResult" dx="0" dy="4"></feOffset><feFlood result="floodResult" flood-color="#000000" flood-opacity="0.4"></feFlood><feComposite in="floodResult" in2="offsetResult" operator="in" result="compositeResult"></feComposite><feComposite in="SourceGraphic" in2="compositeResult" operator="over"></feComposite></filter></defs></svg></div></div> </td> </tr> </tbody> </table> </div> </div>
+    <div class="col-sm-6"> <div class="panel panel-default"> <div class="panel-heading">Average Age Group</div> <table class="table"> <thead> <tr> <th>Group</th> <th width="20%">Pct</th> <th width="20%">Target</th> <th width="40%">Chart</th> </tr> </thead> <tbody> <tr> <td>18-24</td> <td>42,17%</td> <td>50%</td> <td> <div id="age-group-1" class="sparkline dx-visibility-change-handler"><svg width="125" height="30" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" stroke="none" stroke-width="0" fill="none" class="dxb dxb-bullet" direction="ltr" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: block; overflow: hidden;"><path class="dxb-bar-value" d="M 1 5 L 82 5 L 82 25 L 1 25" fill="#68b828"></path><path class="dxb-target" d="M 89 27 L 89 3" stroke="#666666" stroke-width="4"></path><path class="dxb-zero-level" d="M 1.5 27 L 1.5 3" stroke="#666666" stroke-width="1"></path></svg><div style="position: relative"><svg width="125" height="30" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" stroke="none" stroke-width="0" fill="none" class="dxb dxb-tooltip" direction="ltr" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: block; overflow: hidden; left: 0px; top: -30px; position: absolute;"><g class="dxb-tooltip-group" style="z-index: 1;"></g><g class="dxb-tooltip-tracker-group"><rect x="0" y="0" width="125" height="30" rx="0" ry="0" fill="grey" opacity="0"></rect></g></svg></div></div> </td> </tr> <tr> <td>25-35</td> <td>29,50%</td> <td>26%</td> <td> <div id="age-group-2" class="sparkline dx-visibility-change-handler"><svg width="125" height="30" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" stroke="none" stroke-width="0" fill="none" class="dxb dxb-bullet" direction="ltr" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: block; overflow: hidden;"><path class="dxb-bar-value" d="M 1 5 L 96 5 L 96 25 L 1 25" fill="#4fcdfc"></path><path class="dxb-target" d="M 89 27 L 89 3" stroke="#666666" stroke-width="4"></path><path class="dxb-zero-level" d="M 1.5 27 L 1.5 3" stroke="#666666" stroke-width="1"></path></svg><div style="position: relative"><svg width="125" height="30" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" stroke="none" stroke-width="0" fill="none" class="dxb dxb-tooltip" direction="ltr" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: block; overflow: hidden; left: 0px; top: -30px; position: absolute;"><g class="dxb-tooltip-group" style="z-index: 1;"></g><g class="dxb-tooltip-tracker-group"><rect x="0" y="0" width="125" height="30" rx="0" ry="0" fill="grey" opacity="0"></rect></g></svg></div></div> </td> </tr> <tr> <td>36-50</td> <td>28.33%</td> <td>24%</td> <td> <div id="age-group-3" class="sparkline dx-visibility-change-handler"><svg width="125" height="30" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" stroke="none" stroke-width="0" fill="none" class="dxb dxb-bullet" direction="ltr" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: block; overflow: hidden;"><path class="dxb-bar-value" d="M 1 5 L 71 5 L 71 25 L 1 25" fill="#d5080f"></path><path class="dxb-target" d="M 54 27 L 54 3" stroke="#666666" stroke-width="4"></path><path class="dxb-zero-level" d="M 1.5 27 L 1.5 3" stroke="#666666" stroke-width="1"></path></svg><div style="position: relative"><svg width="125" height="30" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" stroke="none" stroke-width="0" fill="none" class="dxb dxb-tooltip" direction="ltr" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: block; overflow: hidden; left: 0px; top: -30px; position: absolute;"><g class="dxb-tooltip-group" style="z-index: 1;"></g><g class="dxb-tooltip-tracker-group"><rect x="0" y="0" width="125" height="30" rx="0" ry="0" fill="grey" opacity="0"></rect></g></svg></div></div> </td> </tr> </tbody> </table> </div> </div>
+    <div class="col-sm-3">
+
+        <div class="xe-widget xe-counter" data-count=".num" data-from="0" data-to="99.9" data-suffix="%" data-duration="2">
+            <div class="xe-icon">
+                <i class="linecons-cloud"></i>
+            </div>
+            <div class="xe-label">
+                <strong class="num">0.0%</strong>
+                <span>Server uptime</span>
             </div>
         </div>
+
     </div>
-    <!-- Container-fluid starts-->
-    <div class="container-fluid">
-        <div class="row widget-grid">
-            <div class="col-xxl-4 col-sm-6 box-col-6">
-                <div class="card profile-box">
-                    <div class="card-body">
-                        <div class="media">
-                            <div class="media-body">
-                                <div class="greeting-user">
-                                    <h4 class="f-w-600">Welcome to cuba</h4>
-                                    <p>Here whats happing in your account today</p>
-                                    <div class="whatsnew-btn"><a class="btn btn-outline-white">Whats New !</a></div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="clockbox">
-                                    <svg id="clock" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
-                                        <g id="face">
-                                            <circle class="circle" cx="300" cy="300" r="253.9"></circle>
-                                            <path class="hour-marks" d="M300.5 94V61M506 300.5h32M300.5 506v33M94 300.5H60M411.3 107.8l7.9-13.8M493 190.2l13-7.4M492.1 411.4l16.5 9.5M411 492.3l8.9 15.3M189 492.3l-9.2 15.9M107.7 411L93 419.5M107.5 189.3l-17.1-9.9M188.1 108.2l-9-15.6"></path>
-                                            <circle class="mid-circle" cx="300" cy="300" r="16.2"></circle>
-                                        </g>
-                                        <g id="hour">
-                                            <path class="hour-hand" d="M300.5 298V142"></path>
-                                            <circle class="sizing-box" cx="300" cy="300" r="253.9"></circle>
-                                        </g>
-                                        <g id="minute">
-                                            <path class="minute-hand" d="M300.5 298V67"></path>
-                                            <circle class="sizing-box" cx="300" cy="300" r="253.9"></circle>
-                                        </g>
-                                        <g id="second">
-                                            <path class="second-hand" d="M300.5 350V55"></path>
-                                            <circle class="sizing-box" cx="300" cy="300" r="253.9">   </circle>
-                                        </g>
-                                    </svg>
-                                </div>
-                                <div class="badge f-10 p-0" id="txt"></div>
-                            </div>
-                        </div>
-                        <div class="cartoon"><img class="img-fluid" src="~/assets/images/dashboard/cartoon.svg" alt="vector women with leptop"></div>
-                    </div>
-                </div>
+
+    <div class="col-sm-3">
+
+        <div class="xe-widget xe-counter xe-counter-blue" data-count=".num" data-from="1" data-to="117" data-suffix="k" data-duration="3" data-easing="false">
+            <div class="xe-icon">
+                <i class="linecons-user"></i>
             </div>
-            <div class="col-xxl-auto col-xl-3 col-sm-6 box-col-6">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="card widget-1">
-                            <div class="card-body">
-                                <div class="widget-content">
-                                    <div class="widget-round secondary">
-                                        <div class="bg-round">
-                                            <svg class="svg-fill">
-                                                <use href="../assets/svg/icon-sprite.svg#cart"> </use>
-                                            </svg>
-                                            <svg class="half-circle svg-fill">
-                                                <use href="../assets/svg/icon-sprite.svg#halfcircle"></use>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <h4>10,000</h4><span class="f-light">Purchase</span>
-                                    </div>
-                                </div>
-                                <div class="font-secondary f-w-500"><i class="icon-arrow-up icon-rotate me-1"></i><span>+50%</span></div>
-                            </div>
-                        </div>
-                        <div class="col-xl-12">
-                            <div class="card widget-1">
-                                <div class="card-body">
-                                    <div class="widget-content">
-                                        <div class="widget-round primary">
-                                            <div class="bg-round">
-                                                <svg class="svg-fill">
-                                                    <use href="../assets/svg/icon-sprite.svg#tag"> </use>
-                                                </svg>
-                                                <svg class="half-circle svg-fill">
-                                                    <use href="../assets/svg/icon-sprite.svg#halfcircle"></use>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <h4>4,200</h4><span class="f-light">Sales</span>
-                                        </div>
-                                    </div>
-                                    <div class="font-primary f-w-500"><i class="icon-arrow-up icon-rotate me-1"></i><span>+70%</span></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xxl-auto col-xl-3 col-sm-6 box-col-6">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="card widget-1">
-                            <div class="card-body">
-                                <div class="widget-content">
-                                    <div class="widget-round warning">
-                                        <div class="bg-round">
-                                            <svg class="svg-fill">
-                                                <use href="../assets/svg/icon-sprite.svg#return-box"> </use>
-                                            </svg>
-                                            <svg class="half-circle svg-fill">
-                                                <use href="../assets/svg/icon-sprite.svg#halfcircle"></use>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <h4>7000</h4><span class="f-light">Sales return</span>
-                                    </div>
-                                </div>
-                                <div class="font-warning f-w-500"><i class="icon-arrow-down icon-rotate me-1"></i><span>-20%</span></div>
-                            </div>
-                        </div>
-                        <div class="col-xl-12">
-                            <div class="card widget-1">
-                                <div class="card-body">
-                                    <div class="widget-content">
-                                        <div class="widget-round success">
-                                            <div class="bg-round">
-                                                <svg class="svg-fill">
-                                                    <use href="../assets/svg/icon-sprite.svg#rate"> </use>
-                                                </svg>
-                                                <svg class="half-circle svg-fill">
-                                                    <use href="../assets/svg/icon-sprite.svg#halfcircle"></use>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <h4>5700</h4><span class="f-light">Purchase rate</span>
-                                        </div>
-                                    </div>
-                                    <div class="font-success f-w-500"><i class="icon-arrow-up icon-rotate me-1"></i><span>+70%</span></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xxl-auto col-xl-12 col-sm-6 box-col-6">
-                <div class="row">
-                    <div class="col-xxl-12 col-xl-6 box-col-12">
-                        <div class="card widget-1 widget-with-chart">
-                            <div class="card-body">
-                                <div>
-                                    <h4 class="mb-1">1,80k</h4><span class="f-light">Orders</span>
-                                </div>
-                                <div class="order-chart">
-                                    <div id="orderchart"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xxl-12 col-xl-6 box-col-12">
-                        <div class="card widget-1 widget-with-chart">
-                            <div class="card-body">
-                                <div>
-                                    <h4 class="mb-1">6,90k</h4><span class="f-light">Profit</span>
-                                </div>
-                                <div class="profit-chart">
-                                    <div id="profitchart"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xxl-8 col-lg-12 box-col-12">
-                <div class="card">
-                    <div class="card-header card-no-border">
-                        <h5>Overall balance</h5>
-                    </div>
-                    <div class="card-body pt-0">
-                        <div class="row m-0 overall-card">
-                            <div class="col-xl-9 col-md-12 col-sm-7 p-0">
-                                <div class="chart-right">
-                                    <div class="row">
-                                        <div class="col-xl-12">
-                                            <div class="card-body p-0">
-                                                <ul class="balance-data">
-                                                    <li><span class="circle bg-warning"> </span><span class="f-light ms-1">Earning</span></li>
-                                                    <li><span class="circle bg-primary"> </span><span class="f-light ms-1">Expense</span></li>
-                                                </ul>
-                                                <div class="current-sale-container">
-                                                    <div id="chart-currently"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-12 col-sm-5 p-0">
-                                <div class="row g-sm-4 g-2">
-                                    <div class="col-xl-12 col-md-4">
-                                        <div class="light-card balance-card widget-hover">
-                                            <div class="svg-box">
-                                                <svg class="svg-fill">
-                                                    <use href="../assets/svg/icon-sprite.svg#income"></use>
-                                                </svg>
-                                            </div>
-                                            <div>
-                                                <span class="f-light">Income</span>
-                                                <h6 class="mt-1 mb-0">$22,678</h6>
-                                            </div>
-                                            <div class="ms-auto text-end">
-                                                <div class="dropdown icon-dropdown">
-                                                    <button class="btn dropdown-toggle" id="incomedropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="icon-more-alt"></i></button>
-                                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="incomedropdown"><a class="dropdown-item" href="#">Today</a><a class="dropdown-item" href="#">Tomorrow</a><a class="dropdown-item" href="#">Yesterday </a></div>
-                                                </div><span class="font-success">+$456</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-12 col-md-4">
-                                        <div class="light-card balance-card widget-hover">
-                                            <div class="svg-box">
-                                                <svg class="svg-fill">
-                                                    <use href="../assets/svg/icon-sprite.svg#expense"></use>
-                                                </svg>
-                                            </div>
-                                            <div>
-                                                <span class="f-light">Expense</span>
-                                                <h6 class="mt-1 mb-0">$12,057</h6>
-                                            </div>
-                                            <div class="ms-auto text-end">
-                                                <div class="dropdown icon-dropdown">
-                                                    <button class="btn dropdown-toggle" id="expensedropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="icon-more-alt"></i></button>
-                                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="expensedropdown"><a class="dropdown-item" href="#">Today</a><a class="dropdown-item" href="#">Tomorrow</a><a class="dropdown-item" href="#">Yesterday </a></div>
-                                                </div><span class="font-danger">+$256</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-12 col-md-4">
-                                        <div class="light-card balance-card widget-hover">
-                                            <div class="svg-box">
-                                                <svg class="svg-fill">
-                                                    <use href="../assets/svg/icon-sprite.svg#doller-return"></use>
-                                                </svg>
-                                            </div>
-                                            <div>
-                                                <span class="f-light">Cashback</span>
-                                                <h6 class="mt-1 mb-0">8,475</h6>
-                                            </div>
-                                            <div class="ms-auto text-end">
-                                                <div class="dropdown icon-dropdown">
-                                                    <button class="btn dropdown-toggle" id="cashbackdropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="icon-more-alt"></i></button>
-                                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cashbackdropdown"><a class="dropdown-item" href="#">Today</a><a class="dropdown-item" href="#">Tomorrow</a><a class="dropdown-item" href="#">Yesterday </a></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xxl-4 col-xl-7 col-md-6 col-sm-5 box-col-6">
-                <div class="card height-equal">
-                    <div class="card-header card-no-border">
-                        <div class="header-top">
-                            <h5>Recent Orders</h5>
-                            <div class="card-header-right-icon">
-                                <div class="dropdown icon-dropdown">
-                                    <button class="btn dropdown-toggle" id="recentdropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="icon-more-alt"></i></button>
-                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="recentdropdown"><a class="dropdown-item" href="#">Weekly</a><a class="dropdown-item" href="#">Monthly</a><a class="dropdown-item" href="#">Yearly</a></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body pt-0">
-                        <div class="row recent-wrapper">
-                            <div class="col-xl-6">
-                                <div class="recent-chart">
-                                    <div id="recentchart"></div>
-                                </div>
-                            </div>
-                            <div class="col-xl-6">
-                                <ul class="order-content">
-                                    <li>
-                                        <span class="recent-circle bg-primary"> </span>
-                                        <div>
-                                            <span class="f-light f-w-500">Cancelled </span>
-                                            <h4 class="mt-1 mb-0">2,302<span class="f-light f-14 f-w-400 ms-1">(Last 6 Month) </span></h4>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <span class="recent-circle bg-info"></span>
-                                        <div>
-                                            <span class="f-light f-w-500">Delivered</span>
-                                            <h4 class="mt-1 mb-0">9,302<span class="f-light f-14 f-w-400 ms-1">(Last 6 Month) </span></h4>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xxl-4 col-xl-5 col-md-6 col-sm-7 notification box-col-6">
-                <div class="card height-equal">
-                    <div class="card-header card-no-border">
-                        <div class="header-top">
-                            <h5 class="m-0">Activity</h5>
-                            <div class="card-header-right-icon">
-                                <div class="dropdown">
-                                    <button class="btn dropdown-toggle" id="dropdownMenuButton" type="button" data-bs-toggle="dropdown" aria-expanded="false">Today</button>
-                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton"><a class="dropdown-item" href="#">Today</a><a class="dropdown-item" href="#">Tomorrow</a><a class="dropdown-item" href="#">Yesterday  </a></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body pt-0">
-                        <ul>
-                            <li class="d-flex">
-                                <div class="activity-dot-primary"></div>
-                                <div class="w-100 ms-3">
-                                    <p class="d-flex justify-content-between mb-2"><span class="date-content light-background">8th March, 2022 </span><span>1 day ago</span></p>
-                                    <h6>Updated Product<span class="dot-notification"></span></h6>
-                                    <p class="f-light">Quisque a consequat ante sit amet magna...</p>
-                                </div>
-                            </li>
-                            <li class="d-flex">
-                                <div class="activity-dot-warning"></div>
-                                <div class="w-100 ms-3">
-                                    <p class="d-flex justify-content-between mb-2"><span class="date-content light-background">15th Oct, 2022 </span><span>Today</span></p>
-                                    <h6>Tello just like your product<span class="dot-notification"></span></h6>
-                                    <p>Quisque a consequat ante sit amet magna... </p>
-                                </div>
-                            </li>
-                            <li class="d-flex">
-                                <div class="activity-dot-secondary"></div>
-                                <div class="w-100 ms-3">
-                                    <p class="d-flex justify-content-between mb-2"><span class="date-content light-background">20th Sep, 2022 </span><span>12:00 PM</span></p>
-                                    <h6>Tello just like your product<span class="dot-notification"></span></h6>
-                                    <p>Quisque a consequat ante sit amet magna... </p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xxl-4 col-md-6 appointment-sec box-col-6">
-                <div class="appointment">
-                    <div class="card">
-                        <div class="card-header card-no-border">
-                            <div class="header-top">
-                                <h5 class="m-0">Recent Sales</h5>
-                                <div class="card-header-right-icon">
-                                    <div class="dropdown">
-                                        <button class="btn dropdown-toggle" id="recentButton" type="button" data-bs-toggle="dropdown" aria-expanded="false">Today</button>
-                                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="recentButton"><a class="dropdown-item" href="#">Today</a><a class="dropdown-item" href="#">Tomorrow</a><a class="dropdown-item" href="#">Yesterday</a></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body pt-0">
-                            <div class="appointment-table table-responsive">
-                                <table class="table table-bordernone">
-                                    <tbody>
-                                        <tr>
-                                            <td><img class="img-fluid img-40 rounded-circle" src="~/assets/images/dashboard/user/1.jpg" alt="user"></td>
-                                            <td class="img-content-box"><a class="d-block f-w-500" asp-controller="User" asp-action="UserProfile">Jane Cooper</a><span class="f-light">10 minutes ago</span></td>
-                                            <td class="text-end">
-                                                <p class="m-0 font-success">$200.00</p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><img class="img-fluid img-40 rounded-circle" src="~/assets/images/dashboard/user/2.jpg" alt="user"></td>
-                                            <td class="img-content-box"><a class="d-block f-w-500" asp-controller="User" asp-action="UserProfile">Brooklyn Simmons</a><span class="f-light">19 minutes ago</span></td>
-                                            <td class="text-end">
-                                                <p class="m-0 font-success">$970.00</p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><img class="img-fluid img-40 rounded-circle" src="~/assets/images/dashboard/user/3.jpg" alt="user"></td>
-                                            <td class="img-content-box"><a class="d-block f-w-500" asp-controller="User" asp-action="UserProfile">Leslie Alexander</a><span class="f-light">2 hours ago</span></td>
-                                            <td class="text-end">
-                                                <p class="m-0 font-success">$300.00</p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><img class="img-fluid img-40 rounded-circle" src="~/assets/images/dashboard/user/4.jpg" alt="user"></td>
-                                            <td class="img-content-box"><a class="d-block f-w-500" asp-controller="User" asp-action="UserProfile">Travis Wright</a><span class="f-light">8 hours ago</span></td>
-                                            <td class="text-end">
-                                                <p class="m-0 font-success">$450.00</p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><img class="img-fluid img-40 rounded-circle" src="~/assets/images/dashboard/user/5.jpg" alt="user"></td>
-                                            <td class="img-content-box"><a class="d-block f-w-500" asp-controller="User" asp-action="UserProfile">Mark Green</a><span class="f-light">1 day ago</span></td>
-                                            <td class="text-end">
-                                                <p class="m-0 font-success">$768.00</p>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xxl-4 col-md-6 box-col-6">
-                <div class="card">
-                    <div class="card-header card-no-border">
-                        <div class="header-top">
-                            <h5 class="m-0">Timeline</h5>
-                            <div class="card-header-right-icon">
-                                <div class="dropdown">
-                                    <button class="btn dropdown-toggle" id="dropdownschedules" type="button" data-bs-toggle="dropdown" aria-expanded="false">Today</button>
-                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownschedules"><a class="dropdown-item" href="#">Today</a><a class="dropdown-item" href="#">Tomorrow</a><a class="dropdown-item" href="#">Yesterday</a></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body pt-0">
-                        <div class="schedule-container">
-                            <div id="schedulechart"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xxl-3 col-md-6 box-col-6 col-ed-none wow zoomIn">
-                <div class="card purchase-card">
-                    <img class="img-fluid" src="~/assets/images/dashboard/purchase.png" alt="vector mens with leptop">
-                    <div class="card-body pt-3">
-                        <h6 class="mb-3">Buy <a href="#">Pro Account </a>to Explore Primium Features</h6><a class="purchase-btn btn btn-primary btn-hover-effect f-w-500" href="https://1.envato.market/3GVzd" target="_blank">Purchase Now</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xxl-4 col-md-6 box-col-6 col-ed-6">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="card">
-                            <div class="card-header card-no-border">
-                                <div class="header-top">
-                                    <h5>Total Users</h5>
-                                    <div class="dropdown icon-dropdown">
-                                        <button class="btn dropdown-toggle" id="userdropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="icon-more-alt"></i></button>
-                                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userdropdown"><a class="dropdown-item" href="#">Weekly</a><a class="dropdown-item" href="#">Monthly</a><a class="dropdown-item" href="#">Yearly</a></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body pt-0">
-                                <ul class="user-list">
-                                    <li>
-                                        <div class="user-icon primary">
-                                            <div class="user-box"><i class="font-primary" data-feather="user-plus"></i></div>
-                                        </div>
-                                        <div>
-                                            <h5 class="mb-1">178,098</h5><span class="font-primary d-flex align-items-center"><i class="icon-arrow-up icon-rotate me-1"> </i><span class="f-w-500">+30.89</span></span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="user-icon success">
-                                            <div class="user-box"><i class="font-success" data-feather="user-minus"></i></div>
-                                        </div>
-                                        <div>
-                                            <h5 class="mb-1">178,098</h5><span class="font-danger d-flex align-items-center"><i class="icon-arrow-down icon-rotate me-1"></i><span class="f-w-500">-08.89</span></span>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-12">
-                        <div class="card growth-wrap">
-                            <div class="card-header card-no-border">
-                                <div class="header-top">
-                                    <h5>Followers Growth</h5>
-                                    <div class="dropdown icon-dropdown">
-                                        <button class="btn dropdown-toggle" id="growthdropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="icon-more-alt"></i></button>
-                                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="growthdropdown"><a class="dropdown-item" href="#">Weekly</a><a class="dropdown-item" href="#">Monthly</a><a class="dropdown-item" href="#">Yearly</a></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body pt-0">
-                                <div class="growth-wrapper">
-                                    <div id="growthchart"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xxl-5 col-lg-8 col-md-11 box-col-8 col-ed-6">
-                <div class="card papernote-wrap">
-                    <div class="card-header card-no-border">
-                        <div class="header-top">
-                            <h5>PaperNote</h5><a class="f-light d-flex align-items-center" href="#">View project <i class="f-w-700 icon-arrow-top-right"></i></a>
-                        </div>
-                    </div>
-                    <div class="card-body pt-0">
-                        <img class="banner-img img-fluid" src="~/assets/images/dashboard/papernote.jpg" alt="multicolor background">
-                        <div class="note-content mt-sm-4 mt-2">
-                            <p>Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.</p>
-                            <div class="note-labels">
-                                <ul>
-                                    <li> <span class="badge badge-light-primary">SAAS</span></li>
-                                    <li> <span class="badge badge-light-success">E-Commerce</span></li>
-                                    <li> <span class="badge badge-light-warning">Crypto</span></li>
-                                    <li> <span class="badge badge-light-info">Project</span></li>
-                                    <li> <span class="badge badge-light-secondary">NFT</span></li>
-                                    <li> <span class="badge badge-light-light">+9</span></li>
-                                </ul>
-                                <div class="last-label"> <span class="badge badge-light-success">Inprogress</span></div>
-                            </div>
-                            <div class="mt-sm-4 mt-2 user-details">
-                                <div class="customers">
-                                    <ul>
-                                        <li class="d-inline-block"><img class="img-40 rounded-circle" src="~/assets/images/dashboard/user/1.jpg" alt="user"></li>
-                                        <li class="d-inline-block"><img class="img-40 rounded-circle" src="~/assets/images/dashboard/user/6.jpg" alt="user"></li>
-                                        <li class="d-inline-block"><img class="img-40 rounded-circle" src="~/assets/images/dashboard/user/7.jpg" alt="user"></li>
-                                        <li class="d-inline-block"><img class="img-40 rounded-circle" src="~/assets/images/dashboard/user/3.jpg" alt="user"></li>
-                                        <li class="d-inline-block"><img class="img-40 rounded-circle" src="~/assets/images/dashboard/user/8.jpg" alt="user"></li>
-                                        <li class="d-inline-block">
-                                            <div class="light-card"><span class="f-w-500">+5</span></div>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    <h5 class="mb-0 font-primary f-18 me-1">$239,098</h5><span class="f-light f-w-500">(Budget)</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="xe-label">
+                <strong class="num">1k</strong>
+                <span>Users Total</span>
             </div>
         </div>
+
     </div>
-    <!-- Container-fluid Ends-->
+
+    <div class="col-sm-3">
+
+        <div class="xe-widget xe-counter xe-counter-info" data-count=".num" data-from="1000" data-to="2470" data-duration="4" data-easing="true">
+            <div class="xe-icon">
+                <i class="linecons-camera"></i>
+            </div>
+            <div class="xe-label">
+                <strong class="num">1000</strong>
+                <span>New Daily Photos</span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-sm-3">
+
+        <div class="xe-widget xe-counter xe-counter-red" data-count=".num" data-from="0" data-to="57" data-prefix="-," data-suffix="%" data-duration="5" data-easing="true" data-delay="1">
+            <div class="xe-icon">
+                <i class="linecons-lightbulb"></i>
+            </div>
+            <div class="xe-label">
+                <strong class="num">-,0%</strong>
+                <span>Exchange Commission</span>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
 </div>
-@section Script{
-    <script src="../assets/js/sidebar-menu.js"></script>
-    <script src="../assets/js/clock.js"></script>
-    <script src="../assets/js/slick/slick.min.js"></script>
-    <script src="../assets/js/slick/slick.js"></script>
-    <script src="../assets/js/header-slick.js"></script>
-    <script src="../assets/js/chart/apex-chart/apex-chart.js"></script>
-    <script src="../assets/js/chart/apex-chart/stock-prices.js"></script>
-    <script src="../assets/js/chart/apex-chart/moment.min.js"></script>
-    <script src="../assets/js/notify/bootstrap-notify.min.js"></script>
-    <script src="../assets/js/dashboard/default.js"></script>
-    <script src="../assets/js/notify/index.js"></script>
-    <script src="../assets/js/typeahead/handlebars.js"></script>
-    <script src="../assets/js/typeahead/typeahead.bundle.js"></script>
-    <script src="../assets/js/typeahead/typeahead.custom.js"></script>
-    <script src="../assets/js/typeahead-search/handlebars.js"></script>
-    <script src="../assets/js/typeahead-search/typeahead-custom.js"></script>
-    <script src="../assets/js/height-equal.js"></script>
-    <script src="../assets/js/animation/wow/wow.min.js"></script>
-    <script src="../assets/js/script.js"></script>
-    <script>new WOW().init();</script>
-}

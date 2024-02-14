@@ -1,51 +1,297 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <partial name="_Style" />
-    @RenderSection("Style",false)
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Xenon Boostrap Admin Panel" />
+    <meta name="author" content="" />
+    <title>Tape App</title>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Arimo:400,700,400italic">
+    <link rel="stylesheet" href="~/assets/css/fonts/linecons/css/linecons.css">
+    <link rel="stylesheet" href="~/assets/css/fonts/fontawesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="~/assets/css/xenon-core.css">
+    <link rel="stylesheet" href="~/assets/css/xenon-forms.css">
+    <link rel="stylesheet" href="~/assets/css/xenon-components.css">
+    <link rel="stylesheet" href="~/assets/css/xenon-skins.css">
+    <link rel="stylesheet" href="~/assets/css/custom.css">
+    <link href="~/assets/css/sweetalert.css" rel="stylesheet" />
+    <script src="~/assets/js/jquery-1.11.1.min.js"></script>
+    <script src="~/assets/js/AjaxCall.js"></script>
 </head>
-@if (ViewData["Title"] == "Dashboard")
-{
-    <body onload="startTime()">
-        <partial name="_Loader" />
-        <div class="tap-top"><i data-feather="chevrons-up"></i></div>
-        <div class="page-wrapper compact-wrapper" id="pageWrapper">
-            <div class="page-body-wrapper sidebar-icon">
-                <partial name="_Header" />
-                <div class="page-body-wrapper">
-                    <partial name="_SidePenal" />
-                    @RenderBody()
-                    <partial name="IconMarkup" />
-                    <partial name="_Footer" />
-                </div>
-            </div>
-        </div>
-        <partial name="_Script" />
-        @RenderSection("Script",false)
+<body class="page-body">
 
-        <script src="/assets/js/theme-customizer/customizer.js"></script>
-    </body>
-}
-else
-{
-    <body>
-        <partial name="_Loader" />
-        <div class="tap-top"><i data-feather="chevrons-up"></i></div>
-        <div class="page-wrapper compact-wrapper" id="pageWrapper">
-            <div class="page-body-wrapper sidebar-icon">
-                <partial name="_Header" />
-                <div class="page-body-wrapper">
-                    <partial name="_SidePenal" />
-                    @RenderBody()
-                    <partial name="IconMarkup" />
-                    <partial name="_Footer" />
-                </div>
-            </div>
+
+    <div class="page-container">
+      
+        <div class="sidebar-menu toggle-others fixed">
+
+            @Html.Action("MenuControl", "Home")
+
         </div>
-        <partial name="_Script" />
-        @RenderSection("Script",false)
-       
-        <script src="/assets/js/theme-customizer/customizer.js"></script>
-    </body>
-}
+
+        <div class="main-content">
+
+            <nav class="navbar user-info-navbar" role="navigation">
+                <!-- User Info, Notifications and Menu Bar -->
+                <!-- Left links for user info navbar -->
+                <ul class="user-info-menu left-links list-inline list-unstyled">
+
+                    <li class="hidden-sm hidden-xs">
+                        <a href="#" data-toggle="sidebar">
+                            <i class="fa-bars"></i>
+                        </a>
+                    </li>
+
+
+                </ul>
+
+
+                <!-- Right links for user info navbar -->
+                @Html.Action("Header", "Home")
+
+            </nav>
+
+            <div id="mainContent">
+                @RenderBody()
+            </div>
+
+            <!-- Main Footer -->
+            <!-- Choose between footer styles: "footer-type-1" or "footer-type-2" -->
+            <!-- Add class "sticky" to  always stick the footer to the end of page (if page contents is small) -->
+            <!-- Or class "fixed" to  always fix the footer to the end of page -->
+            <footer class="main-footer sticky footer-type-1">
+
+                <div class="footer-inner">
+
+                    <!-- Add your copyright text here -->
+                    <div class="footer-text">
+                        &copy; 2024
+                        <strong>Powered by Aerglo Technology</strong>
+                    </div>
+
+
+                    <!-- Go to Top Link, just add rel="go-top" to any link to add this functionality -->
+                    <div class="go-up">
+
+                        <a href="#" rel="go-top">
+                            <i class="fa-angle-up"></i>
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </footer>
+        </div>
+
+
+
+
+    </div>
+
+    <div class="footer-sticked-chat">
+        <!-- Start: Footer Sticked Chat -->
+
+        <script type="text/javascript">
+		function toggleSampleChatWindow()
+		{
+			var $chat_win = jQuery("#sample-chat-window");
+
+			$chat_win.toggleClass('open');
+
+			if($chat_win.hasClass('open'))
+			{
+				var $messages = $chat_win.find('.ps-scrollbar');
+
+				if($.isFunction($.fn.perfectScrollbar))
+				{
+					$messages.perfectScrollbar('destroy');
+
+					setTimeout(function(){
+						$messages.perfectScrollbar();
+						$chat_win.find('.form-control').focus();
+					}, 300);
+				}
+			}
+
+			jQuery("#sample-chat-window form").on('submit', function(ev)
+			{
+				ev.preventDefault();
+			});
+		}
+
+		jQuery(document).ready(function($)
+		{
+			$(".footer-sticked-chat .chat-user, .other-conversations-list a").on('click', function(ev)
+			{
+				ev.preventDefault();
+				toggleSampleChatWindow();
+			});
+
+			$(".mobile-chat-toggle").on('click', function(ev)
+			{
+				ev.preventDefault();
+
+				$(".footer-sticked-chat").toggleClass('mobile-is-visible');
+			});
+		});
+        </script>
+
+
+
+
+        <!-- End: Footer Sticked Chat -->
+    </div>
+
+    <!-- Page Loading Overlay -->
+    <div class="page-loading-overlay">
+        <div class="loader-2"></div>
+    </div>
+
+    
+    <!-- Bottom Scripts -->
+    <script src="~/assets/js/bootstrap.min.js"></script>
+    <script src="~/assets/js/TweenMax.min.js"></script>
+    <script src="~/assets/js/resizeable.js"></script>
+    <script src="~/assets/js/joinable.js"></script>
+    <script src="~/assets/js/xenon-api.js"></script>
+    <script src="~/assets/js/xenon-toggles.js"></script>
+
+    <!-- Imported scripts on this page -->
+    <script src="~/assets/js/xenon-widgets.js"></script>
+    <script src="~/assets/js/devexpress-web-14.1/js/globalize.min.js"></script>
+    <script src="~/assets/js/devexpress-web-14.1/js/dx.chartjs.js"></script>
+    <script src="~/assets/js/toastr/toastr.min.js"></script>
+
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+
+    <link rel="stylesheet" href="~/assets/js/datatables/dataTables.bootstrap.css">
+
+    <script src="~/assets/js/datatables/js/jquery.dataTables.min.js"></script>
+
+    <!-- Imported styles on this page -->
+    <link rel="stylesheet" href="~/assets/js/daterangepicker/daterangepicker-bs3.css">
+    <link rel="stylesheet" href="~/assets/js/select2/select2.css">
+    <link rel="stylesheet" href="~/assets/js/select2/select2-bootstrap.css">
+    <link rel="stylesheet" href="~/assets/js/multiselect/css/multi-select.css">
+
+    <!-- Imported scripts on this page -->
+    <script src="~/assets/js/datatables/dataTables.bootstrap.js"></script>
+    <script src="~/assets/js/datatables/yadcf/jquery.dataTables.yadcf.js"></script>
+    <script src="~/assets/js/datatables/tabletools/dataTables.tableTools.min.js"></script>
+
+    <!-- Imported scripts on this page -->
+    <script src="~/assets/js/daterangepicker/daterangepicker.js"></script>
+    <script src="~/assets/js/datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/assets/js/timepicker/bootstrap-timepicker.min.js"></script>
+    <script src="~/assets/js/colorpicker/bootstrap-colorpicker.min.js"></script>
+    <script src="~/assets/js/select2/select2.min.js"></script>
+    <script src="~/assets/js/jquery-ui/jquery-ui.min.js"></script>
+    <script src="~/assets/js/selectboxit/jquery.selectBoxIt.min.js"></script>
+    <script src="~/assets/js/tagsinput/bootstrap-tagsinput.min.js"></script>
+    <script src="~/assets/js/typeahead.bundle.js"></script>
+    <script src="~/assets/js/handlebars.min.js"></script>
+    <script src="~/assets/js/multiselect/js/jquery.multi-select.js"></script>
+
+
+    <!-- JavaScripts initializations and stuff -->
+    <script src="~/assets/js/xenon-custom.js"></script>
+    <script src="~/assets/js/sweetalert.js"></script>
+
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
+
+    <script>
+
+        $('#btnCoreBanking').click(function () {
+            var hostUrl = $('#serverIp').val()
+            var port = $('#serverPort').val()
+
+        $.ajax({
+            url: $("#url_getDetails").val(),
+            dataType: 'json',
+            type: 'POST',
+            cache: false,
+            dataType: 'json',
+            data: { hostUrl: hostUrl, port: port },
+
+            success: function (data) {
+
+                if (data != null)
+                {
+                    if (data == true)
+                    {
+                        alert("Connection to " +  hostUrl + " On Port " + port + " Successfull ");
+
+
+                    }
+                    else
+                    {
+                        alert("Failed to Connect to " + hostUrl + " On Port " + port);
+
+                    }
+                }
+                else {
+                    alert("Failed to Connect to " + hostUrl + " On Port " + port);
+                  
+                }
+            },
+
+            error: function (xhr, ajaxOptions, thrownError) {
+               
+                return false;
+            }
+
+        });
+        });
+
+        $('#btnCoreSmtp').click(function ()
+        {
+            var hostUrl = $('#smtpIp').val()
+            var port = $('#smtpPort').val()
+
+            $.ajax({
+                url: $("#url_getDetails").val(),
+                dataType: 'json',
+                type: 'POST',
+                cache: false,
+                dataType: 'json',
+                data: { hostUrl: hostUrl, port: port },
+
+                success: function (data) {
+
+                    if (data != null)
+                    {
+                        if (data == true)
+                        {
+                            alert("Connection to " + hostUrl + " On Port " + port + " Successfull");
+
+
+                        }
+                        else {
+                            alert("Failed to Connect to " + hostUrl + " On Port " + port);
+
+                        }
+                    }
+                    else {
+                        alert("Failed to Connect to " + hostUrl + " On Port " + port);
+
+                    }
+                },
+
+                error: function (xhr, ajaxOptions, thrownError) {
+
+                    return false;
+                }
+
+            });
+        });
+
+    </script>
+</body>
 </html>
