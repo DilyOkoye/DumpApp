@@ -23,6 +23,9 @@ namespace DumpApp.DAL
         public string Filename { get; set; }
         public string TapeType { get; set; }
         public string Password { get; set; }
+        public Nullable<int> LocationId { get; set; }
+        public Nullable<int> TapeDeviceId { get; set; }
+        public Nullable<int> DatebaseId { get; set; }
         public Nullable<System.DateTime> DumpDate { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public string Status { get; set; }

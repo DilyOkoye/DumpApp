@@ -59,10 +59,16 @@
     <Compile Include="admClientProfile.cs">
       <DependentUpon>DumpAppModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="admDatabase.cs">
+      <DependentUpon>DumpAppModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="admDump.cs">
       <DependentUpon>DumpAppModel.tt</DependentUpon>
     </Compile>
     <Compile Include="admDumpType.cs">
+      <DependentUpon>DumpAppModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="admLocation.cs">
       <DependentUpon>DumpAppModel.tt</DependentUpon>
     </Compile>
     <Compile Include="admMenuControl.cs">
@@ -75,6 +81,9 @@
       <DependentUpon>DumpAppModel.tt</DependentUpon>
     </Compile>
     <Compile Include="admStatusItem.cs">
+      <DependentUpon>DumpAppModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="admTapeDevice.cs">
       <DependentUpon>DumpAppModel.tt</DependentUpon>
     </Compile>
     <Compile Include="admUserLogin.cs">
@@ -117,12 +126,15 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ClientProfileRepository.cs" />
+    <Compile Include="Repositories\DatabaseRepository.cs" />
     <Compile Include="Repositories\DumpRepository.cs" />
     <Compile Include="Repositories\DumpTypeRepository.cs" />
+    <Compile Include="Repositories\LocationRepository.cs" />
     <Compile Include="Repositories\MenuControlRepo.cs" />
     <Compile Include="Repositories\RoleAssignmentRepo.cs" />
     <Compile Include="Repositories\RoleRepository.cs" />
     <Compile Include="Repositories\StatusItemRepository.cs" />
+    <Compile Include="Repositories\TapeDeviceRespository.cs" />
     <Compile Include="Repositories\UserLoginRepository.cs" />
     <Compile Include="Repositories\UserProfileRepository.cs" />
   </ItemGroup>

@@ -21,5 +21,13 @@ namespace DumpApp.BAL.OperationsModel
         public bool DumpTypeCheck{ get; set; }
 
         public bool TapeTypeCheck { get; set; }
+
+        public int? LocationId { get; set; }
+        public int? TapeDeviceId { get; set; }
+        public int? DatebaseId { get; set; }
+
+        public string DatabaseName { get; set; }
+
+        public string TapeName { get; set; }
     }
 }

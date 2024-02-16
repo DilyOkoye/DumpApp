@@ -1,8 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using DumpApp.BAL.AdminModel.ViewModel;
+using DumpApp.BAL.OperationsModel.ViewModel;
+using DumpApp.BAL.Utilities;
+using DumpApp.DAL;
 using DumpApp.DAL.Implementation;
 using DumpApp.DAL.Interface;
 using DumpApp.DAL.Repositories;
+using Sybase.Data.AseClient;
 
 namespace DumpApp.BAL.OperationsModel
 {
@@ -10,7 +18,10 @@ namespace DumpApp.BAL.OperationsModel
     {
         private readonly IUserProfileRepository repoUserProfileRepository;
         private readonly IDumpTypeRepository repoDumpTypeRepository;
+        private readonly ILocationRepository repoLocation;
+        private readonly IDatabaseRepository repoDatabase;
         private readonly IDumpRepository repoDumpRepository;
+        private readonly ITapeDeviceRespository repoTapeDevice;
         private readonly IUnitOfWork unitOfWork;
         private readonly IDbFactory idbfactory;
          
@@ -21,7 +32,9 @@ namespace DumpApp.BAL.OperationsModel
             repoUserProfileRepository = new UserProfileRepository(idbfactory);
             repoDumpTypeRepository = new DumpTypeRepository(idbfactory);
             repoDumpRepository = new DumpRepository(idbfactory);
-            
+            repoLocation = new LocationRepository(idbfactory);
+            repoDatabase = new DatabaseRepository(idbfactory);
+            repoTapeDevice = new TapeDeviceRespository(idbfactory);
         }
 
         public List<Dumps> ListOfDumps()
@@ -47,6 +60,45 @@ namespace DumpApp.BAL.OperationsModel
             return d;
         }
 
+        public IEnumerable<SelectListItem> ListLocation()
+        {
+
+            IEnumerable<System.Web.Mvc.SelectListItem> items = repoLocation.GetAllNonAsync().AsEnumerable()
+                .Select(p => new System.Web.Mvc.SelectListItem
+                {
+                    Text = p.Name,
+                    Value = p.Id.ToString()
+
+                });
+            return items;
+        }
+
+        public IEnumerable<SelectListItem> ListTapeDevice()
+        {
+
+            IEnumerable<System.Web.Mvc.SelectListItem> items = repoTapeDevice.GetAllNonAsync().AsEnumerable()
+                .Select(p => new System.Web.Mvc.SelectListItem
+                {
+                    Text = p.Name,
+                    Value = p.Id.ToString()
+
+                });
+            return items;
+        }
+
+        public IEnumerable<SelectListItem> ListDatabase()
+        {
+
+            IEnumerable<System.Web.Mvc.SelectListItem> items = repoDatabase.GetAllNonAsync().AsEnumerable()
+                .Select(p => new System.Web.Mvc.SelectListItem
+                {
+                    Text = p.Name,
+                    Value = p.Id.ToString()
+
+                });
+            return items;
+        }
+
 
         public string GetUserById(int id)
         {
@@ -67,6 +119,108 @@ namespace DumpApp.BAL.OperationsModel
                 return dumpType.Name;
             }
             return null;
+        }
+
+
+        public async Task<ReturnValues> ProcessDump(OperationsViewModel p, int loginUserId,string button)
+        {
+            var returnVal = new ReturnValues();
+
+            var t = await repoDumpRepository.Get(c => c.TapeIdentifier.ToUpper() == p.dumps.TapeIdentifier.ToUpper());
+            if (t != null)
+            {
+                returnVal.nErrorCode = -2;
+                returnVal.sErrorText = "Tape Identifier Already Exist.";
+                return returnVal;
+            }
+
+            var dumpType = p.dumps.DumpType == "Offsite" ? 1 : 2;
+            var databaseName = repoDatabase.GetNonAsync(o => o.Id == p.dumps.DatebaseId).Name;
+            p.dumps.DatabaseName = databaseName;
+
+            var tapeName = repoTapeDevice.GetNonAsync(o => o.Id == p.dumps.TapeDeviceId).Name;
+            p.dumps.TapeName = tapeName;
+            
+            var admDump = new admDump()
+            {
+                DumpDate = DateTime.Now,
+                DumpType = p.dumps.DumpType =="Offsite"? 1: 2,
+                CreatedBy = loginUserId,
+                TapeIdentifier = p.dumps.TapeIdentifier,
+                DumpName = p.dumps.DumpName,
+                DateCreated = DateTime.Now,
+                DatebaseId = p.dumps.DatebaseId,
+                DumpDescription = p.dumps.DumpDescription,
+                Filename = p.dumps.Filename,
+                Status = button == "Save"?"Saved":"Active",
+                TapeDeviceId = p.dumps.TapeDeviceId,
+                TapeDescription = p.dumps.TapeDescription,
+                LocationId = p.dumps.LocationId,
+                TapeType = p.dumps.DumpTypeCheck ? "New":"Old",
+                Password = dumpType == 1 ? Cryptors.Encrypt(p.dumps.TapeIdentifier, "DumpApp"):null 
+            };
+
+            if (button == "Test")
+            {
+                returnVal.nErrorCode = 0;
+                returnVal.sErrorText = "Test Successful";
+                return returnVal;
+            }
+            
+            try
+            {
+                repoDumpRepository.Add(admDump);
+                var result = await unitOfWork.Commit(loginUserId) > 0;
+                if (result)
+                {
+                    if (button == "Save")
+                    {
+                        returnVal.nErrorCode = 0;
+                        returnVal.sErrorText = "Record Saved Successfully";
+                        return returnVal;
+                    }
+
+                    return await ExecuteDump(p.dumps);
+                }
+            }
+            catch (Exception ex)
+            {
+                returnVal.nErrorCode = -1;
+                returnVal.sErrorText = ex.Message ?? ex.InnerException.Message;
+
+                return returnVal;
+            }
+
+            return returnVal;
+        }
+
+
+        public async Task<ReturnValues> ExecuteDump(Dumps dump)
+        {
+            var returnVal = new ReturnValues();
+            var sybaseLayer = new SybaseDataLayer();
+            var query = string.Empty;
+
+            switch (dump.DumpTypeCheck)
+            {
+                case true when dump.DumpType == "Offsite":
+                    query = $"dump {dump.DatabaseName} phoenix to {dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}' with init go";
+                    break;
+                case false when dump.DumpType == "Offsite":
+                    query = $"dump {dump.DatabaseName} phoenix to {dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}'";
+                    break;
+                case true when dump.DumpType == "Internal":
+                    query = $"dump {dump.DatabaseName} phoenix to {dump.TapeName} file= '{dump.Filename}' with init go";
+                    break;
+                case false when dump.DumpType == "Internal":
+                    query = $"dump {dump.DatabaseName} phoenix to {dump.TapeName} file= '{dump.Filename}'";
+                    break;
+                default:
+                    returnVal.nErrorCode = -1;
+                    break;
+            }
+
+            return await sybaseLayer.SqlDs(query);
         }
     }
 }

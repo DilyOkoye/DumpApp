@@ -34,6 +34,17 @@
           <Property Name="Status" Type="varchar" MaxLength="20" />
           <Property Name="LoginCount" Type="int" />
         </EntityType>
+        <EntityType Name="admDatabase">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" />
+          <Property Name="Description" Type="nvarchar" MaxLength="256" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="Status" Type="varchar" MaxLength="10" />
+          <Property Name="DateCreated" Type="datetime" />
+        </EntityType>
         <EntityType Name="admDump">
           <Key>
             <PropertyRef Name="Id" />
@@ -47,6 +58,9 @@
           <Property Name="Filename" Type="varchar" MaxLength="300" />
           <Property Name="TapeType" Type="varchar" MaxLength="20" />
           <Property Name="Password" Type="varchar(max)" />
+          <Property Name="LocationId" Type="int" />
+          <Property Name="TapeDeviceId" Type="int" />
+          <Property Name="DatebaseId" Type="int" />
           <Property Name="DumpDate" Type="datetime" />
           <Property Name="DateCreated" Type="datetime" />
           <Property Name="Status" Type="varchar" MaxLength="20" />
@@ -59,6 +73,17 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="200" />
           <Property Name="Status" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="admLocation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" />
+          <Property Name="Description" Type="nvarchar" MaxLength="256" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="Status" Type="varchar" MaxLength="10" />
+          <Property Name="DateCreated" Type="datetime" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'DumpApp.dbo.admMenuControl' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -110,6 +135,17 @@ warning 6002: The table/view 'DumpApp.dbo.admMenuControl' does not have a primar
           <Property Name="StatusValue" Type="varchar" MaxLength="10" />
           <Property Name="Status" Type="varchar" MaxLength="10" />
         </EntityType>
+        <EntityType Name="admTapeDevice">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" />
+          <Property Name="Description" Type="nvarchar" MaxLength="256" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="Status" Type="varchar" MaxLength="10" />
+          <Property Name="DateCreated" Type="datetime" />
+        </EntityType>
         <EntityType Name="admUserLogin">
           <Key>
             <PropertyRef Name="RowGuid" />
@@ -158,11 +194,14 @@ warning 6002: The table/view 'DumpApp.dbo.admMenuControl' does not have a primar
         <EntityContainer Name="DumpAppModelStoreContainer">
           <EntitySet Name="admAuditTrail" EntityType="Self.admAuditTrail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="admClientProfile" EntityType="Self.admClientProfile" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="admDatabase" EntityType="Self.admDatabase" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="admDump" EntityType="Self.admDump" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="admDumpType" EntityType="Self.admDumpType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="admLocation" EntityType="Self.admLocation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="admRole" EntityType="Self.admRole" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="admRoleAssignment" EntityType="Self.admRoleAssignment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="admStatusItem" EntityType="Self.admStatusItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="admTapeDevice" EntityType="Self.admTapeDevice" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="admUserLogin" EntityType="Self.admUserLogin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="admUserProfile" EntityType="Self.admUserProfile" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="admMenuControl" EntityType="Self.admMenuControl" store:Type="Tables" store:Schema="dbo">
@@ -216,7 +255,10 @@ warning 6002: The table/view 'DumpApp.dbo.admMenuControl' does not have a primar
           </FunctionImport>
           <EntitySet Name="admUserLogins" EntityType="DumpAppModel.admUserLogin" />
           <EntitySet Name="admDumpTypes" EntityType="DumpAppModel.admDumpType" />
+          <EntitySet Name="admDatabases" EntityType="DumpAppModel.admDatabase" />
           <EntitySet Name="admDumps" EntityType="DumpAppModel.admDump" />
+          <EntitySet Name="admLocations" EntityType="DumpAppModel.admLocation" />
+          <EntitySet Name="admTapeDevices" EntityType="DumpAppModel.admTapeDevice" />
         </EntityContainer>
         <EntityType Name="admClientProfile">
           <Key>
@@ -358,6 +400,17 @@ warning 6002: The table/view 'DumpApp.dbo.admMenuControl' does not have a primar
           <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="Status" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="admDatabase">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DateCreated" Type="DateTime" Precision="3" />
+        </EntityType>
         <EntityType Name="admDump">
           <Key>
             <PropertyRef Name="Id" />
@@ -371,10 +424,35 @@ warning 6002: The table/view 'DumpApp.dbo.admMenuControl' does not have a primar
           <Property Name="Filename" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
           <Property Name="TapeType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LocationId" Type="Int32" />
+          <Property Name="TapeDeviceId" Type="Int32" />
+          <Property Name="DatebaseId" Type="Int32" />
           <Property Name="DumpDate" Type="DateTime" Precision="3" />
           <Property Name="DateCreated" Type="DateTime" Precision="3" />
           <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="CreatedBy" Type="Int32" />
+        </EntityType>
+        <EntityType Name="admLocation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DateCreated" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="admTapeDevice">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DateCreated" Type="DateTime" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -557,6 +635,18 @@ warning 6002: The table/view 'DumpApp.dbo.admMenuControl' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="admDatabases">
+            <EntityTypeMapping TypeName="DumpAppModel.admDatabase">
+              <MappingFragment StoreEntitySet="admDatabase">
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="admDumps">
             <EntityTypeMapping TypeName="DumpAppModel.admDump">
               <MappingFragment StoreEntitySet="admDump">
@@ -564,6 +654,9 @@ warning 6002: The table/view 'DumpApp.dbo.admMenuControl' does not have a primar
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
                 <ScalarProperty Name="DumpDate" ColumnName="DumpDate" />
+                <ScalarProperty Name="DatebaseId" ColumnName="DatebaseId" />
+                <ScalarProperty Name="TapeDeviceId" ColumnName="TapeDeviceId" />
+                <ScalarProperty Name="LocationId" ColumnName="LocationId" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="TapeType" ColumnName="TapeType" />
                 <ScalarProperty Name="Filename" ColumnName="Filename" />
@@ -572,6 +665,30 @@ warning 6002: The table/view 'DumpApp.dbo.admMenuControl' does not have a primar
                 <ScalarProperty Name="DumpName" ColumnName="DumpName" />
                 <ScalarProperty Name="TapeDescription" ColumnName="TapeDescription" />
                 <ScalarProperty Name="TapeIdentifier" ColumnName="TapeIdentifier" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="admLocations">
+            <EntityTypeMapping TypeName="DumpAppModel.admLocation">
+              <MappingFragment StoreEntitySet="admLocation">
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="admTapeDevices">
+            <EntityTypeMapping TypeName="DumpAppModel.admTapeDevice">
+              <MappingFragment StoreEntitySet="admTapeDevice">
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

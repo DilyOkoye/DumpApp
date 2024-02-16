@@ -19,6 +19,7 @@ namespace DumpApp.Controllers
         public OperationsViewModel operationsViewModel = null;
         public DumpModel dumpModel = null;
         private string _userName = string.Empty;
+        private PriviledgeManager primanager = null;
         private int _userId;
         public int _RoleId;
         
@@ -56,23 +57,34 @@ namespace DumpApp.Controllers
 
         public ActionResult AddNewDump(int menuid)
         {
+            operationsViewModel.dumps = new Dumps();
+            operationsViewModel.rv = new ReturnValues();
+            primanager = new PriviledgeManager(menuid, _RoleId);
+            operationsViewModel.roleManager = primanager.AssignRoleToUser() == null
+                ? new PriviledgeAssignmentManager()
+                : primanager.AssignRoleToUser();
+            operationsViewModel.drpLocation = dumpModel.ListLocation();
+            operationsViewModel.drpDatabase = dumpModel.ListDatabase();
+            operationsViewModel.drpTapeDevice = dumpModel.ListTapeDevice();
+            var redirectUrl = new UrlHelper(Request.RequestContext).Action("LoadDump", "Operations", new { menuid = menuid });
+            operationsViewModel.Url = redirectUrl;
+
             return View(operationsViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<JsonResult> AddNewDump(OperationsViewModel p)
+        public async Task<JsonResult> AddNewDump(OperationsViewModel p, string button)
         {
             var rtv = new ReturnValues();
             try
             {
-                //if (ModelState.IsValid)
-                //{
-                //    p.admUserProfile.Status = "Active";
-                //    p.rv = await userprofilemodel.AddUserProfile(p, _userId);
+                if (ModelState.IsValid)
+                {
+                    p.rv = await dumpModel.ProcessDump(p, _userId, button);
 
-                //    return (Json(JsonResponseFactory.SuccessResponse(p), JsonRequestBehavior.DenyGet));
-                //}
+                    return (Json(JsonResponseFactory.SuccessResponse(p), JsonRequestBehavior.DenyGet));
+                }
             }
             catch (Exception ex)
             {

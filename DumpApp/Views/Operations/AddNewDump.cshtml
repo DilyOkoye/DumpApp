@@ -45,50 +45,64 @@
                 <div class="panel-body">
 
                     <div role="form" class="form-horizontal">
+                        <div class="text-right">
+                            <button type="submit" name="button" value="Test" class="btn btn-warning"><i class="fa-arrow-circle-right"></i>Test Connection</button>
 
+                        </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="dumpTypeCheck">Requires Initialization</label>
-                            
                             <div class="col-sm-10">
                                 @Html.CheckBoxFor(model => model.dumps.DumpTypeCheck, new { @autocomplete = "off", @style = "text-transform:uppercase", @class = "form-check-input", @id = "DumpTypeCheck", required = "required" })
                             </div>
                         </div>
+                        
+                        <div class="form-group-separator"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="inlineRadio1">Dump Type</label>
                             <div class="col-sm-10">
                                 <div class="form-check form-check-inline">
-                                    @Html.RadioButtonFor(model => model.dumps.DumpType, "Offsite", new { @autocomplete = "off", @class = "form-check-input", @id = "DumpType", required = "required" })
+                                    @Html.RadioButtonFor(model => model.dumps.DumpType, "Offsite", new { @autocomplete = "off", @class = "form-check-input",@name= "DumpTypeRadio", @id = "DumpTypeOffsite", required = "required" })
 
                                     <label class="form-check-label" for="inlineRadio1">Offsite Use</label>
                                     &nbsp;&nbsp;
-                                    @Html.RadioButtonFor(model => model.dumps.DumpType, "Internal", new { @autocomplete = "off", @class = "form-check-input", @id = "DumpType", required = "required" })
+                                    @Html.RadioButtonFor(model => model.dumps.DumpType, "Internal", new { @autocomplete = "off", @class = "form-check-input", @name = "DumpTypeRadio", @id = "DumpTypeInternal", required = "required" })
 
                                     <label class="form-check-label" for="inlineRadio1">Internal Use</label>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="form-group-separator"></div>
+
+                        <div class="form-group" id="divLocation" style="display: none;">
+                            <label class="col-sm-2 control-label">Location</label>
+
+                            <div class="col-sm-10">
+                                @Html.DropDownListFor(model => model.dumps.LocationId, new SelectList(Model.drpLocation, "Value", "Text"), "Select Location", new { @autocomplete = "off", @class = "form-control single-select", @id = "LocationId", required = "required" })
                             </div>
+                        </div>
 
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label" for="field-1">Tape Identifier</label>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="field-1">Tape Identifier</label>
 
-                                <div class="col-sm-10">
-                                    @Html.TextBoxFor(model => model.dumps.TapeIdentifier, new { @autocomplete = "off", @style = "text-transform:uppercase", @class = "form-control", @id = "TapeIdentifier", required = "required" })
-                                </div>
+                            <div class="col-sm-10">
+                            @Html.HiddenFor(o=>o.dumps.TapeIdentifier, new {id= "TapeIdentifier",value="test" })
+                                @Html.TextBoxFor(model => model.dumps.TapeIdentifier, new { @autocomplete = "off", @style = "text-transform:uppercase", @class = "form-control", @id = "TapeIdentifier", required = "required" })
                             </div>
+                        </div>
 
-                            <div class="form-group-separator"></div>
+                        <div class="form-group-separator"></div>
 
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label" for="field-2">Dump Name</label>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="field-2">Dump Name</label>
 
-                                <div class="col-sm-10">
-                                    @Html.TextBoxFor(model => model.dumps.DumpName, new { @autocomplete = "off", @class = "form-control", @id = "DumpName", required = "required" })
+                            <div class="col-sm-10">
+                                @Html.TextBoxFor(model => model.dumps.DumpName, new { @autocomplete = "off", @class = "form-control", @id = "DumpName", required = "required" })
 
-
-                                </div>
                             </div>
+                        </div>
 
-                            <div class="form-group-separator"></div>
+                        <div class="form-group-separator"></div>
 
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="field-2">Filename</label>
@@ -97,7 +111,7 @@
                                 @Html.TextBoxFor(model => model.dumps.Filename, new { @autocomplete = "off", @class = "form-control", @id = "Filename", required = "required" })
                             </div>
                         </div>
-                        
+
                         <div class="form-group-separator"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="field-2">Dump Description</label>
@@ -108,22 +122,47 @@
                         </div>
 
 
+
                         <div class="form-group-separator"></div>
 
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label" for="field-3"></label>
-                                <div class="col-sm-10">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Database</label>
 
-                                    <button type="submit" class="btn btn-info"><i class="fa-save"></i>Save</button>
-                                    
-                                    <button type="submit" class="btn btn-success"><i class="fa-check"></i>Execute</button>
-
-                                    <input type="button" id="Return" value="Return " class="btn btn-info" onclick="foo()">
-                                </div>
-
+                            <div class="col-sm-10">
+                                @Html.DropDownListFor(model => model.dumps.DatebaseId, new SelectList(Model.drpDatabase, "Value", "Text"), "Select Database", new { @autocomplete = "off", @class = "form-control single-select", @id = "DatebaseId", required = "required" })
                             </div>
+                        </div>
+
+                        <div class="form-group-separator"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Tape Device</label>
+
+                            <div class="col-sm-10">
+                                @Html.DropDownListFor(model => model.dumps.TapeDeviceId, new SelectList(Model.drpTapeDevice, "Value", "Text"), "Select Tape Device", new { @autocomplete = "off", @class = "form-control single-select", @id = "TapeDeviceId", required = "required" })
+                            </div>
+                        </div>
+
+
+                        <div class="form-group-separator"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="field-3"></label>
+                            <div class="col-sm-10">
+
+                                <button type="submit" value="Save" name="button" class="btn btn-info"><i class="fa-save"></i>Save</button>
+
+                                <button type="submit" value="Execute" name="button" class="btn btn-success"><i class="fa-check"></i>Execute</button>
+
+                                <input type="button" id="Return" value="Return " class="btn btn-info" onclick="foo()">
+                            
+                            </div>
+                            
+                            
 
                         </div>
+
+                    </div>
 
                 </div>
             }
@@ -132,3 +171,55 @@
     </div>
 </div>
 
+<script>
+    $(document).ready(function () {
+        $("#DumpTypeOffsite").change(function () {
+            var value = $(this).attr("value");
+            if (value == "Offsite") {
+                $("#divLocation").show();
+            }
+            else 
+            {
+                $("#divLocation").hide();
+            }
+        });
+
+        $("#DumpTypeInternal").change(function () {
+            var value = $(this).attr("value");
+            if (value == "Internal") {
+                $("#divLocation").hide();
+            }
+            else
+            {
+                $("#divLocation").show();
+            }
+        });
+
+        $("#DumpTypeCheck").change(function () {
+            if ($('#DumpTypeCheck').is(':checked')) {
+                var uniqueIdentifier = uuidv4();
+                $("#TapeIdentifier").html(uniqueIdentifier);
+                $("#TapeIdentifier").val(uniqueIdentifier)
+
+                var now = new Date();
+                var year = now.getFullYear();
+
+                $('#TapeIdentifier').val(year);
+
+
+                $("#TapeIdentifier").prop('disabled', true);
+            }
+            else
+            {
+                $("#TapeIdentifier").val("");
+                $("#TapeIdentifier").prop('disabled', false);
+            }
+        });
+
+        function uuidv4() {
+            return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
+                (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+            );
+        }
+    }); 
+</script>
