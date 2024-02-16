@@ -86,7 +86,7 @@
                             <label class="col-sm-2 control-label" for="field-1">Tape Identifier</label>
 
                             <div class="col-sm-10">
-                            @Html.HiddenFor(o=>o.dumps.TapeIdentifier, new {id= "TapeIdentifier",value="test" })
+                                @Html.HiddenFor(o=>o.dumps.TapeIdentifier, new {id = "TapeName1" })
                                 @Html.TextBoxFor(model => model.dumps.TapeIdentifier, new { @autocomplete = "off", @style = "text-transform:uppercase", @class = "form-control", @id = "TapeIdentifier", required = "required" })
                             </div>
                         </div>
@@ -201,18 +201,18 @@
                 $("#TapeIdentifier").html(uniqueIdentifier);
                 $("#TapeIdentifier").val(uniqueIdentifier)
 
-                var now = new Date();
-                var year = now.getFullYear();
+                var tapeIdentifier = uuidv4();
 
-                $('#TapeIdentifier').val(year);
-
-
+                $('#TapeIdentifier').val(tapeIdentifier);
+                
+                $('#TapeName1').val(tapeIdentifier);
                 $("#TapeIdentifier").prop('disabled', true);
             }
             else
             {
                 $("#TapeIdentifier").val("");
                 $("#TapeIdentifier").prop('disabled', false);
+                $('#TapeName1').val(tapeIdentifier);
             }
         });
 

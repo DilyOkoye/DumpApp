@@ -1,10 +1,7 @@
-﻿using System.Data.SqlClient;
-using System.Data;
-using System;
+﻿using System;
 using DumpApp.BAL.Utilities;
-using Sybase.Data.AseClient;
-using System.Collections.Generic;
 using System.Threading.Tasks;
+using Sybase.Data.AseClient;
 
 namespace DumpApp.BAL.OperationsModel
 {
@@ -14,7 +11,7 @@ namespace DumpApp.BAL.OperationsModel
         {
             var rtv = new ReturnValues();
             var de = new ConnectionDetails();
-            var connstring = System.Configuration.ConfigurationManager.AppSettings["sybconnection"].ToString();
+            var connstring = System.Configuration.ConfigurationManager.ConnectionStrings["sybconnection"].ToString();
             connstring = connstring.Replace("{{Data Source}}", de.Server);
             connstring = connstring.Replace("{{port}}", de.Port.ToString());
             connstring = connstring.Replace("{{database}}", de.DatabaseName);
@@ -27,6 +24,7 @@ namespace DumpApp.BAL.OperationsModel
                 using (var connection = new AseConnection(connstring))
                 {
                     connection.Open();
+                    LogManager.SaveLog(commandQuery);
                     LogManager.SaveLog("Connected to the database successfully.");
 
                     using (var command = new AseCommand(commandQuery, connection))
@@ -35,7 +33,7 @@ namespace DumpApp.BAL.OperationsModel
                         if (result > 0)
                         {
                             rtv.nErrorCode = 0;
-                            rtv.sErrorText = "Success";
+                            rtv.sErrorText = "Database Dump Successful";
                             return rtv;
                         }
                         LogManager.SaveLog("Database dump successfully executed.");

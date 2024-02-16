@@ -160,13 +160,12 @@ namespace DumpApp.BAL.OperationsModel
                 Password = dumpType == 1 ? Cryptors.Encrypt(p.dumps.TapeIdentifier, "DumpApp"):null 
             };
 
+            p.dumps.Password = admDump.Password;
             if (button == "Test")
             {
-                returnVal.nErrorCode = 0;
-                returnVal.sErrorText = "Test Successful";
-                return returnVal;
+                await ExecuteTestDump(p.dumps);
             }
-            
+
             try
             {
                 repoDumpRepository.Add(admDump);
@@ -194,33 +193,66 @@ namespace DumpApp.BAL.OperationsModel
             return returnVal;
         }
 
-
-        public async Task<ReturnValues> ExecuteDump(Dumps dump)
+        public string GetQuery(Dumps dump)
         {
-            var returnVal = new ReturnValues();
-            var sybaseLayer = new SybaseDataLayer();
             var query = string.Empty;
 
             switch (dump.DumpTypeCheck)
             {
                 case true when dump.DumpType == "Offsite":
-                    query = $"dump {dump.DatabaseName} phoenix to {dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}' with init go";
+                    query = $"dump {dump.DatabaseName}  to {dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}' with init go";
                     break;
                 case false when dump.DumpType == "Offsite":
-                    query = $"dump {dump.DatabaseName} phoenix to {dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}'";
+                    query = $"dump {dump.DatabaseName}  to {dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}'";
                     break;
                 case true when dump.DumpType == "Internal":
-                    query = $"dump {dump.DatabaseName} phoenix to {dump.TapeName} file= '{dump.Filename}' with init go";
+                    query = $"dump {dump.DatabaseName}  to {dump.TapeName} file= '{dump.Filename}' with init go";
                     break;
                 case false when dump.DumpType == "Internal":
-                    query = $"dump {dump.DatabaseName} phoenix to {dump.TapeName} file= '{dump.Filename}'";
-                    break;
-                default:
-                    returnVal.nErrorCode = -1;
+                    query = $"dump {dump.DatabaseName}  to {dump.TapeName} file= '{dump.Filename}'";
                     break;
             }
 
-            return await sybaseLayer.SqlDs(query);
+            return query;
+        }
+
+        public string GetTestQuery(Dumps dump,string path)
+        {
+            var query = string.Empty;
+
+            switch (dump.DumpTypeCheck)
+            {
+                case true when dump.DumpType == "Offsite":
+                    query = $"dump {dump.DatabaseName}  to {path + dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}' with init go";
+                    break;
+                case false when dump.DumpType == "Offsite":
+                    query = $"dump {dump.DatabaseName}  to {path + dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}'";
+                    break;
+                case true when dump.DumpType == "Internal":
+                    query = $"dump {dump.DatabaseName}  to {path + dump.TapeName} file= '{dump.Filename}' with init go";
+                    break;
+                case false when dump.DumpType == "Internal":
+                    query = $"dump {dump.DatabaseName}  to {path + dump.TapeName} file= '{dump.Filename}'";
+                    break;
+            }
+
+            return query;
+        }
+
+        public async Task<ReturnValues> ExecuteTestDump(Dumps dump)
+        {
+            string path = System.Configuration.ConfigurationManager.AppSettings["DumpPath"];
+
+            var sybaseLayer = new SybaseDataLayer();
+
+            return await sybaseLayer.SqlDs(GetTestQuery(dump, path));
+        }
+
+        public async Task<ReturnValues> ExecuteDump(Dumps dump)
+        {
+            var sybaseLayer = new SybaseDataLayer();
+            
+            return await sybaseLayer.SqlDs(GetQuery(dump));
         }
     }
 }
