@@ -10,8 +10,10 @@ namespace DumpApp.BAL.OperationsModel.ViewModel
     public class OperationsViewModel
     {
         public Dumps dumps { get; set; }
+        public admDump AdmDump { get; set; }
         public ReturnValues rv { get; set; }
         public List<Dumps> ListOfDumps { set; get; }
+        public List<Dumps> ListOfLoad { set; get; }
         public PriviledgeAssignmentManager roleManager { get; set; }
         public IEnumerable<SelectListItem> drpLocation { get; set; }
         public IEnumerable<SelectListItem> drpDatabase { get; set; }

@@ -8,7 +8,7 @@
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title">Load Dump(s)</h3>
+        <h3 class="panel-title">New Dump</h3>
 
         <div class="panel-options">
             <a href="#" data-toggle="panel">
@@ -31,11 +31,12 @@
                         { column_number: 4, filter_type: 'text' },
                         { column_number: 5, filter_type: 'text' },
                         { column_number: 6, filter_type: 'text' },
-                        { column_number: 7, filter_type: 'text' }
+                        { column_number: 7, filter_type: 'text' },
+                        { column_number: 8, filter_type: 'text' }
                     ]);
                 });
             </script>
-            @Html.ActionLink("Load New Dump", "AddNewDump", new { menuid = @Model.menuid}, new { @class = "btn btn-success" })
+            @Html.ActionLink("New Dump", "AddNewDump", new { menuid = @Model.menuid}, new { @class = "btn btn-success" })
 
             <br />
             <table class="table uk-responsive-width table-striped table-bordered dataTable" id="example-4" role="grid" aria-describedby="example-4_info">
@@ -70,10 +71,19 @@
                             <td>@row.Status</td>
                             <td>@row.CreatedBy</td>
 
-                            <td>
-                                @Html.ActionLink("Load", "EditDump", new { h = row.Id, menuid = Model.menuid }, htmlAttributes: new { @Class = "btn btn-success btn-sm btn-icon icon-left" })&nbsp;
-                                @Html.ActionLink("Edit", "EditDump", new { h = row.Id, menuid = Model.menuid }, htmlAttributes: new { @Class = "btn btn-info btn-sm btn-icon icon-left" })&nbsp;
-                                @Html.ActionLink("View", "EditDump", new { h = row.Id, menuid = Model.menuid }, htmlAttributes: new { @Class = "btn btn-info btn-sm btn-icon icon-left" })
+                            <td style="width:110px">
+                                @if (row.Status == "Dumped")
+                                {
+                                    @Html.ActionLink("Load", "Load", new { h = row.Id, menuid = Model.menuid }, htmlAttributes: new { @Class = "btn btn-success btn-sm btn-icon icon-left" })
+
+                                }
+                                &nbsp;
+                                @if (row.Status == "Saved")
+                                {
+                                    @Html.ActionLink("Edit", "EditDump", new { h = row.Id, menuid = Model.menuid }, htmlAttributes: new { @Class = "btn btn-info btn-sm btn-icon icon-left" })
+
+                                }
+
                             </td>
                         </tr>
                     }

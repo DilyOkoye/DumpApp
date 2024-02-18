@@ -68,6 +68,9 @@
     <Compile Include="admDumpType.cs">
       <DependentUpon>DumpAppModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="admLoad.cs">
+      <DependentUpon>DumpAppModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="admLocation.cs">
       <DependentUpon>DumpAppModel.tt</DependentUpon>
     </Compile>
@@ -129,6 +132,7 @@
     <Compile Include="Repositories\DatabaseRepository.cs" />
     <Compile Include="Repositories\DumpRepository.cs" />
     <Compile Include="Repositories\DumpTypeRepository.cs" />
+    <Compile Include="Repositories\LoadRepository.cs" />
     <Compile Include="Repositories\LocationRepository.cs" />
     <Compile Include="Repositories\MenuControlRepo.cs" />
     <Compile Include="Repositories\RoleAssignmentRepo.cs" />

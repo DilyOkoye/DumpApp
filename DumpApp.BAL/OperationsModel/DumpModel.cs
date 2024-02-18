@@ -21,6 +21,7 @@ namespace DumpApp.BAL.OperationsModel
         private readonly ILocationRepository repoLocation;
         private readonly IDatabaseRepository repoDatabase;
         private readonly IDumpRepository repoDumpRepository;
+        private readonly ILoadRepository repoLoadRepository;
         private readonly ITapeDeviceRespository repoTapeDevice;
         private readonly IUnitOfWork unitOfWork;
         private readonly IDbFactory idbfactory;
@@ -35,6 +36,30 @@ namespace DumpApp.BAL.OperationsModel
             repoLocation = new LocationRepository(idbfactory);
             repoDatabase = new DatabaseRepository(idbfactory);
             repoTapeDevice = new TapeDeviceRespository(idbfactory);
+            repoLoadRepository = new LoadRepository(idbfactory);
+        }
+
+        public List<Dumps> ListOfLoad()
+        {
+
+            var d = (from h in repoLoadRepository.GetAllNonAsync()
+                select new Dumps()
+                {
+                    DumpName = h.DumpName,
+                    DumpDescription = h.DumpDescription,
+                    TapeDescription = h.TapeDescription,
+                    Status = h.Status,
+                    Filename = h.Filename,
+                    DumpType = h.DumpType == null ? "" : GetDumpTypeName((int)h.DumpType),
+                    DumpDate = h.DumpDate == null ? "" : $"{h.DumpDate:F}",
+                    TapeType = h.TapeType,
+                    DateCreated = h.DateCreated == null ? "" : $"{h.DateCreated:F}",
+                    TapeIdentifier = h.TapeIdentifier,
+                    Id = h.Id,
+                    CreatedBy = h.CreatedBy == null ? "" : GetUserById((int)h.CreatedBy),
+                }).ToList();
+
+            return d;
         }
 
         public List<Dumps> ListOfDumps()
@@ -58,6 +83,42 @@ namespace DumpApp.BAL.OperationsModel
                 }).ToList();
 
             return d;
+        }
+
+        public async Task<Dumps> ViewDetails(int id)
+        {
+            try
+            {
+                var y = await repoDumpRepository.Get(p => p.Id == id);
+                if (y != null)
+                {
+                    return new Dumps()
+                    {
+                        DumpDate = $"{y.DumpDate:F}",
+                        DateCreated = $"{y.DateCreated:F}",
+                        TapeIdentifier = y.TapeIdentifier,
+                        TapeDescription = y.TapeDescription,
+                        DumpDescription = y.DumpDescription,
+                        DumpName = y.DumpName,
+                        Filename = y.Filename,
+                        DumpTypeCheck = y.TapeType == "New",
+                        Status = y.Status,
+                        CreatedBy = y.CreatedBy == null ? "" : GetUserById((int)y.CreatedBy),
+                        DatebaseId = y.DatebaseId,
+                        LocationId = y.LocationId,
+                        Password = y.Password,
+                        Id = y.Id,
+                        TapeDeviceId = y.TapeDeviceId,
+                        DumpType = y.DumpType ==1? "Offsite": "Internal"
+                    };
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return null;
         }
 
         public IEnumerable<SelectListItem> ListLocation()
@@ -120,6 +181,77 @@ namespace DumpApp.BAL.OperationsModel
             }
             return null;
         }
+        
+        
+
+        public async Task<ReturnValues> ProcessLoad(OperationsViewModel p, int loginUserId, string button)
+        {
+            var returnVal = new ReturnValues();
+
+            var t = await repoDumpRepository.Get(c => c.TapeIdentifier.ToUpper() == p.dumps.TapeIdentifier.ToUpper());
+            if (t is null)
+            {
+                returnVal.nErrorCode = -2;
+                returnVal.sErrorText = "Tape Identifier Does not Exist";
+                return returnVal;
+            }
+
+            var dumpType = p.dumps.DumpType == "Offsite" ? 1 : 2;
+            var databaseName = repoDatabase.GetNonAsync(o => o.Id == p.dumps.DatebaseId).Name;
+            p.dumps.DatabaseName = databaseName;
+
+            var tapeName = repoTapeDevice.GetNonAsync(o => o.Id == p.dumps.TapeDeviceId).Name;
+            p.dumps.TapeName = tapeName;
+
+            var admLoad = new admLoad()
+            {
+                DumpDate = DateTime.Now,
+                DumpType = p.dumps.DumpType == "Offsite" ? 1 : 2,
+                CreatedBy = loginUserId,
+                TapeIdentifier = p.dumps.TapeIdentifier,
+                DumpName = p.dumps.DumpName,
+                DateCreated = DateTime.Now,
+                DatebaseId = p.dumps.DatebaseId,
+                DumpDescription = p.dumps.DumpDescription,
+                Filename = p.dumps.Filename,
+                TapeDeviceId = p.dumps.TapeDeviceId,
+                TapeDescription = p.dumps.TapeDescription,
+                LocationId = p.dumps.LocationId,
+                TapeType = p.dumps.DumpTypeCheck ? "New" : "Old",
+                Password = dumpType == 1 ? Cryptors.Encrypt(p.dumps.TapeIdentifier, "DumpApp") : null
+            };
+
+            p.dumps.Password = admLoad.Password;
+            if (button == "Test")
+            {
+                await ExecuteTestLoad(p.dumps);
+            }
+
+            try
+            {
+                repoLoadRepository.Add(admLoad);
+                var result = await unitOfWork.Commit(loginUserId) > 0;
+                if (result)
+                {
+                    var loadResult = await ExecuteLoad(p.dumps);
+                    if (loadResult.nErrorCode == 0)
+                    {
+                        admLoad.Status = "Loaded";
+                        await unitOfWork.Commit(loginUserId);
+                        returnVal.sErrorText = "Load Operation Successful";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                returnVal.nErrorCode = -1;
+                returnVal.sErrorText = ex.Message ?? ex.InnerException.Message;
+
+                return returnVal;
+            }
+
+            return returnVal;
+        }
 
 
         public async Task<ReturnValues> ProcessDump(OperationsViewModel p, int loginUserId,string button)
@@ -179,7 +311,13 @@ namespace DumpApp.BAL.OperationsModel
                         return returnVal;
                     }
 
-                    return await ExecuteDump(p.dumps);
+                    var loadResult = await ExecuteLoad(p.dumps);
+                    if (loadResult.nErrorCode == 0)
+                    {
+                        admDump.Status = "Dumped";
+                        await unitOfWork.Commit(loginUserId);
+                        returnVal.sErrorText = "Dump Operation Successful";
+                    }
                 }
             }
             catch (Exception ex)
@@ -192,6 +330,83 @@ namespace DumpApp.BAL.OperationsModel
 
             return returnVal;
         }
+
+        public async Task<ReturnValues> EditDump(OperationsViewModel p, int loginUserId, string button)
+        {
+            var returnVal = new ReturnValues();
+
+            var t = await repoDumpRepository.Get(c => c.Id == p.dumps.Id);
+            if (t == null)
+            {
+                returnVal.nErrorCode = -2;
+                returnVal.sErrorText = "Record Does not Exist.";
+                return returnVal;
+            }
+
+            var dumpType = p.dumps.DumpType == "Offsite" ? 1 : 2;
+            var databaseName = repoDatabase.GetNonAsync(o => o.Id == p.dumps.DatebaseId).Name;
+            p.dumps.DatabaseName = databaseName;
+
+            var tapeName = repoTapeDevice.GetNonAsync(o => o.Id == p.dumps.TapeDeviceId).Name;
+            p.dumps.TapeName = tapeName;
+
+
+            t.DumpDate = DateTime.Now;
+            t.DumpType = p.dumps.DumpType == "Offsite" ? 1 : 2;
+            t.CreatedBy = loginUserId;
+            t.TapeIdentifier = p.dumps.TapeIdentifier;
+            t.DumpName = p.dumps.DumpName;
+            t.DateCreated = DateTime.Now;
+            t.DatebaseId = p.dumps.DatebaseId;
+            t.DumpDescription = p.dumps.DumpDescription;
+            t.Filename = p.dumps.Filename;
+            t.Status = "Saved";
+            t.TapeDeviceId = p.dumps.TapeDeviceId;
+            t.TapeDescription = p.dumps.TapeDescription;
+            t.LocationId = p.dumps.LocationId;
+            t.TapeType = p.dumps.DumpTypeCheck ? "New" : "Old";
+            t.Password = dumpType == 1 ? Cryptors.Encrypt(p.dumps.TapeIdentifier, "DumpApp") : null;
+           
+
+            p.dumps.Password = t.Password;
+            if (button == "Test")
+            {
+                await ExecuteTestDump(p.dumps);
+            }
+
+            try
+            {
+                repoDumpRepository.Update(t);
+                var result = await unitOfWork.Commit(loginUserId) > 0;
+                if (result)
+                {
+                    if (button == "Save")
+                    {
+                        returnVal.nErrorCode = 0;
+                        returnVal.sErrorText = "Record Updated Successfully";
+                        return returnVal;
+                    }
+
+                    var loadResult = await ExecuteLoad(p.dumps);
+                    if (loadResult.nErrorCode == 0)
+                    {
+                        t.Status = "Dumped";
+                        await unitOfWork.Commit(loginUserId);
+                        returnVal.sErrorText = "Dump Operation Successful";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                returnVal.nErrorCode = -1;
+                returnVal.sErrorText = ex.Message ?? ex.InnerException.Message;
+
+                return returnVal;
+            }
+
+            return returnVal;
+        }
+
 
         public string GetQuery(Dumps dump)
         {
@@ -216,7 +431,30 @@ namespace DumpApp.BAL.OperationsModel
             return query;
         }
 
-        public string GetTestQuery(Dumps dump,string path)
+        public string GetTestLoadQuery(Dumps dump, string path)
+        {
+            var query = string.Empty;
+
+            switch (dump.DumpTypeCheck)
+            {
+                case true when dump.DumpType == "Offsite":
+                    query = $"load {dump.DatabaseName}  to {path + dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}' with init go";
+                    break;
+                case false when dump.DumpType == "Offsite":
+                    query = $"load {dump.DatabaseName}  to {path + dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}'";
+                    break;
+                case true when dump.DumpType == "Internal":
+                    query = $"load {dump.DatabaseName}  to {path + dump.TapeName} file= '{dump.Filename}' with init go";
+                    break;
+                case false when dump.DumpType == "Internal":
+                    query = $"load {dump.DatabaseName}  to {path + dump.TapeName} file= '{dump.Filename}'";
+                    break;
+            }
+
+            return query;
+        }
+
+        public string GetTestDumpQuery(Dumps dump,string path)
         {
             var query = string.Empty;
 
@@ -239,19 +477,35 @@ namespace DumpApp.BAL.OperationsModel
             return query;
         }
 
+        public async Task<ReturnValues> ExecuteTestLoad(Dumps dump)
+        {
+            string path = System.Configuration.ConfigurationManager.AppSettings["LoadPath"];
+
+            var sybaseLayer = new SybaseDataLayer();
+
+            return await sybaseLayer.SqlDs(GetTestLoadQuery(dump, path));
+        }
+
         public async Task<ReturnValues> ExecuteTestDump(Dumps dump)
         {
             string path = System.Configuration.ConfigurationManager.AppSettings["DumpPath"];
 
             var sybaseLayer = new SybaseDataLayer();
 
-            return await sybaseLayer.SqlDs(GetTestQuery(dump, path));
+            return await sybaseLayer.SqlDs(GetTestDumpQuery(dump, path));
         }
 
         public async Task<ReturnValues> ExecuteDump(Dumps dump)
         {
             var sybaseLayer = new SybaseDataLayer();
             
+            return await sybaseLayer.SqlDs(GetQuery(dump));
+        }
+
+        public async Task<ReturnValues> ExecuteLoad(Dumps dump)
+        {
+            var sybaseLayer = new SybaseDataLayer();
+
             return await sybaseLayer.SqlDs(GetQuery(dump));
         }
     }

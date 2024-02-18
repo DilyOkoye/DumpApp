@@ -14,7 +14,7 @@ namespace DumpApp.DAL
     using System;
     using System.Collections.Generic;
     
-    public partial class admDump
+    public partial class admLoad
     {
         [Key]
         public int Id { get; set; }

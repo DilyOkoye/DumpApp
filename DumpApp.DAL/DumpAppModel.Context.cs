@@ -40,6 +40,7 @@ namespace DumpApp.DAL
         public virtual DbSet<admDump> admDumps { get; set; }
         public virtual DbSet<admLocation> admLocations { get; set; }
         public virtual DbSet<admTapeDevice> admTapeDevices { get; set; }
+        public virtual DbSet<admLoad> admLoads { get; set; }
     
         public virtual ObjectResult<Isp_MenuSystemAdmin_Result> Isp_MenuSystemAdmin(Nullable<int> role_id)
         {

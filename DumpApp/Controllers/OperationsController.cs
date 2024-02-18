@@ -44,8 +44,19 @@ namespace DumpApp.Controllers
             dumpModel = new DumpModel();
         }
 
+        public ActionResult LoadList(int menuId)
+        {
+            operationsViewModel.dumps = new Dumps();
+            operationsViewModel.rv = new ReturnValues();
+            operationsViewModel.menuid = menuId;
+            operationsViewModel.ListOfLoad = dumpModel.ListOfLoad();
 
-        public ActionResult LoadDump(int menuid)
+            return View(operationsViewModel);
+        }
+        
+        
+
+        public ActionResult DumpList(int menuid)
         {
             operationsViewModel.dumps = new Dumps();
             operationsViewModel.rv = new ReturnValues();
@@ -66,7 +77,7 @@ namespace DumpApp.Controllers
             operationsViewModel.drpLocation = dumpModel.ListLocation();
             operationsViewModel.drpDatabase = dumpModel.ListDatabase();
             operationsViewModel.drpTapeDevice = dumpModel.ListTapeDevice();
-            var redirectUrl = new UrlHelper(Request.RequestContext).Action("LoadDump", "Operations", new { menuid = menuid });
+            var redirectUrl = new UrlHelper(Request.RequestContext).Action("DumpList", "Operations", new { menuid = menuid });
             operationsViewModel.Url = redirectUrl;
 
             return View(operationsViewModel);
@@ -96,9 +107,89 @@ namespace DumpApp.Controllers
             return (Json(JsonResponseFactory.ErrorResponse("Error"), JsonRequestBehavior.DenyGet));
         }
 
-        public ActionResult EditDump(int menuid)
+        public async Task<ActionResult> EditDump(int h, int menuid)
         {
+            operationsViewModel.rv = new ReturnValues();
+            operationsViewModel.dumps = await dumpModel.ViewDetails(h);
+            operationsViewModel.drpLocation = dumpModel.ListLocation();
+            operationsViewModel.drpDatabase = dumpModel.ListDatabase();
+            operationsViewModel.drpTapeDevice = dumpModel.ListTapeDevice();
+            operationsViewModel.menuid = menuid;
+
+            var redirectUrl = new UrlHelper(Request.RequestContext).Action("DumpList", "Operations", new { menuid = menuid });
+            operationsViewModel.Url = redirectUrl;
+            primanager = new PriviledgeManager(menuid, _RoleId);
+            operationsViewModel.roleManager = primanager.AssignRoleToUser() == null
+                ? new PriviledgeAssignmentManager()
+                : primanager.AssignRoleToUser();
+
             return View(operationsViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> EditDump(OperationsViewModel p, string button)
+        {
+            var rtv = new ReturnValues();
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    p.rv = await dumpModel.EditDump(p, _userId, button);
+
+                    return (Json(JsonResponseFactory.SuccessResponse(p), JsonRequestBehavior.DenyGet));
+                }
+            }
+            catch (Exception ex)
+            {
+                rtv.nErrorCode = -1001;
+                rtv.sErrorText = ex.Message == null ? ex.InnerException.Message : ex.Message;
+                p.rv = rtv;
+                return (Json(JsonResponseFactory.SuccessResponse(p), JsonRequestBehavior.DenyGet));
+            }
+            return (Json(JsonResponseFactory.ErrorResponse("Error"), JsonRequestBehavior.DenyGet));
+        }
+
+        public async Task<ActionResult> Load(int h, int menuid)
+        {
+            operationsViewModel.rv = new ReturnValues();
+            operationsViewModel.dumps = await dumpModel.ViewDetails(h);
+            operationsViewModel.drpLocation = dumpModel.ListLocation();
+            operationsViewModel.drpDatabase = dumpModel.ListDatabase();
+            operationsViewModel.drpTapeDevice = dumpModel.ListTapeDevice();
+            operationsViewModel.menuid = menuid;
+
+            var redirectUrl = new UrlHelper(Request.RequestContext).Action("DumpList", "Operations", new { menuid = menuid });
+            operationsViewModel.Url = redirectUrl;
+            primanager = new PriviledgeManager(menuid, _RoleId);
+            operationsViewModel.roleManager = primanager.AssignRoleToUser() == null
+                ? new PriviledgeAssignmentManager()
+                : primanager.AssignRoleToUser();
+
+            return View(operationsViewModel);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> Load(OperationsViewModel p, string button)
+        {
+            var rtv = new ReturnValues();
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                   p.rv = await dumpModel.ProcessLoad(p, _userId, button);
+
+                    return (Json(JsonResponseFactory.SuccessResponse(p), JsonRequestBehavior.DenyGet));
+                }
+            }
+            catch (Exception ex)
+            {
+                rtv.nErrorCode = -1001;
+                rtv.sErrorText = ex.Message == null ? ex.InnerException.Message : ex.Message;
+                p.rv = rtv;
+                return (Json(JsonResponseFactory.SuccessResponse(p), JsonRequestBehavior.DenyGet));
+            }
+            return (Json(JsonResponseFactory.ErrorResponse("Error"), JsonRequestBehavior.DenyGet));
         }
     }
 }

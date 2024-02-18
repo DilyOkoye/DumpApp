@@ -43,6 +43,7 @@ namespace DumpApp.BAL.OperationsModel
             catch (Exception ex)
             {
                 LogManager.SaveLog($"An error occurred: {ex.Message}");
+                rtv.sErrorText = ex.Message;
             }
 
             return rtv;

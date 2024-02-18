@@ -18,6 +18,7 @@
         <EntityTypeShape EntityType="DumpAppModel.admDump" Width="1.5" PointX="9.375" PointY="3.75" />
         <EntityTypeShape EntityType="DumpAppModel.admLocation" Width="1.5" PointX="9.375" PointY="8.75" />
         <EntityTypeShape EntityType="DumpAppModel.admTapeDevice" Width="1.5" PointX="5.375" PointY="10.75" />
+        <EntityTypeShape EntityType="DumpAppModel.admLoad" Width="1.5" PointX="11.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

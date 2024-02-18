@@ -1402,9 +1402,11 @@
     <Content Include="Views\Admin\ManageUser.cshtml" />
     <Content Include="Views\Admin\AddUserProfile.cshtml" />
     <Content Include="Views\Admin\EditUserProfile.cshtml" />
-    <Content Include="Views\Operations\LoadDump.cshtml" />
+    <Content Include="Views\Operations\DumpList.cshtml" />
     <Content Include="Views\Operations\AddNewDump.cshtml" />
     <Content Include="Views\Operations\EditDump.cshtml" />
+    <Content Include="Views\Operations\Load.cshtml" />
+    <Content Include="Views\Operations\LoadList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
