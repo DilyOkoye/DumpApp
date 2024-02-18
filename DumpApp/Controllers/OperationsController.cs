@@ -62,7 +62,10 @@ namespace DumpApp.Controllers
             operationsViewModel.rv = new ReturnValues();
             operationsViewModel.menuid = menuid;
             operationsViewModel.ListOfDumps = dumpModel.ListOfDumps();
-
+            primanager = new PriviledgeManager(menuid, _RoleId);
+            operationsViewModel.roleManager = primanager.AssignRoleToUser() == null
+                ? new PriviledgeAssignmentManager()
+                : primanager.AssignRoleToUser();
             return View(operationsViewModel);
         }
 

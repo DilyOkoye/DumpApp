@@ -36,8 +36,12 @@
                     ]);
                 });
             </script>
-            @Html.ActionLink("New Dump", "AddNewDump", new { menuid = @Model.menuid}, new { @class = "btn btn-success" })
+            @if (Model.roleManager.CanAdd)
+            {
+                @Html.ActionLink("New Dump", "AddNewDump", new { menuid = @Model.menuid}, new { @class = "btn btn-success" })
 
+            }
+           
             <br />
             <table class="table uk-responsive-width table-striped table-bordered dataTable" id="example-4" role="grid" aria-describedby="example-4_info">
                 <thead>
@@ -68,20 +72,24 @@
                             <td>@row.DumpType</td>
                             <td>@row.TapeType</td>
                             <td>@row.DumpDate</td>
-                            <td>@row.Status</td>
+                            <td style="width:60px">@row.Status</td>
                             <td>@row.CreatedBy</td>
 
                             <td style="width:110px">
                                 @if (row.Status == "Dumped")
                                 {
-                                    @Html.ActionLink("Load", "Load", new { h = row.Id, menuid = Model.menuid }, htmlAttributes: new { @Class = "btn btn-success btn-sm btn-icon icon-left" })
-
+                                    if (Model.roleManager.CanAdd)
+                                    {
+                                        @Html.ActionLink("Load", "Load", new { h = row.Id, menuid = Model.menuid }, htmlAttributes: new { @Class = "btn btn-success btn-sm btn-icon icon-left" })
+                                    }
                                 }
                                 &nbsp;
                                 @if (row.Status == "Saved")
                                 {
-                                    @Html.ActionLink("Edit", "EditDump", new { h = row.Id, menuid = Model.menuid }, htmlAttributes: new { @Class = "btn btn-info btn-sm btn-icon icon-left" })
-
+                                    if (Model.roleManager.CanEdit)
+                                    {
+                                        @Html.ActionLink("Edit", "EditDump", new { h = row.Id, menuid = Model.menuid }, htmlAttributes: new { @Class = "btn btn-info btn-sm btn-icon icon-left" })
+                                    }
                                 }
 
                             </td>

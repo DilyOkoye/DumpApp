@@ -1407,6 +1407,10 @@
     <Content Include="Views\Operations\EditDump.cshtml" />
     <Content Include="Views\Operations\Load.cshtml" />
     <Content Include="Views\Operations\LoadList.cshtml" />
+    <Content Include="Views\Admin\ManageClientProfile.cshtml" />
+    <Content Include="Views\Admin\ManageTapeDevice.cshtml" />
+    <Content Include="Views\Admin\AddTapeDevice.cshtml" />
+    <Content Include="Views\Admin\EditTapeDevice.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

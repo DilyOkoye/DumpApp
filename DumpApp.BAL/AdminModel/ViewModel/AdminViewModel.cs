@@ -25,6 +25,8 @@ namespace DumpApp.BAL.AdminModel.ViewModel
         public string toDate { get; set; }
         public PriviledgeAssignmentManager roleManager { get; set; }
         public admRole admRole { get; set; }
+
+        public admTapeDevice admTapeDevice { get; set; }
         public List<admRole> ListOfRole { get; set; }
         public string Url { get; set; }
         public string PasswordExpiryDate { get; set; }
@@ -35,6 +37,8 @@ namespace DumpApp.BAL.AdminModel.ViewModel
         public bool ssl { get; set; }
         public string RepeatTaskEvery { get; set; }
         public admUserProfile admUserProfile { get; set; }
+
+        public List<admTapeDevice> ListOfTapeDevices { set; get; }
         public List<admUserProfile> ListadmUserProfile { set; get; }
         //public List<Implementation.ClientProfileModel.AuditInfo> ListOfAudit { set; get; }
 

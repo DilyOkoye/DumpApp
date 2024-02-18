@@ -78,11 +78,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdminModel\ClientProfileModel.cs" />
     <Compile Include="AdminModel\Header.cs" />
     <Compile Include="AdminModel\MenuModel.cs" />
     <Compile Include="AdminModel\PriviledgeAssignmentManager.cs" />
     <Compile Include="AdminModel\RoleModel.cs" />
     <Compile Include="AdminModel\RolePriviledgeReturnValues.cs" />
+    <Compile Include="AdminModel\TapeDeviceModel.cs" />
     <Compile Include="AdminModel\UserProfileModel.cs" />
     <Compile Include="AdminModel\ViewModel\AdminViewModel.cs" />
     <Compile Include="AdminModel\ViewModel\MenuViewModel.cs" />
