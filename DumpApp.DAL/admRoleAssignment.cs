@@ -7,8 +7,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.ComponentModel.DataAnnotations;
-
 namespace DumpApp.DAL
 {
     using System;
@@ -16,7 +14,6 @@ namespace DumpApp.DAL
     
     public partial class admRoleAssignment
     {
-        [Key]
         public int id { get; set; }
         public Nullable<int> role_id { get; set; }
         public Nullable<int> menu_id { get; set; }

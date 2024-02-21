@@ -66,7 +66,26 @@
                             <td>@row.DumpType</td>
                             <td>@row.TapeType</td>
                             <td>@row.DumpDate</td>
-                            <td>@row.Status</td>
+                            <td style="width:50px">
+                                @switch (row.Status)
+                                {
+                                    case "Dumped":
+                                        <span class="label label-success">@row.Status</span>
+                                        break;
+                                    case "Saved":
+                                        <span class="label label-info">@row.Status</span>
+                                        break;
+                                    case "Pending":
+                                        <span class="label label-warning">@row.Status</span>
+                                        break;
+                                    case "Error":
+                                        <span class="label label-danger">@row.Status</span>
+                                        break;
+                                    default:
+                                        <span class="label label-default">@row.Status</span>
+                                        break;
+                                }
+                            </td>
                             <td>@row.CreatedBy</td>
                         </tr>
                     }

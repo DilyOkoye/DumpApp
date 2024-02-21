@@ -72,10 +72,29 @@
                             <td>@row.DumpType</td>
                             <td>@row.TapeType</td>
                             <td>@row.DumpDate</td>
-                            <td style="width:60px">@row.Status</td>
-                            <td>@row.CreatedBy</td>
+                            <td style="width:50px">
+                                @switch(row.Status)
+                                {
+                                    case "Dumped":
+                                        <span class="label label-success">@row.Status</span>
+                                        break;
+                                    case "Saved":
+                                        <span class="label label-info">@row.Status</span>
+                                        break;
+                                    case "Pending":
+                                        <span class="label label-warning">@row.Status</span>
+                                        break;
+                                    case "Error":
+                                        <span class="label label-danger">@row.Status</span>
+                                        break;
+                                    default:
+                                        <span class="label label-default">@row.Status</span>
+                                        break;
+                                }
+                            </td>
+                            <td style="width:60px">@row.CreatedBy</td>
 
-                            <td style="width:110px">
+                            <td style="width:100px">
                                 @if (row.Status == "Dumped")
                                 {
                                     if (Model.roleManager.CanAdd)

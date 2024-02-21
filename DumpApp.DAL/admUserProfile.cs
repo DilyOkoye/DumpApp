@@ -7,8 +7,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.ComponentModel.DataAnnotations;
-
 namespace DumpApp.DAL
 {
     using System;
@@ -16,7 +14,6 @@ namespace DumpApp.DAL
     
     public partial class admUserProfile
     {
-        [Key]
         public int UserId { get; set; }
         public string FullName { get; set; }
         public string LoginId { get; set; }

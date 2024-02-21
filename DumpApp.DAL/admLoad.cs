@@ -7,8 +7,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.ComponentModel.DataAnnotations;
-
 namespace DumpApp.DAL
 {
     using System;
@@ -16,7 +14,6 @@ namespace DumpApp.DAL
     
     public partial class admLoad
     {
-        [Key]
         public int Id { get; set; }
         public string TapeIdentifier { get; set; }
         public string TapeDescription { get; set; }
@@ -29,6 +26,9 @@ namespace DumpApp.DAL
         public Nullable<int> LocationId { get; set; }
         public Nullable<int> TapeDeviceId { get; set; }
         public Nullable<int> DatebaseId { get; set; }
+        public string JobId { get; set; }
+        public Nullable<int> ErrorId { get; set; }
+        public string ErrorMessage { get; set; }
         public Nullable<System.DateTime> DumpDate { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public string Status { get; set; }
