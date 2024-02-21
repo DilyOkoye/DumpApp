@@ -222,7 +222,7 @@ namespace DumpApp.BAL.OperationsModel
                 TapeDescription = p.dumps.TapeDescription,
                 LocationId = p.dumps.LocationId,
                 TapeType = p.dumps.DumpTypeCheck ? "New" : "Old",
-                Password = dumpType == 1 ? Cryptors.Encrypt(p.dumps.TapeIdentifier, "DumpApp") : null
+                Password = dumpType == 1 ? Cryptors.Encrypt(RandomString(10), "DumpApp") : null
             };
 
             p.dumps.Password = admLoad.Password;
@@ -260,7 +260,13 @@ namespace DumpApp.BAL.OperationsModel
 
             return returnVal;
         }
-
+        public static string RandomString(int length)
+        {
+            Random random = new Random();
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
 
         public async Task<ReturnValues> ProcessDump(OperationsViewModel p, int loginUserId,string button)
         {
@@ -297,7 +303,7 @@ namespace DumpApp.BAL.OperationsModel
                 TapeDescription = p.dumps.TapeDescription,
                 LocationId = p.dumps.LocationId,
                 TapeType = p.dumps.DumpTypeCheck ? "New":"Old",
-                Password = dumpType == 1 ? Cryptors.Encrypt(p.dumps.TapeIdentifier, "DumpApp"):null 
+                Password = dumpType == 1 ? Cryptors.Encrypt(RandomString(10), "DumpApp"):null 
             };
 
             p.dumps.Password = admDump.Password;
@@ -377,7 +383,7 @@ namespace DumpApp.BAL.OperationsModel
             t.TapeDescription = p.dumps.TapeDescription;
             t.LocationId = p.dumps.LocationId;
             t.TapeType = p.dumps.DumpTypeCheck ? "New" : "Old";
-            t.Password = dumpType == 1 ? Cryptors.Encrypt(p.dumps.TapeIdentifier, "DumpApp") : null;
+            t.Password = dumpType == 1 ? Cryptors.Encrypt(RandomString(10), "DumpApp") : null;
            
 
             p.dumps.Password = t.Password;
