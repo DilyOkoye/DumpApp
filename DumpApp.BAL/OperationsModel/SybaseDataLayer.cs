@@ -17,7 +17,7 @@ namespace DumpApp.BAL.OperationsModel
             connstring = connstring.Replace("{{database}}", de.DatabaseName);
             connstring = connstring.Replace("{{uid}}", de.Userid);
             connstring = connstring.Replace("{{pwd}}", de.Password);
-            LogManager.SaveLog(connstring);
+            LogManager.SaveLog("Before Connecting " +connstring);
             rtv.nErrorCode = -1;
             try
             {
@@ -42,6 +42,8 @@ namespace DumpApp.BAL.OperationsModel
             }
             catch (Exception ex)
             {
+                LogManager.SaveLog($"StackTrace exception error occurred: {ex.StackTrace}");
+                LogManager.SaveLog($"Inner exception error occurred: {ex.InnerException}");
                 LogManager.SaveLog($"An error occurred: {ex.Message}");
                 rtv.sErrorText = ex.Message;
             }

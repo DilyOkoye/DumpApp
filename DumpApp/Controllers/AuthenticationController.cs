@@ -86,7 +86,6 @@ namespace DumpApp.Controllers
                             HttpCookie ck = new HttpCookie(FormsAuthentication.FormsCookieName, cookiesstr);
                             ck.Expires = tkt.Expiration;
                             ck.Path = FormsAuthentication.FormsCookiePath;
-                            //ck.HttpOnly = true;
                             ck.Secure = true;
                             FormsAuthentication.SetAuthCookie(Username.Trim(), false);
                             new ProfileHelper().SetProfile(Username.Trim(), "User", ologinReturn.UserId.ToString(), "string");

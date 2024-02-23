@@ -84,5 +84,40 @@ namespace DumpApp.Controllers
             return View(reportViewModel);
 
         }
+
+        public ActionResult DumpReport(int menuId)
+        {
+            reportViewModel.admUserProfile = new admUserProfile();
+            reportViewModel.rv = new ReturnValues();
+            reportViewModel.menuid = menuId;
+            return View(reportViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DumpReport(AdminViewModel rpt)
+        {
+            var dt = await reportModel.FetchAuditTrail(rpt.fromDate, rpt.toDate);
+            ReportViewer reportView = new ReportViewer();
+            reportView.LocalReport.ReportPath += @"Report/Dump.rdlc";
+            ReportParameter[] param = new ReportParameter[2];
+
+            string froDate = !string.IsNullOrEmpty(rpt.fromDate) ? string.Format("{0:dd-MMM-yy}", Convert.ToDateTime(rpt.fromDate)) : "";
+            string toDate = !string.IsNullOrEmpty(rpt.toDate) ? string.Format("{0:dd-MMM-yy}", Convert.ToDateTime(rpt.toDate)) : "";
+
+            param[0] = new ReportParameter("FromDate", froDate);
+            param[1] = new ReportParameter("ToDate", toDate);
+            reportView.LocalReport.SetParameters(param);
+            ReportDataSource rdc = new ReportDataSource("DataSet1", dt);
+            reportView.LocalReport.DataSources.Clear();
+            reportView.LocalReport.DataSources.Add(rdc);
+            reportView.LocalReport.Refresh();
+            reportView.SizeToReportContent = true;
+            ViewBag.ReportByMemberAgeC = null;
+            ViewBag.ReportByMemberAge = reportView;
+
+            return View(reportViewModel);
+
+        }
     }
 }

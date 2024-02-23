@@ -1491,6 +1491,7 @@
     <Content Include="Views\Admin\EditTapeDevice.cshtml" />
     <Content Include="Views\Report\Index.cshtml" />
     <Content Include="Views\Report\AuditReport.cshtml" />
+    <Content Include="Views\Report\DumpReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1521,6 +1522,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Report\AuditTrail.rdlc" />
+    <EmbeddedResource Include="Report\Dump.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

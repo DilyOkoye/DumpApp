@@ -276,13 +276,13 @@ namespace DumpApp.BAL.OperationsModel
         {
             var returnVal = new ReturnValues();
 
-            var t = await repoDumpRepository.Get(c => c.TapeIdentifier.ToUpper() == p.dumps.TapeIdentifier.ToUpper());
-            if (t != null)
-            {
-                returnVal.nErrorCode = -2;
-                returnVal.sErrorText = "Tape Identifier Already Exist.";
-                return returnVal;
-            }
+            //var t = await repoDumpRepository.Get(c => c.TapeIdentifier.ToUpper() == p.dumps.TapeIdentifier.ToUpper());
+            //if (t != null)
+            //{
+            //    returnVal.nErrorCode = -2;
+            //    returnVal.sErrorText = "Tape Identifier Already Exist.";
+            //    return returnVal;
+            //}
 
             var dumpType = p.dumps.DumpType == "Offsite" ? 1 : 2;
             var databaseName = repoDatabase.GetNonAsync(o => o.Id == p.dumps.DatebaseId).Name;
@@ -467,17 +467,17 @@ namespace DumpApp.BAL.OperationsModel
             {
                 case true when dump.DumpType == "Offsite":
                     query =
-                        $"load {dump.DatabaseName}  to {path + dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}' with init go";
+                        $"load database {dump.DatabaseName}  to '{path + dump.Filename}' with passwd = '{dump.Password}' with init go";
                     break;
                 case false when dump.DumpType == "Offsite":
                     query =
-                        $"load {dump.DatabaseName}  to {path + dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}'";
+                        $"load database {dump.DatabaseName}  to '{path + dump.Filename}' with passwd = '{dump.Password}'";
                     break;
                 case true when dump.DumpType == "Internal":
-                    query = $"load {dump.DatabaseName}  to {path + dump.TapeName} file= '{dump.Filename}' with init go";
+                    query = $"load database {dump.DatabaseName}  to '{path + dump.Filename}'  with init go";
                     break;
                 case false when dump.DumpType == "Internal":
-                    query = $"load {dump.DatabaseName}  to {path + dump.TapeName} file= '{dump.Filename}'";
+                    query = $"load database  {dump.DatabaseName}  to '{path + dump.Filename}'";
                     break;
             }
 
@@ -492,24 +492,24 @@ namespace DumpApp.BAL.OperationsModel
             {
                 case true when dump.DumpType == "Offsite":
                     query =
-                        $"dump {dump.DatabaseName}  to {path + dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}' with init go";
+                        $"dump database {dump.DatabaseName}  to '{path + dump.Filename}' with passwd = '{dump.Password}' with init go";
                     break;
                 case false when dump.DumpType == "Offsite":
                     query =
-                        $"dump {dump.DatabaseName}  to {path + dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}'";
+                        $"dump database {dump.DatabaseName}  to '{path + dump.Filename}' with passwd = '{dump.Password}'";
                     break;
                 case true when dump.DumpType == "Internal":
-                    query = $"dump {dump.DatabaseName}  to {path + dump.TapeName} file= '{dump.Filename}' with init go";
+                    query = $"dump database {dump.DatabaseName}  to '{path + dump.Filename}'  with init go";
                     break;
                 case false when dump.DumpType == "Internal":
-                    query = $"dump {dump.DatabaseName}  to {path + dump.TapeName} file= '{dump.Filename}'";
+                    query = $"dump database  {dump.DatabaseName}  to '{path + dump.Filename}'";
                     break;
             }
 
             return query;
         }
 
-        public string GetDumpQuery(Dumps dump)
+        public string GetDumpQuery(Dumps dump, string path)
         {
             var query = string.Empty;
 
@@ -517,24 +517,24 @@ namespace DumpApp.BAL.OperationsModel
             {
                 case true when dump.DumpType == "Offsite":
                     query =
-                        $"dump {dump.DatabaseName}  to {dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}' with init go";
+                        $"dump database {dump.DatabaseName}  to '{path + dump.Filename}' with passwd = '{dump.Password}' with init go";
                     break;
                 case false when dump.DumpType == "Offsite":
                     query =
-                        $"dump {dump.DatabaseName}  to {dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}'";
+                        $"dump database {dump.DatabaseName}  to '{path + dump.Filename}' with passwd = '{dump.Password}'";
                     break;
                 case true when dump.DumpType == "Internal":
-                    query = $"dump {dump.DatabaseName}  to {dump.TapeName} file= '{dump.Filename}' with init go";
+                    query = $"dump database {dump.DatabaseName}  to '{path + dump.Filename}'  with init go";
                     break;
                 case false when dump.DumpType == "Internal":
-                    query = $"dump {dump.DatabaseName}  to {dump.TapeName} file= '{dump.Filename}'";
+                    query = $"dump database  {dump.DatabaseName}  to '{path + dump.Filename}'";
                     break;
             }
 
             return query;
         }
 
-        public string GetLoadQuery(Dumps dump)
+        public string GetLoadQuery(Dumps dump, string path)
         {
             var query = string.Empty;
 
@@ -542,17 +542,17 @@ namespace DumpApp.BAL.OperationsModel
             {
                 case true when dump.DumpType == "Offsite":
                     query =
-                        $"load {dump.DatabaseName}  to {dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}' with init go";
+                        $"load database {dump.DatabaseName}  to '{path + dump.Filename}' with passwd = '{dump.Password}' with init go";
                     break;
                 case false when dump.DumpType == "Offsite":
                     query =
-                        $"load {dump.DatabaseName}  to {dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}'";
+                        $"load database {dump.DatabaseName}  to '{path + dump.Filename}' with passwd = '{dump.Password}'";
                     break;
                 case true when dump.DumpType == "Internal":
-                    query = $"load {dump.DatabaseName}  to {dump.TapeName} file= '{dump.Filename}' with init go";
+                    query = $"load database {dump.DatabaseName}  to '{path + dump.Filename}'  with init go";
                     break;
                 case false when dump.DumpType == "Internal":
-                    query = $"load {dump.DatabaseName}  to {dump.TapeName} file= '{dump.Filename}'";
+                    query = $"load database  {dump.DatabaseName}  to '{path + dump.Filename}'";
                     break;
             }
 
@@ -570,7 +570,8 @@ namespace DumpApp.BAL.OperationsModel
                 rtv.nErrorCode = -1;
                 var sybaseLayer = new SybaseDataLayer();
 
-                rtv = await sybaseLayer.SqlDs(GetDumpQuery(dump));
+                string path = System.Configuration.ConfigurationManager.AppSettings["DumpPath"];
+                rtv = await sybaseLayer.SqlDs(GetDumpQuery(dump, path));
                 if (rtv != null && rtv.nErrorCode == 0)
                 {
                     rtv.nErrorCode = 0;
@@ -620,11 +621,11 @@ namespace DumpApp.BAL.OperationsModel
 
             try
             {
-
+                string path = System.Configuration.ConfigurationManager.AppSettings["LoadPath"];
                 rtv.nErrorCode = -1;
                 var sybaseLayer = new SybaseDataLayer();
 
-                rtv = await sybaseLayer.SqlDs(GetLoadQuery(dump));
+                rtv = await sybaseLayer.SqlDs(GetLoadQuery(dump, path));
                 if (rtv != null && rtv.nErrorCode == 0)
                 {
                     rtv.nErrorCode = 0;
