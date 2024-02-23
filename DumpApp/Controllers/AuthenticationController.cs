@@ -10,6 +10,7 @@ using DumpApp.BAL.LoginModel.ViewModel;
 using DumpApp.BAL.Utilities;
 using DumpApp.DAL;
 using EmailNotification.BAL.Utilities;
+using Microsoft.Owin.Logging;
 using Login = DumpApp.BAL.LoginModel.Login;
 
 namespace DumpApp.Controllers
@@ -59,7 +60,7 @@ namespace DumpApp.Controllers
 
                 if (ModelState.IsValid)
                 {
-
+                    LogManager.SaveLog("Trying to Authenticate");
                     Username = HttpUtility.HtmlEncode(loginViewmodel.LoginPwdModel.Username);
                     Password = HttpUtility.HtmlEncode(loginViewmodel.LoginPwdModel.Password);
 

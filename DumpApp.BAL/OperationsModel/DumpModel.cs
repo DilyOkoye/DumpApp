@@ -29,7 +29,7 @@ namespace DumpApp.BAL.OperationsModel
         private readonly ITapeDeviceRespository repoTapeDevice;
         private readonly IUnitOfWork unitOfWork;
         private readonly IDbFactory idbfactory;
-         
+
         public DumpModel()
         {
             idbfactory = new DbFactory();
@@ -72,18 +72,18 @@ namespace DumpApp.BAL.OperationsModel
             var d = (from h in repoDumpRepository.GetAllNonAsync()
                 select new Dumps()
                 {
-                   DumpName = h.DumpName,
-                   DumpDescription = h.DumpDescription,
-                   TapeDescription = h.TapeDescription,
-                   Status = h.Status,
-                   Filename = h.Filename,
-                   DumpType = h.DumpType == null? "": GetDumpTypeName((int)h.DumpType),
-                   DumpDate = h.DumpDate == null?"": $"{h.DumpDate:F}",
-                   TapeType = h.TapeType,
-                   DateCreated = h.DateCreated == null ? "" : $"{h.DateCreated:F}",
-                   TapeIdentifier = h.TapeIdentifier,
-                   Id = h.Id,
-                   CreatedBy = h.CreatedBy == null ? "" : GetUserById((int)h.CreatedBy),
+                    DumpName = h.DumpName,
+                    DumpDescription = h.DumpDescription,
+                    TapeDescription = h.TapeDescription,
+                    Status = h.Status,
+                    Filename = h.Filename,
+                    DumpType = h.DumpType == null ? "" : GetDumpTypeName((int)h.DumpType),
+                    DumpDate = h.DumpDate == null ? "" : $"{h.DumpDate:F}",
+                    TapeType = h.TapeType,
+                    DateCreated = h.DateCreated == null ? "" : $"{h.DateCreated:F}",
+                    TapeIdentifier = h.TapeIdentifier,
+                    Id = h.Id,
+                    CreatedBy = h.CreatedBy == null ? "" : GetUserById((int)h.CreatedBy),
                 }).ToList();
 
             return d;
@@ -113,7 +113,7 @@ namespace DumpApp.BAL.OperationsModel
                         Password = y.Password,
                         Id = y.Id,
                         TapeDeviceId = y.TapeDeviceId,
-                        DumpType = y.DumpType ==1? "Offsite": "Internal"
+                        DumpType = y.DumpType == 1 ? "Offsite" : "Internal"
                     };
                 }
 
@@ -122,6 +122,7 @@ namespace DumpApp.BAL.OperationsModel
             {
 
             }
+
             return null;
         }
 
@@ -167,26 +168,28 @@ namespace DumpApp.BAL.OperationsModel
 
         public string GetUserById(int id)
         {
-            var use =  repoUserProfileRepository.GetNonAsync(o => o.UserId == id);
+            var use = repoUserProfileRepository.GetNonAsync(o => o.UserId == id);
             if (use != null)
             {
                 return use.FullName;
             }
+
             return null;
         }
 
 
         public string GetDumpTypeName(int id)
         {
-            var dumpType =  repoDumpTypeRepository.GetNonAsync(o => o.Id == id);
+            var dumpType = repoDumpTypeRepository.GetNonAsync(o => o.Id == id);
             if (dumpType != null)
             {
                 return dumpType.Name;
             }
+
             return null;
         }
-        
-        
+
+
 
         public async Task<ReturnValues> ProcessLoad(OperationsViewModel p, int loginUserId, string button)
         {
@@ -260,6 +263,7 @@ namespace DumpApp.BAL.OperationsModel
 
             return returnVal;
         }
+
         public static string RandomString(int length)
         {
             Random random = new Random();
@@ -268,7 +272,7 @@ namespace DumpApp.BAL.OperationsModel
                 .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
-        public async Task<ReturnValues> ProcessDump(OperationsViewModel p, int loginUserId,string button)
+        public async Task<ReturnValues> ProcessDump(OperationsViewModel p, int loginUserId, string button)
         {
             var returnVal = new ReturnValues();
 
@@ -286,11 +290,11 @@ namespace DumpApp.BAL.OperationsModel
 
             var tapeName = repoTapeDevice.GetNonAsync(o => o.Id == p.dumps.TapeDeviceId).Name;
             p.dumps.TapeName = tapeName;
-            
+
             var admDump = new admDump()
             {
                 DumpDate = DateTime.Now,
-                DumpType = p.dumps.DumpType =="Offsite"? 1: 2,
+                DumpType = p.dumps.DumpType == "Offsite" ? 1 : 2,
                 CreatedBy = loginUserId,
                 TapeIdentifier = p.dumps.TapeIdentifier,
                 DumpName = p.dumps.DumpName,
@@ -298,12 +302,12 @@ namespace DumpApp.BAL.OperationsModel
                 DatebaseId = p.dumps.DatebaseId,
                 DumpDescription = p.dumps.DumpDescription,
                 Filename = p.dumps.Filename,
-                Status = button == "Save"?"Saved":"Processing",
+                Status = button == "Save" ? "Saved" : "Processing",
                 TapeDeviceId = p.dumps.TapeDeviceId,
                 TapeDescription = p.dumps.TapeDescription,
                 LocationId = p.dumps.LocationId,
-                TapeType = p.dumps.DumpTypeCheck ? "New":"Old",
-                Password = dumpType == 1 ? Cryptors.Encrypt(RandomString(10), "DumpApp"):null 
+                TapeType = p.dumps.DumpTypeCheck ? "New" : "Old",
+                Password = dumpType == 1 ? Cryptors.Encrypt(RandomString(10), "DumpApp") : null
             };
 
             p.dumps.Password = admDump.Password;
@@ -326,8 +330,8 @@ namespace DumpApp.BAL.OperationsModel
                     }
 
                     var jobId = BackgroundJob.Enqueue(
-                        () => ExecuteDump(p.dumps,null,loginUserId));
-                    
+                        () => ExecuteDump(p.dumps, null, loginUserId));
+
                     if (!string.IsNullOrEmpty(jobId))
                     {
                         admDump.JobId = jobId;
@@ -384,7 +388,7 @@ namespace DumpApp.BAL.OperationsModel
             t.LocationId = p.dumps.LocationId;
             t.TapeType = p.dumps.DumpTypeCheck ? "New" : "Old";
             t.Password = dumpType == 1 ? Cryptors.Encrypt(RandomString(10), "DumpApp") : null;
-           
+
 
             p.dumps.Password = t.Password;
             if (button == "Test")
@@ -406,7 +410,7 @@ namespace DumpApp.BAL.OperationsModel
                     }
 
                     var jobId = BackgroundJob.Enqueue(
-                        () => ExecuteDump(p.dumps, null,loginUserId));
+                        () => ExecuteDump(p.dumps, null, loginUserId));
 
                     if (!string.IsNullOrEmpty(jobId))
                     {
@@ -437,10 +441,12 @@ namespace DumpApp.BAL.OperationsModel
             switch (dump.DumpTypeCheck)
             {
                 case true when dump.DumpType == "Offsite":
-                    query = $"dump {dump.DatabaseName}  to {dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}' with init go";
+                    query =
+                        $"dump {dump.DatabaseName}  to {dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}' with init go";
                     break;
                 case false when dump.DumpType == "Offsite":
-                    query = $"dump {dump.DatabaseName}  to {dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}'";
+                    query =
+                        $"dump {dump.DatabaseName}  to {dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}'";
                     break;
                 case true when dump.DumpType == "Internal":
                     query = $"dump {dump.DatabaseName}  to {dump.TapeName} file= '{dump.Filename}' with init go";
@@ -460,10 +466,12 @@ namespace DumpApp.BAL.OperationsModel
             switch (dump.DumpTypeCheck)
             {
                 case true when dump.DumpType == "Offsite":
-                    query = $"load {dump.DatabaseName}  to {path + dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}' with init go";
+                    query =
+                        $"load {dump.DatabaseName}  to {path + dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}' with init go";
                     break;
                 case false when dump.DumpType == "Offsite":
-                    query = $"load {dump.DatabaseName}  to {path + dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}'";
+                    query =
+                        $"load {dump.DatabaseName}  to {path + dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}'";
                     break;
                 case true when dump.DumpType == "Internal":
                     query = $"load {dump.DatabaseName}  to {path + dump.TapeName} file= '{dump.Filename}' with init go";
@@ -476,17 +484,19 @@ namespace DumpApp.BAL.OperationsModel
             return query;
         }
 
-        public string GetTestDumpQuery(Dumps dump,string path)
+        public string GetTestDumpQuery(Dumps dump, string path)
         {
             var query = string.Empty;
 
             switch (dump.DumpTypeCheck)
             {
                 case true when dump.DumpType == "Offsite":
-                    query = $"dump {dump.DatabaseName}  to {path + dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}' with init go";
+                    query =
+                        $"dump {dump.DatabaseName}  to {path + dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}' with init go";
                     break;
                 case false when dump.DumpType == "Offsite":
-                    query = $"dump {dump.DatabaseName}  to {path + dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}'";
+                    query =
+                        $"dump {dump.DatabaseName}  to {path + dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}'";
                     break;
                 case true when dump.DumpType == "Internal":
                     query = $"dump {dump.DatabaseName}  to {path + dump.TapeName} file= '{dump.Filename}' with init go";
@@ -499,156 +509,88 @@ namespace DumpApp.BAL.OperationsModel
             return query;
         }
 
-        public async Task<ReturnValues> ExecuteTestLoad(Dumps dump)
+        public string GetDumpQuery(Dumps dump)
         {
-            string path = System.Configuration.ConfigurationManager.AppSettings["LoadPath"];
+            var query = string.Empty;
 
-            var sybaseLayer = new SybaseDataLayer();
+            switch (dump.DumpTypeCheck)
+            {
+                case true when dump.DumpType == "Offsite":
+                    query =
+                        $"dump {dump.DatabaseName}  to {dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}' with init go";
+                    break;
+                case false when dump.DumpType == "Offsite":
+                    query =
+                        $"dump {dump.DatabaseName}  to {dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}'";
+                    break;
+                case true when dump.DumpType == "Internal":
+                    query = $"dump {dump.DatabaseName}  to {dump.TapeName} file= '{dump.Filename}' with init go";
+                    break;
+                case false when dump.DumpType == "Internal":
+                    query = $"dump {dump.DatabaseName}  to {dump.TapeName} file= '{dump.Filename}'";
+                    break;
+            }
 
-            return await sybaseLayer.TestSqlDs(GetTestLoadQuery(dump, path));
+            return query;
         }
 
-        public async Task<ReturnValues> ExecuteTestDump(Dumps dump)
+        public string GetLoadQuery(Dumps dump)
         {
-            string path = System.Configuration.ConfigurationManager.AppSettings["DumpPath"];
+            var query = string.Empty;
 
-            var sybaseLayer = new SybaseDataLayer();
+            switch (dump.DumpTypeCheck)
+            {
+                case true when dump.DumpType == "Offsite":
+                    query =
+                        $"load {dump.DatabaseName}  to {dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}' with init go";
+                    break;
+                case false when dump.DumpType == "Offsite":
+                    query =
+                        $"load {dump.DatabaseName}  to {dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}'";
+                    break;
+                case true when dump.DumpType == "Internal":
+                    query = $"load {dump.DatabaseName}  to {dump.TapeName} file= '{dump.Filename}' with init go";
+                    break;
+                case false when dump.DumpType == "Internal":
+                    query = $"load {dump.DatabaseName}  to {dump.TapeName} file= '{dump.Filename}'";
+                    break;
+            }
 
-            return await sybaseLayer.TestSqlDs(GetTestDumpQuery(dump, path));
+            return query;
         }
 
-       
-        private object CheckDBNullValue(string value)
-        {
-            if (string.IsNullOrWhiteSpace(value))
-                return DBNull.Value;
-            else
-                return value;
-        }
-
-        public async Task<ReturnValues> ExecuteLoad(Dumps dump, PerformContext context, int loginUserId)
+        public async Task<ReturnValues> ExecuteDump(Dumps dump, PerformContext context, int loginUserId)
         {
             var rtv = new ReturnValues();
-            rtv.nErrorCode = -1;
             var dumpRecord = await repoDumpRepository.Get(o => o.Id == dump.Id);
 
             try
             {
-
+               
+                rtv.nErrorCode = -1;
                 var sybaseLayer = new SybaseDataLayer();
 
-                List<AseParameter> sp = new List<AseParameter>()
+                rtv = await sybaseLayer.SqlDs(GetDumpQuery(dump));
+                if (rtv != null && rtv.nErrorCode == 0)
                 {
-                    new AseParameter() {ParameterName = "@pbNewInitiatization", AseDbType = AseDbType.Bit, Value= dump.DumpType},
-                    new AseParameter() {ParameterName = "@psDumpType", AseDbType = AseDbType.VarChar, Value= dump.DumpType},
-                    new AseParameter() {ParameterName = "@psDatabaseName", AseDbType = AseDbType.VarChar, Value= dump.DatabaseName},
-                    new AseParameter() {ParameterName = "@psTapeName", AseDbType = AseDbType.VarChar, Value= dump.TapeName},
-                    new AseParameter() {ParameterName = "@psFileName", AseDbType = AseDbType.Decimal, Value=dump.TapeName},
-                    new AseParameter() {ParameterName = "@psUserName", AseDbType = AseDbType.VarChar, Value=CheckDBNullValue(dump.Password)}
-                };
+                    rtv.nErrorCode = 0;
+                    rtv.sErrorText = "Dump Successful";
 
-
-                var dt = await sybaseLayer.SqlDs("sp_loaddb", sp, 0);
-
-                if (dt != null && dt.Rows.Count > 0)
-                {
-                    rtv.nErrorCode = Convert.ToInt32(dt.Rows[0]);
-
-                    if (rtv.nErrorCode == 0)
+                    if (dumpRecord != null)
                     {
-                        rtv.nErrorCode = 0;
-                        rtv.sErrorText = "Load Successful";
-
-                        if (dumpRecord != null)
-                        {
-                            dumpRecord.JobId = context.BackgroundJob.Id;
-                            dumpRecord.ErrorId = rtv.nErrorCode;
-                            dumpRecord.Status = "Loaded";
-                            repoDumpRepository.Update(dumpRecord);
-                            await unitOfWork.Commit(loginUserId);
-                            return rtv;
-                        }
-
+                        dumpRecord.JobId = context.BackgroundJob.Id;
+                        dumpRecord.ErrorId = rtv.nErrorCode;
+                        dumpRecord.Status = "Dumped";
+                        repoDumpRepository.Update(dumpRecord);
+                        await unitOfWork.Commit(loginUserId);
+                        return rtv;
                     }
-
                 }
-                if (dumpRecord != null)
-                {
-                    dumpRecord.JobId = context.BackgroundJob.Id;
-                    dumpRecord.ErrorId = rtv.nErrorCode;
-                    dumpRecord.Status = "Error";
-                    dumpRecord.ErrorMessage = "Error While Loading";
-                    repoDumpRepository.Update(dumpRecord);
-                    await unitOfWork.Commit(loginUserId);
-                    return rtv;
-                }
-            }
-            catch (Exception e)
-            {
-                if (dumpRecord != null)
+                
+                else if (dumpRecord != null)
                 {
                     dumpRecord.JobId = context.BackgroundJob.Id;
                     dumpRecord.ErrorId = -1;
-                    dumpRecord.Status = "Error";
-                    dumpRecord.ErrorMessage = e.ToString();
-                    repoDumpRepository.Update(dumpRecord);
-                    await unitOfWork.Commit(loginUserId);
-                }
-            }
-
-            return rtv;
-        }
-
-        public async Task<ReturnValues> ExecuteDump(Dumps dump, PerformContext context,int loginUserId)
-        {
-            var rtv = new ReturnValues();
-            rtv.nErrorCode = -1;
-            var dumpRecord = await repoDumpRepository.Get(o => o.Id == dump.Id);
-
-            try
-            {
-                
-                var sybaseLayer = new SybaseDataLayer();
-
-                List<AseParameter> sp = new List<AseParameter>()
-                {
-                    new AseParameter() {ParameterName = "@pbNewInitiatization", AseDbType = AseDbType.Bit, Value= dump.DumpType},
-                    new AseParameter() {ParameterName = "@psDumpType", AseDbType = AseDbType.VarChar, Value= dump.DumpType},
-                    new AseParameter() {ParameterName = "@psDatabaseName", AseDbType = AseDbType.VarChar, Value= dump.DatabaseName},
-                    new AseParameter() {ParameterName = "@psTapeName", AseDbType = AseDbType.VarChar, Value= dump.TapeName},
-                    new AseParameter() {ParameterName = "@psFileName", AseDbType = AseDbType.Decimal, Value=dump.TapeName},
-                    new AseParameter() {ParameterName = "@psUserName", AseDbType = AseDbType.VarChar, Value=CheckDBNullValue(dump.Password)}
-                };
-
-                
-                var dt = await sybaseLayer.SqlDs("sp_dumpdb", sp, 0);
-
-                if (dt != null && dt.Rows.Count > 0)
-                {
-                    rtv.nErrorCode = Convert.ToInt32(dt.Rows[0]);
-
-                    if (rtv.nErrorCode == 0)
-                    {
-                        rtv.nErrorCode = 0;
-                        rtv.sErrorText = "Dump Successful";
-
-                        if (dumpRecord != null)
-                        {
-                            dumpRecord.JobId = context.BackgroundJob.Id;
-                            dumpRecord.ErrorId = rtv.nErrorCode;
-                            dumpRecord.Status = "Dumped";
-                            repoDumpRepository.Update(dumpRecord);
-                            await unitOfWork.Commit(loginUserId);
-                            return rtv;
-                        }
-
-                    }
-                   
-                }
-                if (dumpRecord != null)
-                {
-                    dumpRecord.JobId = context.BackgroundJob.Id;
-                    dumpRecord.ErrorId = rtv.nErrorCode;
                     dumpRecord.Status = "Error";
                     dumpRecord.ErrorMessage = "Error While Dumping";
                     repoDumpRepository.Update(dumpRecord);
@@ -668,8 +610,236 @@ namespace DumpApp.BAL.OperationsModel
                     await unitOfWork.Commit(loginUserId);
                 }
             }
-
             return rtv;
         }
+
+        public async Task<ReturnValues> ExecuteLoad(Dumps dump, PerformContext context, int loginUserId)
+        {
+            var rtv = new ReturnValues();
+            var dumpRecord = await repoDumpRepository.Get(o => o.Id == dump.Id);
+
+            try
+            {
+
+                rtv.nErrorCode = -1;
+                var sybaseLayer = new SybaseDataLayer();
+
+                rtv = await sybaseLayer.SqlDs(GetLoadQuery(dump));
+                if (rtv != null && rtv.nErrorCode == 0)
+                {
+                    rtv.nErrorCode = 0;
+                    rtv.sErrorText = "Load Successful";
+
+                    if (dumpRecord != null)
+                    {
+                        dumpRecord.JobId = context.BackgroundJob.Id;
+                        dumpRecord.ErrorId = rtv.nErrorCode;
+                        dumpRecord.Status = "Loaded";
+                        repoDumpRepository.Update(dumpRecord);
+                        await unitOfWork.Commit(loginUserId);
+                        return rtv;
+                    }
+                }
+
+                else if (dumpRecord != null)
+                {
+                    dumpRecord.JobId = context.BackgroundJob.Id;
+                    dumpRecord.ErrorId = -1;
+                    dumpRecord.Status = "Error";
+                    dumpRecord.ErrorMessage = "Error While Loading";
+                    repoDumpRepository.Update(dumpRecord);
+                    await unitOfWork.Commit(loginUserId);
+                    return rtv;
+                }
+            }
+            catch (Exception e)
+            {
+                if (dumpRecord != null)
+                {
+                    dumpRecord.JobId = context.BackgroundJob.Id;
+                    dumpRecord.ErrorId = -1;
+                    dumpRecord.Status = "Error";
+                    dumpRecord.ErrorMessage = e.ToString();
+                    repoDumpRepository.Update(dumpRecord);
+                    await unitOfWork.Commit(loginUserId);
+                }
+            }
+            return rtv;
+        }
+
+
+        public async Task<ReturnValues> ExecuteTestDump(Dumps dump)
+        {
+            string path = System.Configuration.ConfigurationManager.AppSettings["DumpPath"];
+
+            var sybaseLayer = new SybaseDataLayer();
+
+            return await sybaseLayer.SqlDs(GetTestDumpQuery(dump, path));
+        }
+
+        public async Task<ReturnValues> ExecuteTestLoad(Dumps dump)
+        {
+            string path = System.Configuration.ConfigurationManager.AppSettings["LoadPath"];
+
+            var sybaseLayer = new SybaseDataLayer();
+
+            return await sybaseLayer.SqlDs(GetTestLoadQuery(dump, path));
+        }
+
+
+        private object CheckDBNullValue(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return DBNull.Value;
+            else
+                return value;
+        }
+
+        //    public async Task<ReturnValues> ExecuteLoad(Dumps dump, PerformContext context, int loginUserId)
+        //    {
+        //        var rtv = new ReturnValues();
+        //        rtv.nErrorCode = -1;
+        //        var dumpRecord = await repoDumpRepository.Get(o => o.Id == dump.Id);
+
+        //        try
+        //        {
+
+        //            var sybaseLayer = new SybaseDataLayer();
+
+        //            List<AseParameter> sp = new List<AseParameter>()
+        //            {
+        //                new AseParameter() {ParameterName = "@pbNewInitiatization", AseDbType = AseDbType.Bit, Value= dump.DumpType},
+        //                new AseParameter() {ParameterName = "@psDumpType", AseDbType = AseDbType.VarChar, Value= dump.DumpType},
+        //                new AseParameter() {ParameterName = "@psDatabaseName", AseDbType = AseDbType.VarChar, Value= dump.DatabaseName},
+        //                new AseParameter() {ParameterName = "@psTapeName", AseDbType = AseDbType.VarChar, Value= dump.TapeName},
+        //                new AseParameter() {ParameterName = "@psFileName", AseDbType = AseDbType.Decimal, Value=dump.TapeName},
+        //                new AseParameter() {ParameterName = "@psPassword", AseDbType = AseDbType.VarChar, Value=CheckDBNullValue(dump.Password)}
+        //            };
+
+
+        //            var dt = await sybaseLayer.SqlDs("sp_loaddb", sp, 0);
+
+        //            if (dt != null && dt.Rows.Count > 0)
+        //            {
+        //                rtv.nErrorCode = Convert.ToInt32(dt.Rows[0]);
+
+        //                if (rtv.nErrorCode == 0)
+        //                {
+        //                    rtv.nErrorCode = 0;
+        //                    rtv.sErrorText = "Load Successful";
+
+        //                    if (dumpRecord != null)
+        //                    {
+        //                        dumpRecord.JobId = context.BackgroundJob.Id;
+        //                        dumpRecord.ErrorId = rtv.nErrorCode;
+        //                        dumpRecord.Status = "Loaded";
+        //                        repoDumpRepository.Update(dumpRecord);
+        //                        await unitOfWork.Commit(loginUserId);
+        //                        return rtv;
+        //                    }
+
+        //                }
+
+        //            }
+        //            if (dumpRecord != null)
+        //            {
+        //                dumpRecord.JobId = context.BackgroundJob.Id;
+        //                dumpRecord.ErrorId = rtv.nErrorCode;
+        //                dumpRecord.Status = "Error";
+        //                dumpRecord.ErrorMessage = "Error While Loading";
+        //                repoDumpRepository.Update(dumpRecord);
+        //                await unitOfWork.Commit(loginUserId);
+        //                return rtv;
+        //            }
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            if (dumpRecord != null)
+        //            {
+        //                dumpRecord.JobId = context.BackgroundJob.Id;
+        //                dumpRecord.ErrorId = -1;
+        //                dumpRecord.Status = "Error";
+        //                dumpRecord.ErrorMessage = e.ToString();
+        //                repoDumpRepository.Update(dumpRecord);
+        //                await unitOfWork.Commit(loginUserId);
+        //            }
+        //        }
+
+        //        return rtv;
+        //    }
+
+        //    public async Task<ReturnValues> ExecuteDump(Dumps dump, PerformContext context,int loginUserId)
+        //    {
+        //        var rtv = new ReturnValues();
+        //        rtv.nErrorCode = -1;
+        //        var dumpRecord = await repoDumpRepository.Get(o => o.Id == dump.Id);
+
+        //        try
+        //        {
+
+        //            var sybaseLayer = new SybaseDataLayer();
+
+        //            List<AseParameter> sp = new List<AseParameter>()
+        //            {
+        //                new AseParameter() {ParameterName = "@pbNewInitiatization", AseDbType = AseDbType.Bit, Value= dump.DumpType},
+        //                new AseParameter() {ParameterName = "@psDumpType", AseDbType = AseDbType.VarChar, Value= dump.DumpType},
+        //                new AseParameter() {ParameterName = "@psDatabaseName", AseDbType = AseDbType.VarChar, Value= dump.DatabaseName},
+        //                new AseParameter() {ParameterName = "@psTapeName", AseDbType = AseDbType.VarChar, Value= dump.TapeName},
+        //                new AseParameter() {ParameterName = "@psFileName", AseDbType = AseDbType.Decimal, Value=dump.TapeName},
+        //                new AseParameter() {ParameterName = "@psUserName", AseDbType = AseDbType.VarChar, Value=CheckDBNullValue(dump.Password)}
+        //            };
+
+
+        //            var dt = await sybaseLayer.SqlDs("sp_dumpdb", sp, 0);
+
+        //            if (dt != null && dt.Rows.Count > 0)
+        //            {
+        //                rtv.nErrorCode = Convert.ToInt32(dt.Rows[0]);
+
+        //                if (rtv.nErrorCode == 0)
+        //                {
+        //                    rtv.nErrorCode = 0;
+        //                    rtv.sErrorText = "Dump Successful";
+
+        //                    if (dumpRecord != null)
+        //                    {
+        //                        dumpRecord.JobId = context.BackgroundJob.Id;
+        //                        dumpRecord.ErrorId = rtv.nErrorCode;
+        //                        dumpRecord.Status = "Dumped";
+        //                        repoDumpRepository.Update(dumpRecord);
+        //                        await unitOfWork.Commit(loginUserId);
+        //                        return rtv;
+        //                    }
+
+        //                }
+
+        //            }
+        //            if (dumpRecord != null)
+        //            {
+        //                dumpRecord.JobId = context.BackgroundJob.Id;
+        //                dumpRecord.ErrorId = rtv.nErrorCode;
+        //                dumpRecord.Status = "Error";
+        //                dumpRecord.ErrorMessage = "Error While Dumping";
+        //                repoDumpRepository.Update(dumpRecord);
+        //                await unitOfWork.Commit(loginUserId);
+        //                return rtv;
+        //            }
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            if (dumpRecord != null)
+        //            {
+        //                dumpRecord.JobId = context.BackgroundJob.Id;
+        //                dumpRecord.ErrorId = -1;
+        //                dumpRecord.Status = "Error";
+        //                dumpRecord.ErrorMessage = e.ToString();
+        //                repoDumpRepository.Update(dumpRecord);
+        //                await unitOfWork.Commit(loginUserId);
+        //            }
+        //        }
+
+        //        return rtv;
+        //    }
+        //}
     }
 }
