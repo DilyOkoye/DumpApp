@@ -1,9 +1,9 @@
 ﻿using System;
 using DumpApp.BAL.Utilities;
 using System.Threading.Tasks;
-using Sybase.Data.AseClient;
 using System.Collections.Generic;
 using System.Data;
+using AdoNetCore.AseClient;
 
 namespace DumpApp.BAL.OperationsModel
 {

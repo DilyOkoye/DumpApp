@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using AdoNetCore.AseClient;
 using DumpApp.BAL.AdminModel.ViewModel;
 using DumpApp.BAL.OperationsModel.ViewModel;
 using DumpApp.BAL.Utilities;
@@ -14,7 +15,6 @@ using DumpApp.DAL.Interface;
 using DumpApp.DAL.Repositories;
 using Hangfire;
 using Hangfire.Server;
-using Sybase.Data.AseClient;
 
 namespace DumpApp.BAL.OperationsModel
 {
