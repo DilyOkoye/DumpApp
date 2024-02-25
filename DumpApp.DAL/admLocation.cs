@@ -15,8 +15,13 @@ namespace DumpApp.DAL
     public partial class admLocation
     {
         public int Id { get; set; }
+        public bool IsHeadOffice { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public string Server { get; set; }
+        public string Port { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
         public Nullable<int> UserId { get; set; }
         public string Status { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }

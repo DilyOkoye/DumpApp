@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -29,6 +30,7 @@ namespace DumpApp.BAL.OperationsModel
         private readonly ITapeDeviceRespository repoTapeDevice;
         private readonly IUnitOfWork unitOfWork;
         private readonly IDbFactory idbfactory;
+      
 
         public DumpModel()
         {
@@ -210,6 +212,8 @@ namespace DumpApp.BAL.OperationsModel
             var tapeName = repoTapeDevice.GetNonAsync(o => o.Id == p.dumps.TapeDeviceId).Name;
             p.dumps.TapeName = tapeName;
 
+            p.dumps.Password = RandomString(10);
+            
             var admLoad = new admLoad()
             {
                 DumpDate = DateTime.Now,
@@ -225,10 +229,9 @@ namespace DumpApp.BAL.OperationsModel
                 TapeDescription = p.dumps.TapeDescription,
                 LocationId = p.dumps.LocationId,
                 TapeType = p.dumps.DumpTypeCheck ? "New" : "Old",
-                Password = dumpType == 1 ? Cryptors.Encrypt(RandomString(10), "DumpApp") : null
+                Password = dumpType == 1 ? Cryptors.Encrypt(p.dumps.Password, "DumpApp") : null
             };
 
-            p.dumps.Password = admLoad.Password;
             if (button == "Test")
             {
                 await ExecuteTestLoad(p.dumps);
@@ -248,7 +251,7 @@ namespace DumpApp.BAL.OperationsModel
                         admLoad.JobId = jobId;
                         admLoad.Status = "Processing";
                         await unitOfWork.Commit(loginUserId);
-                        returnVal.sErrorText = "Load Operation Successful, Check back later to check Load Status";
+                        returnVal.sErrorText = "Load operation in progress, Check back later to check Load Status";
 
                     }
                 }
@@ -276,13 +279,13 @@ namespace DumpApp.BAL.OperationsModel
         {
             var returnVal = new ReturnValues();
 
-            //var t = await repoDumpRepository.Get(c => c.TapeIdentifier.ToUpper() == p.dumps.TapeIdentifier.ToUpper());
-            //if (t != null)
-            //{
-            //    returnVal.nErrorCode = -2;
-            //    returnVal.sErrorText = "Tape Identifier Already Exist.";
-            //    return returnVal;
-            //}
+            var t = await repoDumpRepository.Get(c => c.TapeIdentifier.ToUpper() == p.dumps.TapeIdentifier.ToUpper());
+            if (t != null)
+            {
+                returnVal.nErrorCode = -2;
+                returnVal.sErrorText = "Tape Identifier Already Exist.";
+                return returnVal;
+            }
 
             var dumpType = p.dumps.DumpType == "Offsite" ? 1 : 2;
             var databaseName = repoDatabase.GetNonAsync(o => o.Id == p.dumps.DatebaseId).Name;
@@ -290,7 +293,10 @@ namespace DumpApp.BAL.OperationsModel
 
             var tapeName = repoTapeDevice.GetNonAsync(o => o.Id == p.dumps.TapeDeviceId).Name;
             p.dumps.TapeName = tapeName;
+            
+                
 
+            p.dumps.Password = RandomString(10);
             var admDump = new admDump()
             {
                 DumpDate = DateTime.Now,
@@ -307,10 +313,9 @@ namespace DumpApp.BAL.OperationsModel
                 TapeDescription = p.dumps.TapeDescription,
                 LocationId = p.dumps.LocationId,
                 TapeType = p.dumps.DumpTypeCheck ? "New" : "Old",
-                Password = dumpType == 1 ? Cryptors.Encrypt(RandomString(10), "DumpApp") : null
+                Password = dumpType == 1 ? Cryptors.Encrypt(p.dumps.Password, "DumpApp") : null
             };
 
-            p.dumps.Password = admDump.Password;
             if (button == "Test")
             {
                 await ExecuteTestDump(p.dumps);
@@ -338,7 +343,7 @@ namespace DumpApp.BAL.OperationsModel
                         admDump.Status = "Processing";
                         await unitOfWork.Commit(loginUserId);
                         returnVal.nErrorCode = 0;
-                        returnVal.sErrorText = "Dump Operation Successful, Check back later to check Dump Status";
+                        returnVal.sErrorText = "Dump operation in progress, Check back later to check Dump Status";
                     }
                 }
             }
@@ -372,7 +377,8 @@ namespace DumpApp.BAL.OperationsModel
             var tapeName = repoTapeDevice.GetNonAsync(o => o.Id == p.dumps.TapeDeviceId).Name;
             p.dumps.TapeName = tapeName;
 
-
+            p.dumps.Password = RandomString(10);
+            
             t.DumpDate = DateTime.Now;
             t.DumpType = p.dumps.DumpType == "Offsite" ? 1 : 2;
             t.CreatedBy = loginUserId;
@@ -387,10 +393,9 @@ namespace DumpApp.BAL.OperationsModel
             t.TapeDescription = p.dumps.TapeDescription;
             t.LocationId = p.dumps.LocationId;
             t.TapeType = p.dumps.DumpTypeCheck ? "New" : "Old";
-            t.Password = dumpType == 1 ? Cryptors.Encrypt(RandomString(10), "DumpApp") : null;
+            t.Password = dumpType == 1 ? Cryptors.Encrypt(p.dumps.Password, "DumpApp") : null;
 
 
-            p.dumps.Password = t.Password;
             if (button == "Test")
             {
                 await ExecuteTestDump(p.dumps);
@@ -417,7 +422,8 @@ namespace DumpApp.BAL.OperationsModel
                         t.JobId = jobId;
                         t.Status = "Processing";
                         await unitOfWork.Commit(loginUserId);
-                        returnVal.sErrorText = "Dump Operation Successful, Check back later to check Dump Status";
+                        returnVal.nErrorCode = 0;
+                        returnVal.sErrorText = "Dump operation in progress, Check back later to check Dump Status";
 
                     }
                 }
@@ -571,7 +577,7 @@ namespace DumpApp.BAL.OperationsModel
                 var sybaseLayer = new SybaseDataLayer();
 
                 string path = System.Configuration.ConfigurationManager.AppSettings["DumpPath"];
-                rtv = await sybaseLayer.SqlDs(GetDumpQuery(dump, path));
+                rtv = await sybaseLayer.SqlDs(GetDumpQuery(dump, path), dump);
                 if (rtv != null && rtv.nErrorCode == 0)
                 {
                     rtv.nErrorCode = 0;
@@ -625,7 +631,7 @@ namespace DumpApp.BAL.OperationsModel
                 rtv.nErrorCode = -1;
                 var sybaseLayer = new SybaseDataLayer();
 
-                rtv = await sybaseLayer.SqlDs(GetLoadQuery(dump, path));
+                rtv = await sybaseLayer.SqlDs(GetLoadQuery(dump, path), dump);
                 if (rtv != null && rtv.nErrorCode == 0)
                 {
                     rtv.nErrorCode = 0;
@@ -675,7 +681,7 @@ namespace DumpApp.BAL.OperationsModel
 
             var sybaseLayer = new SybaseDataLayer();
 
-            return await sybaseLayer.SqlDs(GetTestDumpQuery(dump, path));
+            return await sybaseLayer.SqlDs(GetTestDumpQuery(dump, path), dump);
         }
 
         public async Task<ReturnValues> ExecuteTestLoad(Dumps dump)
@@ -684,7 +690,7 @@ namespace DumpApp.BAL.OperationsModel
 
             var sybaseLayer = new SybaseDataLayer();
 
-            return await sybaseLayer.SqlDs(GetTestLoadQuery(dump, path));
+            return await sybaseLayer.SqlDs(GetTestLoadQuery(dump, path), dump);
         }
 
 

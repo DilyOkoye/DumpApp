@@ -2,21 +2,59 @@
 using DumpApp.BAL.Utilities;
 using System.Threading.Tasks;
 using AdoNetCore.AseClient;
+using DumpApp.DAL.Interface;
+using DumpApp.DAL.Repositories;
+using DumpApp.DAL.Implementation;
 
 namespace DumpApp.BAL.OperationsModel
 {
     public class SybaseDataLayer
     {
-        public async Task<ReturnValues> SqlDs(string commandQuery)
+        private readonly ILocationRepository repoLocation;
+        private readonly IDatabaseRepository repoDatabase;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly IDbFactory idbfactory;
+
+        public SybaseDataLayer()
+        {
+            idbfactory = new DbFactory();
+            unitOfWork = new UnitOfWork(idbfactory);
+            repoLocation = new LocationRepository(idbfactory);
+            repoDatabase = new DatabaseRepository(idbfactory);
+        }
+        public async Task<ReturnValues> SqlDs(string commandQuery,Dumps dump)
         {
             var rtv = new ReturnValues();
             var de = new ConnectionDetails();
             var connstring = System.Configuration.ConfigurationManager.ConnectionStrings["sybconnection"].ToString();
-            connstring = connstring.Replace("{{Data Source}}", de.Server);
-            connstring = connstring.Replace("{{port}}", de.Port.ToString());
-            connstring = connstring.Replace("{{database}}", de.DatabaseName);
-            connstring = connstring.Replace("{{uid}}", de.Userid);
-            connstring = connstring.Replace("{{pwd}}", de.Password);
+            var database = await repoDatabase.Get(o => o.Id == dump.DatebaseId);
+
+            if (dump.DumpType == "Internal")
+            {
+                var location =await repoLocation.Get(o => o.IsHeadOffice);
+                if (location != null)
+                {
+                    connstring = connstring.Replace("{{Data Source}}", location.Server);
+                    connstring = connstring.Replace("{{port}}", location.Port.ToString());
+                    connstring = connstring.Replace("{{database}}", database.Name);
+                    connstring = connstring.Replace("{{uid}}", location.Username);
+                    connstring = connstring.Replace("{{pwd}}", location.Password);
+                }
+            }
+            else
+            {
+                var location = await repoLocation.Get(o => o.Id == dump.LocationId);
+                if (location != null)
+                {
+                    connstring = connstring.Replace("{{Data Source}}", location.Server);
+                    connstring = connstring.Replace("{{port}}", location.Port.ToString());
+                    connstring = connstring.Replace("{{database}}", database.Name);
+                    connstring = connstring.Replace("{{uid}}", location.Username);
+                    connstring = connstring.Replace("{{pwd}}", location.Password);
+                }
+            }
+
+            
             LogManager.SaveLog("Before Connecting " +connstring);
             rtv.nErrorCode = -1;
             try

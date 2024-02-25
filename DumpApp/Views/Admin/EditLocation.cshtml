@@ -1,0 +1,146 @@
+﻿@model DumpApp.BAL.AdminModel.ViewModel.AdminViewModel
+
+@{
+    ViewBag.Title = "EditLocation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    AjaxOptions options = new AjaxOptions();
+    options.HttpMethod = "POST";
+    options.OnBegin = "OnBegin";
+    options.OnComplete = "OnComplete";
+    options.OnFailure = "OnFailure";
+    options.OnSuccess = "OnSuccess";
+    options.LoadingElementId = "divProgress";
+    options.LoadingElementDuration = 1000;
+    options.UpdateTargetId = "divResponse";
+    options.InsertionMode = InsertionMode.InsertAfter;
+}
+<script type='text/javascript'>
+    function foo() {
+        window.location = '@Model.Url';
+    }
+</script>
+
+<div class="row">
+    <div class="col-sm-12">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Edit Location</h3>
+                <div class="panel-options">
+                    <a href="#" data-toggle="panel">
+                        <span class="collapse-icon">&ndash;</span>
+                        <span class="expand-icon">+</span>
+                    </a>
+                    <a href="#" data-toggle="remove">
+                        &times;
+                    </a>
+                </div>
+            </div>
+            @using (Ajax.BeginForm("EditLocation", "Admin", options, new { @class = "form parsley-form" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="panel-body">
+
+                    <div role="form" class="form-horizontal">
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="field-1"> Name</label>
+
+                            <div class="col-sm-10">
+                                @Html.HiddenFor(model => model.admLocation.Id, new { @autocomplete = "off", @class = "form-control" })
+
+                                @Html.TextBoxFor(model => model.admLocation.Name, new { @autocomplete = "off", @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="form-group-separator"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="field-1">Description</label>
+
+                            <div class="col-sm-10">
+                                @Html.TextBoxFor(model => model.admLocation.Description, new { @autocomplete = "off", @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="form-group-separator"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="field-1">Is Head Office</label>
+
+                            <div class="col-sm-10">
+                                @Html.CheckBoxFor(model => model.admLocation.IsHeadOffice, new { @autocomplete = "off", @class = "form-check-input", @id = "DumpTypeCheck" })
+
+                            </div>
+                        </div>
+
+
+                        <div class="form-group-separator"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="field-1">Server</label>
+
+                            <div class="col-sm-10">
+                                @Html.TextBoxFor(model => model.admLocation.Server, new { @autocomplete = "off", @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="form-group-separator"></div>
+
+
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="field-1">Port</label>
+
+                            <div class="col-sm-10">
+                                @Html.TextBoxFor(model => model.admLocation.Port, new { @autocomplete = "off", @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="form-group-separator"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="field-1">Username</label>
+
+                            <div class="col-sm-10">
+                                @Html.TextBoxFor(model => model.admLocation.Username, new { @autocomplete = "off", @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="form-group-separator"></div>
+
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="field-1">Password</label>
+
+                            <div class="col-sm-10">
+                                @Html.TextBoxFor(model => model.admLocation.Password, new { @autocomplete = "off", @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="form-group-separator"></div>
+
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="field-3"></label>
+                            <div class="col-sm-10">
+
+                                <button type="submit" class="btn btn-success"><i class="fa-check"></i>Save</button>
+
+                                <input type="button" id="Return" value="Return " class="btn btn-info" onclick="foo()">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+        </div>
+
+    </div>
+</div>
+

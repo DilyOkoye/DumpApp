@@ -25,9 +25,10 @@ namespace DumpApp.BAL.AdminModel.ViewModel
         public string toDate { get; set; }
         public PriviledgeAssignmentManager roleManager { get; set; }
         public admRole admRole { get; set; }
-
+        public admLocation admLocation { get; set; }
         public admTapeDevice admTapeDevice { get; set; }
         public List<admRole> ListOfRole { get; set; }
+        public List<admLocation> ListOfLocations { get; set; }
         public string Url { get; set; }
         public string PasswordExpiryDate { get; set; }
         //public admEmailSetUp admEmailSetUp { get; set; }

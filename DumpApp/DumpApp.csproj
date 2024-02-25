@@ -1492,6 +1492,11 @@
     <Content Include="Views\Report\Index.cshtml" />
     <Content Include="Views\Report\AuditReport.cshtml" />
     <Content Include="Views\Report\DumpReport.cshtml" />
+    <Content Include="Views\Admin\ManageLocation.cshtml" />
+    <Content Include="Views\Admin\AddLocation.cshtml" />
+    <Content Include="Views\Admin\EditLocation.cshtml" />
+    <Content Include="Views\Report\LoadReport.cshtml" />
+    <Content Include="Views\Report\PasswordedDumpReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1523,6 +1528,8 @@
   <ItemGroup>
     <EmbeddedResource Include="Report\AuditTrail.rdlc" />
     <EmbeddedResource Include="Report\Dump.rdlc" />
+    <EmbeddedResource Include="Report\Load.rdlc" />
+    <EmbeddedResource Include="Report\PasswordedDump.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

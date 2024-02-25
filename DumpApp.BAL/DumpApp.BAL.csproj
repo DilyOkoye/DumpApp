@@ -91,6 +91,7 @@
   <ItemGroup>
     <Compile Include="AdminModel\ClientProfileModel.cs" />
     <Compile Include="AdminModel\Header.cs" />
+    <Compile Include="AdminModel\LocationModel.cs" />
     <Compile Include="AdminModel\MenuModel.cs" />
     <Compile Include="AdminModel\PriviledgeAssignmentManager.cs" />
     <Compile Include="AdminModel\RoleModel.cs" />

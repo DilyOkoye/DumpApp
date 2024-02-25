@@ -52,7 +52,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="dumpTypeCheck">Requires Initialization</label>
                             <div class="col-sm-10">
-                                @Html.CheckBoxFor(model => model.dumps.DumpTypeCheck, new { @autocomplete = "off", @style = "text-transform:uppercase", @class = "form-check-input", @id = "DumpTypeCheck"})
+                                @Html.CheckBoxFor(model => model.dumps.DumpTypeCheck, new { @autocomplete = "off",  @class = "form-check-input", @id = "DumpTypeCheck"})
                             </div>
                         </div>
                         
@@ -86,8 +86,7 @@
                             <label class="col-sm-2 control-label" for="field-1">Tape Identifier</label>
 
                             <div class="col-sm-10">
-                                @Html.HiddenFor(o=>o.dumps.TapeIdentifier, new {id = "TapeName1" })
-                                @Html.TextBoxFor(model => model.dumps.TapeIdentifier, new { @autocomplete = "off", @style = "text-transform:uppercase", @class = "form-control", @id = "TapeIdentifier", required = "required" })
+                                @Html.TextBoxFor(model => model.dumps.TapeIdentifier, new { @autocomplete = "off", @class = "form-control", @id = "TapeIdentifier", required = "required" })
                             </div>
                         </div>
 
@@ -198,21 +197,14 @@
         $("#DumpTypeCheck").change(function () {
             if ($('#DumpTypeCheck').is(':checked')) {
                 var uniqueIdentifier = uuidv4();
-                $("#TapeIdentifier").html(uniqueIdentifier);
                 $("#TapeIdentifier").val(uniqueIdentifier)
-
-                var tapeIdentifier = uuidv4();
-
-                $('#TapeIdentifier').val(tapeIdentifier);
-                
-                $('#TapeName1').val(tapeIdentifier);
-                $("#TapeIdentifier").prop('disabled', true);
+         
+                $("#TapeIdentifier").prop('readonly', true);
             }
             else
             {
                 $("#TapeIdentifier").val("");
-                $("#TapeIdentifier").prop('disabled', false);
-                $('#TapeName1').val(tapeIdentifier);
+                $("#TapeIdentifier").prop('readonly', false);
             }
         });
 

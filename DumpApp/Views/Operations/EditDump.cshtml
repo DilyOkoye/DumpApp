@@ -76,21 +76,21 @@
                         @if (@Model.dumps.DumpType == "Offsite")
                         {
                             <div class="form-group" id="divLocation">
-                            <label class="col-sm-2 control-label">Location</label>
+                                <label class="col-sm-2 control-label">Location</label>
 
-                            <div class="col-sm-10">
-                                @Html.DropDownListFor(model => model.dumps.LocationId, new SelectList(Model.drpLocation, "Value", "Text"), "Select Location", new { @autocomplete = "off", @class = "form-control single-select", @id = "LocationId" })
+                                <div class="col-sm-10">
+                                    @Html.DropDownListFor(model => model.dumps.LocationId, new SelectList(Model.drpLocation, "Value", "Text"), "Select Location", new { @autocomplete = "off", @class = "form-control single-select", @id = "LocationId" })
+                                </div>
                             </div>
-                        </div>
                         }
-                        
+
 
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="field-1">Tape Identifier</label>
 
                             <div class="col-sm-10">
                                 @Html.HiddenFor(o => o.dumps.Id)
-                                @Html.HiddenFor(o => o.dumps.TapeIdentifier, new { id = "TapeName1" })
+                                <input id="hidTapeIdentifier" type="hidden" value="@Model.dumps.TapeIdentifier" />
                                 @Html.TextBoxFor(model => model.dumps.TapeIdentifier, new { @autocomplete = "off", @style = "text-transform:uppercase", @class = "form-control", @id = "TapeIdentifier", required = "required" })
                             </div>
                         </div>
@@ -147,6 +147,25 @@
                             </div>
                         </div>
 
+                        <div class="form-group-separator"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="field-2">Dump Status</label>
+
+                            <div class="col-sm-10">
+                                @Html.TextBoxFor(model => model.dumps.Status, new { @autocomplete = "off", @class = "form-control", @id = "Status", @readonly = "readonly" })
+                            </div>
+                        </div>
+
+
+                        <div class="form-group-separator"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="field-2">Created By</label>
+
+                            <div class="col-sm-10">
+                                @Html.TextBoxFor(model => model.dumps.CreatedBy, new { @autocomplete = "off", @class = "form-control", @id = "CreatedBy", @readonly = "readonly" })
+                            </div>
+                        </div>
+
 
                         <div class="form-group-separator"></div>
 
@@ -154,9 +173,13 @@
                             <label class="col-sm-2 control-label" for="field-3"></label>
                             <div class="col-sm-10">
 
-                                <button type="submit" value="Save" name="button" class="btn btn-info"><i class="fa-save"></i>Update</button>
+                                @if (Model.dumps.Status == "Saved" || @Model.dumps.Status == "Error")
+                                {
+                                    <button type="submit" value="Save" name="button" class="btn btn-info"><i class="fa-save"></i>Update</button>
 
-                                <button type="submit" value="Execute" name="button" class="btn btn-success"><i class="fa-check"></i>Execute</button>
+                                    <button type="submit" value="Execute" name="button" class="btn btn-success"><i class="fa-check"></i>Execute</button>
+
+                                }
 
                                 <input type="button" id="Return" value="Return " class="btn btn-info" onclick="foo()">
 
@@ -201,23 +224,15 @@
 
         $("#DumpTypeCheck").change(function () {
             if ($('#DumpTypeCheck').is(':checked')) {
-                $("#TapeIdentifier").prop('disabled', true);
                 var uniqueIdentifier = uuidv4();
-                $("#TapeIdentifier").html(uniqueIdentifier);
                 $("#TapeIdentifier").val(uniqueIdentifier)
 
-                var tapeIdentifier = uuidv4();
-
-                $('#TapeIdentifier').val(tapeIdentifier);
-
-                $('#TapeName1').val(tapeIdentifier);
-                
+                $("#TapeIdentifier").prop('readonly', true);
             }
-            else
-            {
-                $("#TapeIdentifier").val("");
-                $("#TapeIdentifier").prop('disabled', false);
-                $('#TapeName1').val(tapeIdentifier);
+            else {
+              
+                $("#TapeIdentifier").val(document.getElementById("hidTapeIdentifier").value);
+                $("#TapeIdentifier").prop('readonly', false);
             }
         });
 

@@ -13,6 +13,7 @@ namespace DumpApp.Controllers
     {
         public AdminViewModel adminviewModel = null;
         public RoleModel roleModel = null;
+        public LocationModel locationModel = null;
         public ClientProfileModel ClientProfileModel = null;
         private PriviledgeManager primanager = null;
         public UserProfileModel userprofilemodel = null;
@@ -43,6 +44,7 @@ namespace DumpApp.Controllers
             roleModel = new RoleModel();
             ClientProfileModel = new ClientProfileModel();
             TapeDeviceModel = new TapeDeviceModel();
+            locationModel = new LocationModel();
 
         }
 
@@ -444,6 +446,106 @@ namespace DumpApp.Controllers
             return (Json(JsonResponseFactory.ErrorResponse("Error"), JsonRequestBehavior.DenyGet));
         }
 
+
+
+
+        public ActionResult ManageLocation(int menuid)
+        {
+            adminviewModel.admLocation = new admLocation();
+            adminviewModel.rv = new ReturnValues();
+            adminviewModel.menuid = menuid;
+            adminviewModel.ListOfLocations = locationModel.ListOfLocation();
+            primanager = new PriviledgeManager(menuid, _RoleId);
+            adminviewModel.roleManager = primanager.AssignRoleToUser() == null
+                    ? new PriviledgeAssignmentManager()
+                    : primanager.AssignRoleToUser();
+            return View(adminviewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> AddLocation(AdminViewModel p)
+        {
+            var rtv = new ReturnValues();
+            try
+            {
+                if (ModelState.IsValid)
+                {
+
+                    p.rv = await locationModel.AddLocation(p, _userId);
+
+                    return (Json(JsonResponseFactory.SuccessResponse(p), JsonRequestBehavior.DenyGet));
+                }
+            }
+            catch (Exception ex)
+            {
+                rtv.nErrorCode = -1001;
+                rtv.sErrorText = ex.Message == null ? ex.InnerException.Message : ex.Message;
+                p.rv = rtv;
+                return (Json(JsonResponseFactory.SuccessResponse(p), JsonRequestBehavior.DenyGet));
+            }
+            return (Json(JsonResponseFactory.ErrorResponse("Error"), JsonRequestBehavior.DenyGet));
+        }
+
+        public ActionResult AddLocation(int menuid)
+        {
+            adminviewModel.admLocation = new admLocation();
+            adminviewModel.rv = new ReturnValues();
+            adminviewModel.drpStatus = locationModel.ListStatus();
+            var redirectUrl = new UrlHelper(Request.RequestContext).Action("ManageLocation", "Admin", new { menuid = menuid });
+            adminviewModel.Url = redirectUrl;
+            primanager = new PriviledgeManager(menuid, _RoleId);
+            adminviewModel.roleManager = primanager.AssignRoleToUser() == null
+                    ? new PriviledgeAssignmentManager()
+                    : primanager.AssignRoleToUser();
+
+            return View(adminviewModel);
+        }
+        public async Task<ActionResult> EditLocation(int h, int menuid)
+        {
+            adminviewModel.rv = new ReturnValues();
+            adminviewModel.admLocation = await locationModel.ViewDetails(h);
+            adminviewModel.drpStatus = roleModel.ListStatus();
+            if (adminviewModel.admLocation != null)
+            {
+                adminviewModel.UsercreatedBy = adminviewModel.admLocation.UserId == null ? "" : await roleModel.GetFullname((int)adminviewModel.admLocation.UserId);
+
+            }
+            adminviewModel.menuid = menuid;
+
+            var redirectUrl = new UrlHelper(Request.RequestContext).Action("ManageLocation", "Admin", new { menuid = menuid });
+            adminviewModel.Url = redirectUrl;
+            primanager = new PriviledgeManager(menuid, _RoleId);
+            adminviewModel.roleManager = primanager.AssignRoleToUser() == null
+                    ? new PriviledgeAssignmentManager()
+                    : primanager.AssignRoleToUser();
+
+
+            return View(adminviewModel);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> EditLocation(AdminViewModel p)
+        {
+            var rtv = new ReturnValues();
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    p.rv = await locationModel.EditLocation(p, _userId);
+
+                    return (Json(JsonResponseFactory.SuccessResponse(p), JsonRequestBehavior.DenyGet));
+                }
+            }
+            catch (Exception ex)
+            {
+                rtv.nErrorCode = -1001;
+                rtv.sErrorText = ex.Message == null ? ex.InnerException.Message : ex.Message;
+                p.rv = rtv;
+                return (Json(JsonResponseFactory.SuccessResponse(p), JsonRequestBehavior.DenyGet));
+            }
+            return (Json(JsonResponseFactory.ErrorResponse("Error"), JsonRequestBehavior.DenyGet));
+        }
 
     }
 }

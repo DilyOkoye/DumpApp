@@ -120,7 +120,7 @@ namespace DumpApp.BAL.LoginModel
                 }
                 #endregion
 
-                string compare = Cryptors.Encrypt(Pwd, "DumpApp");
+                string compare = Cryptors.EncryptLogin(Pwd, "DumpApp");
                 var com = await repoUserProfile.Get(i => i.LoginId.Trim().ToUpper().Equals(Username.Trim().ToUpper(), StringComparison.InvariantCultureIgnoreCase) && i.Password == compare);
                 if (com != null)
                 {
