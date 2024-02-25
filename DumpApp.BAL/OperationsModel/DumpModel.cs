@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
+using System.Runtime.Caching;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.Caching;
 using System.Web.Mvc;
 using AdoNetCore.AseClient;
 using DumpApp.BAL.AdminModel.ViewModel;
@@ -30,7 +33,7 @@ namespace DumpApp.BAL.OperationsModel
         private readonly ITapeDeviceRespository repoTapeDevice;
         private readonly IUnitOfWork unitOfWork;
         private readonly IDbFactory idbfactory;
-      
+
 
         public DumpModel()
         {
@@ -213,7 +216,7 @@ namespace DumpApp.BAL.OperationsModel
             p.dumps.TapeName = tapeName;
 
             p.dumps.Password = RandomString(10);
-            
+
             var admLoad = new admLoad()
             {
                 DumpDate = DateTime.Now,
@@ -250,6 +253,7 @@ namespace DumpApp.BAL.OperationsModel
                     {
                         admLoad.JobId = jobId;
                         admLoad.Status = "Processing";
+                        repoLoadRepository.Update(admLoad);
                         await unitOfWork.Commit(loginUserId);
                         returnVal.sErrorText = "Load operation in progress, Check back later to check Load Status";
 
@@ -293,8 +297,8 @@ namespace DumpApp.BAL.OperationsModel
 
             var tapeName = repoTapeDevice.GetNonAsync(o => o.Id == p.dumps.TapeDeviceId).Name;
             p.dumps.TapeName = tapeName;
-            
-                
+
+
 
             p.dumps.Password = RandomString(10);
             var admDump = new admDump()
@@ -378,7 +382,7 @@ namespace DumpApp.BAL.OperationsModel
             p.dumps.TapeName = tapeName;
 
             p.dumps.Password = RandomString(10);
-            
+
             t.DumpDate = DateTime.Now;
             t.DumpType = p.dumps.DumpType == "Offsite" ? 1 : 2;
             t.CreatedBy = loginUserId;
@@ -568,16 +572,37 @@ namespace DumpApp.BAL.OperationsModel
         public async Task<ReturnValues> ExecuteDump(Dumps dump, PerformContext context, int loginUserId)
         {
             var rtv = new ReturnValues();
-            var dumpRecord = await repoDumpRepository.Get(o => o.Id == dump.Id);
+            var dumpRecord = await repoDumpRepository.Get(o => o.TapeIdentifier == dump.TapeIdentifier);
 
             try
             {
-               
+
                 rtv.nErrorCode = -1;
                 var sybaseLayer = new SybaseDataLayer();
 
                 string path = System.Configuration.ConfigurationManager.AppSettings["DumpPath"];
-                rtv = await sybaseLayer.SqlDs(GetDumpQuery(dump, path), dump);
+
+                List<AseParameter> sp = new List<AseParameter>()
+                {
+
+                    new AseParameter()
+                        { ParameterName = "@DumpTypeCheck", AseDbType = AseDbType.Bit, Value = dump.DumpTypeCheck },
+                    new AseParameter()
+                        { ParameterName = "@DumpType", AseDbType = AseDbType.VarChar, Value = dump.DumpType },
+                    new AseParameter()
+                        { ParameterName = "@DatabaseName", AseDbType = AseDbType.VarChar, Value = dump.DatabaseName },
+                    new AseParameter()
+                        { ParameterName = "@Filename", AseDbType = AseDbType.VarChar, Value = dump.Filename },
+                    new AseParameter() { ParameterName = "@Path", AseDbType = AseDbType.VarChar, Value = path },
+                    new AseParameter()
+                    {
+                        ParameterName = "@Password", AseDbType = AseDbType.VarChar,
+                        Value = CheckDBNullValue(dump.Password)
+                    }
+                };
+
+
+                rtv = await sybaseLayer.ExecuteDumpStoredProcedure("sp_dump_database", sp, dump);
                 if (rtv != null && rtv.nErrorCode == 0)
                 {
                     rtv.nErrorCode = 0;
@@ -588,17 +613,24 @@ namespace DumpApp.BAL.OperationsModel
                         dumpRecord.JobId = context.BackgroundJob.Id;
                         dumpRecord.ErrorId = rtv.nErrorCode;
                         dumpRecord.Status = "Dumped";
+                        dumpRecord.StartTime = rtv.StartDateTime;
+                        dumpRecord.EndTime = rtv.EndDateTime;
+                        dumpRecord.TotalDuration = rtv.TotalTime.ToString();
+
                         repoDumpRepository.Update(dumpRecord);
                         await unitOfWork.Commit(loginUserId);
                         return rtv;
                     }
                 }
-                
+
                 else if (dumpRecord != null)
                 {
                     dumpRecord.JobId = context.BackgroundJob.Id;
                     dumpRecord.ErrorId = -1;
                     dumpRecord.Status = "Error";
+                    dumpRecord.StartTime = rtv?.StartDateTime;
+                    dumpRecord.EndTime = rtv?.EndDateTime;
+                    dumpRecord.TotalDuration = rtv?.TotalTime.ToString();
                     dumpRecord.ErrorMessage = "Error While Dumping";
                     repoDumpRepository.Update(dumpRecord);
                     await unitOfWork.Commit(loginUserId);
@@ -613,17 +645,21 @@ namespace DumpApp.BAL.OperationsModel
                     dumpRecord.ErrorId = -1;
                     dumpRecord.Status = "Error";
                     dumpRecord.ErrorMessage = e.ToString();
+                    dumpRecord.StartTime = rtv?.StartDateTime;
+                    dumpRecord.EndTime = rtv?.EndDateTime;
+                    dumpRecord.TotalDuration = rtv?.TotalTime.ToString();
                     repoDumpRepository.Update(dumpRecord);
                     await unitOfWork.Commit(loginUserId);
                 }
             }
+
             return rtv;
         }
 
         public async Task<ReturnValues> ExecuteLoad(Dumps dump, PerformContext context, int loginUserId)
         {
             var rtv = new ReturnValues();
-            var dumpRecord = await repoDumpRepository.Get(o => o.Id == dump.Id);
+            var loadRecord = await repoLoadRepository.Get(o => o.TapeIdentifier == dump.TapeIdentifier);
 
             try
             {
@@ -631,46 +667,77 @@ namespace DumpApp.BAL.OperationsModel
                 rtv.nErrorCode = -1;
                 var sybaseLayer = new SybaseDataLayer();
 
-                rtv = await sybaseLayer.SqlDs(GetLoadQuery(dump, path), dump);
+                List<AseParameter> sp = new List<AseParameter>()
+                {
+
+                    new AseParameter()
+                        { ParameterName = "@DumpTypeCheck", AseDbType = AseDbType.Bit, Value = dump.DumpTypeCheck },
+                    new AseParameter()
+                        { ParameterName = "@DumpType", AseDbType = AseDbType.VarChar, Value = dump.DumpType },
+                    new AseParameter()
+                        { ParameterName = "@DatabaseName", AseDbType = AseDbType.VarChar, Value = dump.DatabaseName },
+                    new AseParameter()
+                        { ParameterName = "@Filename", AseDbType = AseDbType.VarChar, Value = dump.Filename },
+                    new AseParameter() { ParameterName = "@Path", AseDbType = AseDbType.VarChar, Value = path },
+                    new AseParameter()
+                    {
+                        ParameterName = "@Password", AseDbType = AseDbType.VarChar,
+                        Value = CheckDBNullValue(dump.Password)
+                    }
+                };
+
+
+                rtv = await sybaseLayer.ExecuteLoadStoredProcedure("sp_load_database", sp, dump);
+
                 if (rtv != null && rtv.nErrorCode == 0)
                 {
                     rtv.nErrorCode = 0;
                     rtv.sErrorText = "Load Successful";
 
-                    if (dumpRecord != null)
+                    if (loadRecord != null)
                     {
-                        dumpRecord.JobId = context.BackgroundJob.Id;
-                        dumpRecord.ErrorId = rtv.nErrorCode;
-                        dumpRecord.Status = "Loaded";
-                        repoDumpRepository.Update(dumpRecord);
+                        loadRecord.JobId = context.BackgroundJob.Id;
+                        loadRecord.ErrorId = rtv.nErrorCode;
+                        loadRecord.Status = "Loaded";
+                        loadRecord.StartTime = rtv.StartDateTime;
+                        loadRecord.EndTime = rtv.EndDateTime;
+                        loadRecord.TotalDuration = rtv.TotalTime.ToString();
+                        repoLoadRepository.Update(loadRecord);
                         await unitOfWork.Commit(loginUserId);
                         return rtv;
                     }
                 }
 
-                else if (dumpRecord != null)
+                else if (loadRecord != null)
                 {
-                    dumpRecord.JobId = context.BackgroundJob.Id;
-                    dumpRecord.ErrorId = -1;
-                    dumpRecord.Status = "Error";
-                    dumpRecord.ErrorMessage = "Error While Loading";
-                    repoDumpRepository.Update(dumpRecord);
+                    loadRecord.JobId = context.BackgroundJob.Id;
+                    loadRecord.ErrorId = -1;
+                    loadRecord.Status = "Error";
+                    loadRecord.ErrorMessage = "Error While Loading";
+                    loadRecord.StartTime = rtv?.StartDateTime;
+                    loadRecord.EndTime = rtv?.EndDateTime;
+                    loadRecord.TotalDuration = rtv?.TotalTime.ToString();
+                    repoLoadRepository.Update(loadRecord);
                     await unitOfWork.Commit(loginUserId);
                     return rtv;
                 }
             }
             catch (Exception e)
             {
-                if (dumpRecord != null)
+                if (loadRecord != null)
                 {
-                    dumpRecord.JobId = context.BackgroundJob.Id;
-                    dumpRecord.ErrorId = -1;
-                    dumpRecord.Status = "Error";
-                    dumpRecord.ErrorMessage = e.ToString();
-                    repoDumpRepository.Update(dumpRecord);
+                    loadRecord.JobId = context.BackgroundJob.Id;
+                    loadRecord.ErrorId = -1;
+                    loadRecord.Status = "Error";
+                    loadRecord.ErrorMessage = e.ToString();
+                    loadRecord.StartTime = rtv?.StartDateTime;
+                    loadRecord.EndTime = rtv?.EndDateTime;
+                    loadRecord.TotalDuration = rtv?.TotalTime.ToString();
+                    repoLoadRepository.Update(loadRecord);
                     await unitOfWork.Commit(loginUserId);
                 }
             }
+
             return rtv;
         }
 
@@ -848,5 +915,7 @@ namespace DumpApp.BAL.OperationsModel
         //        return rtv;
         //    }
         //}
+
+        
     }
 }

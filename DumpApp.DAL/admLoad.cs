@@ -31,6 +31,9 @@ namespace DumpApp.DAL
         public string ErrorMessage { get; set; }
         public Nullable<System.DateTime> DumpDate { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
+        public Nullable<System.DateTime> StartTime { get; set; }
+        public Nullable<System.DateTime> EndTime { get; set; }
+        public string TotalDuration { get; set; }
         public string Status { get; set; }
         public Nullable<int> CreatedBy { get; set; }
     }

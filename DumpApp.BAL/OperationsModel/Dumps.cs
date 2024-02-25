@@ -28,6 +28,7 @@ namespace DumpApp.BAL.OperationsModel
         public string DatabaseName { get; set; }
         public string TapeName { get; set; }
         public string TapeName1 { get; set; }
-        
+        public string Duration { get; set; }
+
     }
 }

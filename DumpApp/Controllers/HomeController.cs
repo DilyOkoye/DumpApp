@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using EmailNotification.BAL.Utilities;
 using System;
 using System.Threading.Tasks;
+using DumpApp.BAL.Utilities;
 
 namespace DumpApp.Controllers
 {
@@ -13,6 +14,7 @@ namespace DumpApp.Controllers
         public UserProfileModel userprofileModel = null;
         private MenuModel oMenuModel = null;
         private MenuViewModel menuview = null;
+        private DashboardModel dashboardModel = null;
         private Header oHeader = null;
         private string _userName = string.Empty;
         private int _userId;
@@ -38,10 +40,15 @@ namespace DumpApp.Controllers
             oHeader = new Header();
             adminviewmodel = new AdminViewModel();
             userprofileModel = new UserProfileModel();
+            dashboardModel = new DashboardModel();
+
+
         }
 
         public ActionResult DashBoard()
         {
+            adminviewmodel.dashboard = dashboardModel.ListOfDumps();
+            adminviewmodel.dashboard = dashboardModel.ListOfLoad();
             return View(adminviewmodel);
         }
 

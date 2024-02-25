@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using DumpApp.BAL.OperationsModel;
 
 namespace DumpApp.BAL.AdminModel.ViewModel
 {
@@ -28,6 +29,12 @@ namespace DumpApp.BAL.AdminModel.ViewModel
         public admLocation admLocation { get; set; }
         public admTapeDevice admTapeDevice { get; set; }
         public List<admRole> ListOfRole { get; set; }
+
+        public List<Dumps> ListOfDumps { get; set; }
+        
+        public Dashboard dashboard { get; set; }
+
+        public List<Dumps> ListOfLoads { get; set; }
         public List<admLocation> ListOfLocations { get; set; }
         public string Url { get; set; }
         public string PasswordExpiryDate { get; set; }

@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Data.SqlClient;
+using System.Data;
 using System.IO;
+using System.Runtime.Caching;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -64,6 +67,82 @@ namespace DumpApp.BAL.Utilities
             catch (Exception ex)
             {
                 return "Error in decryption: " + ex.Message;
+            }
+        }
+
+        public static DataTable GetTop20DumpRecords()
+        {
+            var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnectionProc"].ToString();
+
+            string cacheKey = "Top10DumpRecordsCacheKey";
+            var cacheItem = MemoryCache.Default.Get(cacheKey) as DataTable;
+
+            if (cacheItem != null)
+            {
+                // Return the cached data
+                return cacheItem;
+            }
+            else
+            {
+                // Cache is empty or expired, fetch data from database
+                DataTable dt = new DataTable();
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    string query = "SELECT TOP 20 * FROM admDump order by DumpDate desc"; // Update this with your actual table name
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        conn.Open();
+                        SqlDataAdapter da = new SqlDataAdapter(cmd);
+                        da.Fill(dt);
+                    }
+                }
+
+                // Cache the data with expiration time of 10 minutes
+                CacheItemPolicy policy = new CacheItemPolicy
+                {
+                    AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(20)
+                };
+                MemoryCache.Default.Set(cacheKey, dt, policy);
+
+                return dt;
+            }
+        }
+
+        public static DataTable GetTop20LoadRecords()
+        {
+            var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnectionProc"].ToString();
+
+            string cacheKey = "Top10LoadRecordsCacheKey";
+            var cacheItem = MemoryCache.Default.Get(cacheKey) as DataTable;
+
+            if (cacheItem != null)
+            {
+                // Return the cached data
+                return cacheItem;
+            }
+            else
+            {
+                // Cache is empty or expired, fetch data from database
+                DataTable dt = new DataTable();
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    string query = "SELECT TOP 20 * FROM admLoad order by DumpDate desc"; // Update this with your actual table name
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        conn.Open();
+                        SqlDataAdapter da = new SqlDataAdapter(cmd);
+                        da.Fill(dt);
+                    }
+                }
+
+                // Cache the data with expiration time of 10 minutes
+                CacheItemPolicy policy = new CacheItemPolicy
+                {
+                    AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(20)
+                };
+                MemoryCache.Default.Set(cacheKey, dt, policy);
+
+                return dt;
             }
         }
     }
