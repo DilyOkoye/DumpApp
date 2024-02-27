@@ -7,18 +7,52 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7bfddb13-5a6a-4318-a255-2f87a5444fd6" name="Changes" comment="" />
+    <list default="true" id="7bfddb13-5a6a-4318-a255-2f87a5444fd6" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/DumpApp.BAL/OperationsModel/DumpModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DumpApp.BAL/OperationsModel/DumpModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DumpApp.BAL/OperationsModel/SybaseDataLayer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DumpApp.BAL/OperationsModel/SybaseDataLayer.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 8
+}]]></component>
+  <component name="ProjectId" id="2cv9xaIVjt8neCHiC3EM9FNdvfU" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "node.js.selected.package.tslint": "(autodetect)"
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7bfddb13-5a6a-4318-a255-2f87a5444fd6" name="Changes" comment="" />
+      <created>1708981434854</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1708981434854</updated>
+      <workItem from="1708981438449" duration="643000" />
+    </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>

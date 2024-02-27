@@ -26,15 +26,18 @@ namespace DumpApp.BAL.OperationsModel
             repoLocation = new LocationRepository(idbfactory);
             repoDatabase = new DatabaseRepository(idbfactory);
         }
-        public async Task<ReturnValues> SqlDs(string commandQuery,Dumps dump)
+        public async Task<ReturnValues> SqlDs(string commandQuery, Dumps dump)
         {
+            var startTime = DateTime.Now; // Log start time
+            LogManager.SaveLog($"ExecuteLoadStoredProcedure execution start time: {startTime}");
+
             var rtv = new ReturnValues();
             var connstring = System.Configuration.ConfigurationManager.ConnectionStrings["sybconnection"].ToString();
             var database = await repoDatabase.Get(o => o.Id == dump.DatebaseId);
 
             if (dump.DumpType == "Internal")
             {
-                var location =await repoLocation.Get(o => o.IsHeadOffice);
+                var location = await repoLocation.Get(o => o.IsHeadOffice);
                 if (location != null)
                 {
                     connstring = connstring.Replace("{{Data Source}}", location.Server);
@@ -57,8 +60,8 @@ namespace DumpApp.BAL.OperationsModel
                 }
             }
 
-            
-            LogManager.SaveLog("Before Connecting " +connstring);
+
+            LogManager.SaveLog("Before Connecting " + connstring);
             rtv.nErrorCode = -1;
             try
             {
@@ -70,12 +73,12 @@ namespace DumpApp.BAL.OperationsModel
 
                     using (var command = new AseCommand(commandQuery, connection))
                     {
-                        var result =command.ExecuteNonQuery();
-                        if (result > 0)
+                        var result = command.ExecuteNonQuery();
+                        if (result == 0)
                         {
                             rtv.nErrorCode = 0;
                             rtv.sErrorText = "Database Dump Successful";
-                            return rtv;
+
                         }
                         LogManager.SaveLog("Database dump successfully executed.");
                     }
@@ -89,6 +92,14 @@ namespace DumpApp.BAL.OperationsModel
                 rtv.sErrorText = ex.Message;
             }
 
+            var endTime = DateTime.Now;
+            LogManager.SaveLog($"Procedure execution end time: {endTime}");
+
+            // Optionally, log the duration
+            LogManager.SaveLog($"Total execution time: {endTime - startTime}");
+            rtv.StartDateTime = startTime;
+            rtv.EndDateTime = endTime;
+            rtv.TotalTime = endTime - startTime;
             return rtv;
         }
 
@@ -96,7 +107,7 @@ namespace DumpApp.BAL.OperationsModel
         {
             var startTime = DateTime.Now; // Log start time
             LogManager.SaveLog($"ExecuteDumpStoredProcedure execution start time: {startTime}");
-            
+
             var rtv = new ReturnValues();
             rtv.nErrorCode = -1;
             rtv.sErrorText = "Dump command execution failed.";
@@ -117,15 +128,15 @@ namespace DumpApp.BAL.OperationsModel
 
             LogManager.SaveLog(connString);
 
-            string responseMessage = "No response message set."; 
+            string responseMessage = "No response message set.";
             using (var theConn = new AseConnection(connString))
             {
-               
+
                 try
                 {
                     await theConn.OpenAsync();
                     LogManager.SaveLog("Connection Opened Successfully");
-                    
+
                     using (var cmd = new AseCommand(storedProcedureName, theConn))
                     {
                         cmd.CommandTimeout = 0;
@@ -177,7 +188,7 @@ namespace DumpApp.BAL.OperationsModel
                                 rtv.sErrorText = "Dump command executed successfully.";
                                 break;
                         }
-                        
+
                     }
                 }
                 catch (Exception ex)
@@ -189,7 +200,7 @@ namespace DumpApp.BAL.OperationsModel
                 }
             }
 
-            var endTime = DateTime.Now; 
+            var endTime = DateTime.Now;
             LogManager.SaveLog($"Procedure execution end time: {endTime}");
 
             // Optionally, log the duration
@@ -206,7 +217,7 @@ namespace DumpApp.BAL.OperationsModel
             var startTime = DateTime.Now; // Log start time
             LogManager.SaveLog($"ExecuteLoadStoredProcedure execution start time: {startTime}");
 
-            
+
             var rtv = new ReturnValues();
             rtv.nErrorCode = -1;
             rtv.sErrorText = "Load command execution failed.";
@@ -230,13 +241,13 @@ namespace DumpApp.BAL.OperationsModel
             string responseMessage = "No response message set.";
             using (var theConn = new AseConnection(connString))
             {
-                
+
                 try
                 {
                     await theConn.OpenAsync();
                     LogManager.SaveLog("Connection Opened Successfully");
 
-                    
+
                     using (var cmd = new AseCommand(storedProcedureName, theConn))
                     {
                         cmd.CommandTimeout = 0;
@@ -297,7 +308,7 @@ namespace DumpApp.BAL.OperationsModel
                     LogManager.SaveLog($"Exception from Load Procedure call: {message}");
                     rtv.nErrorCode = -1;
                     rtv.sErrorText = message;
-                   
+
                 }
             }
 

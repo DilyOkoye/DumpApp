@@ -52,21 +52,21 @@ namespace DumpApp.BAL.OperationsModel
         {
 
             var d = (from h in repoLoadRepository.GetAllNonAsync()
-                select new Dumps()
-                {
-                    DumpName = h.DumpName,
-                    DumpDescription = h.DumpDescription,
-                    TapeDescription = h.TapeDescription,
-                    Status = h.Status,
-                    Filename = h.Filename,
-                    DumpType = h.DumpType == null ? "" : GetDumpTypeName((int)h.DumpType),
-                    DumpDate = h.DumpDate == null ? "" : $"{h.DumpDate:F}",
-                    TapeType = h.TapeType,
-                    DateCreated = h.DateCreated == null ? "" : $"{h.DateCreated:F}",
-                    TapeIdentifier = h.TapeIdentifier,
-                    Id = h.Id,
-                    CreatedBy = h.CreatedBy == null ? "" : GetUserById((int)h.CreatedBy),
-                }).ToList();
+                     select new Dumps()
+                     {
+                         DumpName = h.DumpName,
+                         DumpDescription = h.DumpDescription,
+                         TapeDescription = h.TapeDescription,
+                         Status = h.Status,
+                         Filename = h.Filename,
+                         DumpType = h.DumpType == null ? "" : GetDumpTypeName((int)h.DumpType),
+                         DumpDate = h.DumpDate == null ? "" : $"{h.DumpDate:F}",
+                         TapeType = h.TapeType,
+                         DateCreated = h.DateCreated == null ? "" : $"{h.DateCreated:F}",
+                         TapeIdentifier = h.TapeIdentifier,
+                         Id = h.Id,
+                         CreatedBy = h.CreatedBy == null ? "" : GetUserById((int)h.CreatedBy),
+                     }).ToList();
 
             return d;
         }
@@ -75,21 +75,21 @@ namespace DumpApp.BAL.OperationsModel
         {
 
             var d = (from h in repoDumpRepository.GetAllNonAsync()
-                select new Dumps()
-                {
-                    DumpName = h.DumpName,
-                    DumpDescription = h.DumpDescription,
-                    TapeDescription = h.TapeDescription,
-                    Status = h.Status,
-                    Filename = h.Filename,
-                    DumpType = h.DumpType == null ? "" : GetDumpTypeName((int)h.DumpType),
-                    DumpDate = h.DumpDate == null ? "" : $"{h.DumpDate:F}",
-                    TapeType = h.TapeType,
-                    DateCreated = h.DateCreated == null ? "" : $"{h.DateCreated:F}",
-                    TapeIdentifier = h.TapeIdentifier,
-                    Id = h.Id,
-                    CreatedBy = h.CreatedBy == null ? "" : GetUserById((int)h.CreatedBy),
-                }).ToList();
+                     select new Dumps()
+                     {
+                         DumpName = h.DumpName,
+                         DumpDescription = h.DumpDescription,
+                         TapeDescription = h.TapeDescription,
+                         Status = h.Status,
+                         Filename = h.Filename,
+                         DumpType = h.DumpType == null ? "" : GetDumpTypeName((int)h.DumpType),
+                         DumpDate = h.DumpDate == null ? "" : $"{h.DumpDate:F}",
+                         TapeType = h.TapeType,
+                         DateCreated = h.DateCreated == null ? "" : $"{h.DateCreated:F}",
+                         TapeIdentifier = h.TapeIdentifier,
+                         Id = h.Id,
+                         CreatedBy = h.CreatedBy == null ? "" : GetUserById((int)h.CreatedBy),
+                     }).ToList();
 
             return d;
         }
@@ -215,24 +215,24 @@ namespace DumpApp.BAL.OperationsModel
             var tapeName = repoTapeDevice.GetNonAsync(o => o.Id == p.dumps.TapeDeviceId).Name;
             p.dumps.TapeName = tapeName;
 
-            p.dumps.Password = RandomString(10);
+            p.dumps.Password = t.DumpType == 1 ? Cryptors.Decrypt(t.Password, "DumpApp") : null;
 
             var admLoad = new admLoad()
             {
                 DumpDate = DateTime.Now,
-                DumpType = p.dumps.DumpType == "Offsite" ? 1 : 2,
+                DumpType = t.DumpType,
                 CreatedBy = loginUserId,
-                TapeIdentifier = p.dumps.TapeIdentifier,
-                DumpName = p.dumps.DumpName,
+                TapeIdentifier = t.TapeIdentifier,
+                DumpName = t.DumpName,
                 DateCreated = DateTime.Now,
-                DatebaseId = p.dumps.DatebaseId,
-                DumpDescription = p.dumps.DumpDescription,
-                Filename = p.dumps.Filename,
-                TapeDeviceId = p.dumps.TapeDeviceId,
-                TapeDescription = p.dumps.TapeDescription,
-                LocationId = p.dumps.LocationId,
-                TapeType = p.dumps.DumpTypeCheck ? "New" : "Old",
-                Password = dumpType == 1 ? Cryptors.Encrypt(p.dumps.Password, "DumpApp") : null
+                DatebaseId = t.DatebaseId,
+                DumpDescription = t.DumpDescription,
+                Filename = t.Filename,
+                TapeDeviceId = t.TapeDeviceId,
+                TapeDescription = t.TapeDescription,
+                LocationId = t.LocationId,
+                TapeType = t.TapeType,
+                Password = t.Password
             };
 
             if (button == "Test")
@@ -255,6 +255,7 @@ namespace DumpApp.BAL.OperationsModel
                         admLoad.Status = "Processing";
                         repoLoadRepository.Update(admLoad);
                         await unitOfWork.Commit(loginUserId);
+                        returnVal.nErrorCode = 0;
                         returnVal.sErrorText = "Load operation in progress, Check back later to check Load Status";
 
                     }
@@ -552,17 +553,17 @@ namespace DumpApp.BAL.OperationsModel
             {
                 case true when dump.DumpType == "Offsite":
                     query =
-                        $"load database {dump.DatabaseName}  to '{path + dump.Filename}' with passwd = '{dump.Password}' with init go";
+                        $"load database {dump.DatabaseName}  from '{path + dump.Filename}' with passwd = '{dump.Password}' with init go";
                     break;
                 case false when dump.DumpType == "Offsite":
                     query =
-                        $"load database {dump.DatabaseName}  to '{path + dump.Filename}' with passwd = '{dump.Password}'";
+                        $"load database {dump.DatabaseName}  from '{path + dump.Filename}' with passwd = '{dump.Password}'";
                     break;
                 case true when dump.DumpType == "Internal":
-                    query = $"load database {dump.DatabaseName}  to '{path + dump.Filename}'  with init go";
+                    query = $"load database {dump.DatabaseName}  from '{path + dump.Filename}'  with init go";
                     break;
                 case false when dump.DumpType == "Internal":
-                    query = $"load database  {dump.DatabaseName}  to '{path + dump.Filename}'";
+                    query = $"load database  {dump.DatabaseName}  from '{path + dump.Filename}'";
                     break;
             }
 
@@ -582,27 +583,8 @@ namespace DumpApp.BAL.OperationsModel
 
                 string path = System.Configuration.ConfigurationManager.AppSettings["DumpPath"];
 
-                List<AseParameter> sp = new List<AseParameter>()
-                {
 
-                    new AseParameter()
-                        { ParameterName = "@DumpTypeCheck", AseDbType = AseDbType.Bit, Value = dump.DumpTypeCheck },
-                    new AseParameter()
-                        { ParameterName = "@DumpType", AseDbType = AseDbType.VarChar, Value = dump.DumpType },
-                    new AseParameter()
-                        { ParameterName = "@DatabaseName", AseDbType = AseDbType.VarChar, Value = dump.DatabaseName },
-                    new AseParameter()
-                        { ParameterName = "@Filename", AseDbType = AseDbType.VarChar, Value = dump.Filename },
-                    new AseParameter() { ParameterName = "@Path", AseDbType = AseDbType.VarChar, Value = path },
-                    new AseParameter()
-                    {
-                        ParameterName = "@Password", AseDbType = AseDbType.VarChar,
-                        Value = CheckDBNullValue(dump.Password)
-                    }
-                };
-
-
-                rtv = await sybaseLayer.ExecuteDumpStoredProcedure("sp_dump_database", sp, dump);
+                rtv = await sybaseLayer.SqlDs(GetDumpQuery(dump, path), dump);
                 if (rtv != null && rtv.nErrorCode == 0)
                 {
                     rtv.nErrorCode = 0;
@@ -663,31 +645,12 @@ namespace DumpApp.BAL.OperationsModel
 
             try
             {
-                string path = System.Configuration.ConfigurationManager.AppSettings["LoadPath"];
+                string path = System.Configuration.ConfigurationManager.AppSettings["DumpPath"];
                 rtv.nErrorCode = -1;
                 var sybaseLayer = new SybaseDataLayer();
 
-                List<AseParameter> sp = new List<AseParameter>()
-                {
 
-                    new AseParameter()
-                        { ParameterName = "@DumpTypeCheck", AseDbType = AseDbType.Bit, Value = dump.DumpTypeCheck },
-                    new AseParameter()
-                        { ParameterName = "@DumpType", AseDbType = AseDbType.VarChar, Value = dump.DumpType },
-                    new AseParameter()
-                        { ParameterName = "@DatabaseName", AseDbType = AseDbType.VarChar, Value = dump.DatabaseName },
-                    new AseParameter()
-                        { ParameterName = "@Filename", AseDbType = AseDbType.VarChar, Value = dump.Filename },
-                    new AseParameter() { ParameterName = "@Path", AseDbType = AseDbType.VarChar, Value = path },
-                    new AseParameter()
-                    {
-                        ParameterName = "@Password", AseDbType = AseDbType.VarChar,
-                        Value = CheckDBNullValue(dump.Password)
-                    }
-                };
-
-
-                rtv = await sybaseLayer.ExecuteLoadStoredProcedure("sp_load_database", sp, dump);
+                rtv = await sybaseLayer.SqlDs(GetLoadQuery(dump, path), dump);
 
                 if (rtv != null && rtv.nErrorCode == 0)
                 {
@@ -916,6 +879,6 @@ namespace DumpApp.BAL.OperationsModel
         //    }
         //}
 
-        
+
     }
 }
