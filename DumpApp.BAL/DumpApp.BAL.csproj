@@ -127,8 +127,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdminModel\ChangePasswordModel.cs" />
     <Compile Include="AdminModel\ClientProfileModel.cs" />
     <Compile Include="AdminModel\DashboardModel.cs" />
+    <Compile Include="AdminModel\DatabaseModel.cs" />
     <Compile Include="AdminModel\Header.cs" />
     <Compile Include="AdminModel\LocationModel.cs" />
     <Compile Include="AdminModel\MenuModel.cs" />

@@ -100,7 +100,7 @@ namespace DumpApp.BAL.Utilities
                 // Cache the data with expiration time of 10 minutes
                 CacheItemPolicy policy = new CacheItemPolicy
                 {
-                    AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(20)
+                    AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(30)
                 };
                 MemoryCache.Default.Set(cacheKey, dt, policy);
 
@@ -138,7 +138,73 @@ namespace DumpApp.BAL.Utilities
                 // Cache the data with expiration time of 10 minutes
                 CacheItemPolicy policy = new CacheItemPolicy
                 {
-                    AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(20)
+                    AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(30)
+                };
+                MemoryCache.Default.Set(cacheKey, dt, policy);
+
+                return dt;
+            }
+        }
+
+
+        public static DataTable GetNotifications()
+        {
+            var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnectionProc"].ToString();
+
+            string cacheKey = "DumpNotification";
+            var cacheItem = MemoryCache.Default.Get(cacheKey) as DataTable;
+
+            if (cacheItem != null)
+            {
+                // Return the cached data
+                return cacheItem;
+            }
+            else
+            {
+                // Cache is empty or expired, fetch data from database
+                DataTable dt = new DataTable();
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    string sqlQuery = @"
+    WITH StatusChanges AS (
+        SELECT 
+            *,
+            LAG(status) OVER (ORDER BY DumpDate) AS previous_status
+        FROM 
+            admDump
+        WHERE
+            DumpDate >= DATEADD(day, -1, GETDATE()) -- Filter data for the last 24 hours
+    )
+    SELECT 
+        *
+    FROM 
+        StatusChanges
+    WHERE 
+        status <> previous_status
+
+    UNION
+
+    SELECT 
+        *,
+        Status
+    FROM 
+        admLoad
+    WHERE
+        DumpDate >= DATEADD(day, -1, GETDATE()) -- Filter data for the last 24 hours
+";
+
+
+                    using (SqlCommand cmd = new SqlCommand(sqlQuery, conn))
+                    {
+                        conn.Open();
+                        SqlDataAdapter da = new SqlDataAdapter(cmd);
+                        da.Fill(dt);
+                    }
+                }
+
+                CacheItemPolicy policy = new CacheItemPolicy
+                {
+                    AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(30)
                 };
                 MemoryCache.Default.Set(cacheKey, dt, policy);
 

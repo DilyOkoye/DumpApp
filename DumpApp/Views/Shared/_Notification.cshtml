@@ -1,0 +1,27 @@
+﻿@model DumpApp.BAL.AdminModel.ViewModel.AdminViewModel
+<li class="hidden-sm hidden-xs" style="min-height: 76px;">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"> <i class="fa-bell-o"></i> <span class="badge badge-purple">@Model.notificationResult</span> </a> <ul class="dropdown-menu notifications">
+        <li class="top">
+            <p class="small">
+                You have <strong>@Model.notificationResult</strong> new Dump/Load Updates
+            </p>
+        </li>
+        <li class="top">
+            <ul class="dropdown-menu-list list-unstyled ps-scrollbar ps-container ps-active-y">
+                <li class="active notification-success">
+                    <a href="#">
+                        <i class="fa-user"></i> <span class="line"> <strong>New Dump and Load Results are ready</strong> </span> <span class="line small time">
+                            a few mins ago
+                        </span>
+                    </a>
+                </li>
+
+                <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 3px;"><div class="ps-scrollbar-x" style="left: 0px; width: 0px;"></div></div>
+                <div class="ps-scrollbar-y-rail" style="top: 0px; right: 2px; height: 276px;"><div class="ps-scrollbar-y" style="top: 0px; height: 184px;"></div></div>
+            </ul>
+        </li>
+        <li class="external"> <a href="@Url.Action("DumpList", "Operations", new { menuId = 14 })"> <span>  View Dump List</span> <i class="fa-link-ext"></i> </a> </li>
+        <li class="external"> <a href="@Url.Action("LoadList", "Operations", new { menuId = 15 })"> <span>View Load List</span> <i class="fa-link-ext"></i> </a> </li>
+    </ul>
+</li>
+

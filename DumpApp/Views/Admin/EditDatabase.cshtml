@@ -1,7 +1,7 @@
 ﻿@model DumpApp.BAL.AdminModel.ViewModel.AdminViewModel
 
 @{
-    ViewBag.Title = "AddUserProfile";
+    ViewBag.Title = "AddDatabase";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -28,7 +28,7 @@
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">ADD USER(s)</h3>
+                <h3 class="panel-title">EDIT DATABASE</h3>
                 <div class="panel-options">
                     <a href="#" data-toggle="panel">
                         <span class="collapse-icon">&ndash;</span>
@@ -39,7 +39,7 @@
                     </a>
                 </div>
             </div>
-            @using (Ajax.BeginForm("AddUserProfile", "Admin", options, new { @class = "form parsley-form" }))
+            @using (Ajax.BeginForm("EditDatabase", "Admin", options, new { @class = "form parsley-form" }))
             {
                 @Html.AntiForgeryToken()
                 <div class="panel-body">
@@ -47,42 +47,57 @@
                     <div role="form" class="form-horizontal">
 
                         <div class="form-group">
-                            <label class="col-sm-2 control-label" for="field-1">Login Id</label>
+                            <label class="col-sm-2 control-label" for="field-1">Name</label>
 
                             <div class="col-sm-10">
-                                @Html.TextBoxFor(model => model.admUserProfile.LoginId, new { @autocomplete = "off", @class = "form-control", @id = "LoginId", required = "required" })
+                                @Html.HiddenFor(model => model.admDatabase.Id, new { @autocomplete = "off", @class = "form-control", @id = "LoginId", required = "required" })
+
+
+                                @Html.TextBoxFor(model => model.admDatabase.Name, new { @autocomplete = "off",  @class = "form-control", @id = "LoginId", required = "required" })
                             </div>
                         </div>
 
                         <div class="form-group-separator"></div>
 
                         <div class="form-group">
-                            <label class="col-sm-2 control-label" for="field-2">FullName</label>
+                            <label class="col-sm-2 control-label" for="field-2">admTapeDevice</label>
 
                             <div class="col-sm-10">
-                                @Html.TextBoxFor(model => model.admUserProfile.FullName, new { @autocomplete = "off", @class = "form-control", @id = "FullName", required = "required" })
+                                @Html.TextBoxFor(model => model.admDatabase.Description, new { @autocomplete = "off", @class = "form-control", @id = "FullName", required = "required" })
 
 
+                            </div>
+                        </div>
+
+
+                        <div class="form-group-separator"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="field-3">Status</label>
+
+                            <div class="col-sm-10">
+                                @Html.DropDownListFor(model => model.admDatabase.Status, new SelectList(Model.drpStatus, "Value", "Text"), "Select Status", new { @autocomplete = "off", @class = "form-control single-select", @id = "ddStatus" })
+                            </div>
+                        </div>
+
+
+                        <div class="form-group-separator"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="field-3">Date Created</label>
+
+                            <div class="col-sm-10">
+                                @Html.TextBoxFor(model => model.dateCreated, new { @readonly = "true", @autocomplete = "off", @class = "form-control" })
                             </div>
                         </div>
 
                         <div class="form-group-separator"></div>
 
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">Role</label>
+                            <label class="col-sm-2 control-label" for="field-3">Created By</label>
 
                             <div class="col-sm-10">
-                                @Html.DropDownListFor(model => model.admUserProfile.RoleId, new SelectList(Model.drpRole, "Value", "Text"), "Select Role", new { @autocomplete = "off", @class = "form-control single-select", @id = "ddRole", required = "required" })
-                            </div>
-                        </div>
-
-                        <div class="form-group-separator"></div>
-
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label" for="field-3">Email</label>
-
-                            <div class="col-sm-10">
-                                @Html.TextBoxFor(model => model.admUserProfile.EmailAddress, new { @autocomplete = "off", @class = "form-control", @id = "EmailAddress" })
+                                @Html.TextBoxFor(model => model.UsercreatedBy, new { @readonly = "true", @autocomplete = "off", @class = "form-control" })
                             </div>
                         </div>
 
@@ -91,9 +106,9 @@
                             <label class="col-sm-2 control-label" for="field-3"></label>
                             <div class="col-sm-10">
 
-                                <button type="submit" class="btn btn-success"><i class="fa-check"></i>Save</button>
+                                <button type="submit" class="btn btn-success"><i class="fa-check"></i>Update</button>
 
-                                <input type="button" id="Return" value="Return "  class="btn btn-info" onclick="foo()">
+                                <input type="button" id="Return" value="Return " class="btn btn-info" onclick="foo()">
                             </div>
 
                         </div>

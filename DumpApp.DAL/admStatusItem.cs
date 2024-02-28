@@ -7,6 +7,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
+
 namespace DumpApp.DAL
 {
     using System;
@@ -14,6 +16,7 @@ namespace DumpApp.DAL
     
     public partial class admStatusItem
     {
+        [Key]
         public int ItbId { get; set; }
         public string StatusValue { get; set; }
         public string Status { get; set; }

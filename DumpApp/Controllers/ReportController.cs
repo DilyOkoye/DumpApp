@@ -2,22 +2,19 @@
 using DumpApp.BAL.Utilities;
 using DumpApp.DAL;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.UI.WebControls;
 using DumpApp.BAL.AdminModel;
 using DumpApp.BAL.OperationsModel;
 using EmailNotification.BAL.Utilities;
-using DumpApp.BAL.OperationsModel.ViewModel;
 using Microsoft.Reporting.WebForms;
 using System.Threading.Tasks;
 using DumpApp.BAL.ReportModel;
 using DumpApp.BAL.ReportModel.ViewModel;
+using static DumpApp.Models.Helper;
 
 namespace DumpApp.Controllers
 {
+    [SessionExpireAttribute]
     public class ReportController : Controller
     {
         public ReportViewModel reportViewModel = null;

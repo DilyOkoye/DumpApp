@@ -2,17 +2,21 @@
 using DumpApp.BAL.AdminModel;
 using EmailNotification.BAL.Utilities;
 using System;
+using System.Data.Entity;
 using System.Web.Mvc;
 using DumpApp.BAL.Utilities;
 using DumpApp.DAL;
 using System.Threading.Tasks;
+using static DumpApp.Models.Helper;
 
 namespace DumpApp.Controllers
 {
+    [SessionExpire]
     public class AdminController : Controller
     {
         public AdminViewModel adminviewModel = null;
         public RoleModel roleModel = null;
+        public DatabaseModel databseModel = null;
         public LocationModel locationModel = null;
         public ClientProfileModel ClientProfileModel = null;
         private PriviledgeManager primanager = null;
@@ -45,6 +49,7 @@ namespace DumpApp.Controllers
             ClientProfileModel = new ClientProfileModel();
             TapeDeviceModel = new TapeDeviceModel();
             locationModel = new LocationModel();
+            databseModel = new DatabaseModel();
 
         }
 
@@ -155,7 +160,7 @@ namespace DumpApp.Controllers
             adminviewModel.drpStatus = roleModel.ListStatus();
             if (adminviewModel.admRole != null)
             {
-                adminviewModel.UsercreatedBy = adminviewModel.admRole.UserId == null ? "" : await roleModel.GetFullname((int)adminviewModel.admRole.UserId);
+                adminviewModel.UsercreatedBy = adminviewModel.admUserProfile.CreatedBy == null ? "" : await roleModel.GetFullname((int)adminviewModel.admUserProfile.CreatedBy);
 
             }
             adminviewModel.menuid = menuid;
@@ -294,7 +299,7 @@ namespace DumpApp.Controllers
             {
                 adminviewModel.PasswordExpiryDate = adminviewModel.admUserProfile.PasswordExpiryDate != null ? adminviewModel.FormatDate(adminviewModel.admUserProfile.PasswordExpiryDate) : null;
                 adminviewModel.dateCreated = adminviewModel.admUserProfile.DateCreated != null ? adminviewModel.FormatDate(adminviewModel.admUserProfile.DateCreated) : null;
-                adminviewModel.UsercreatedBy = adminviewModel.admUserProfile.UserId == null ? "" : await roleModel.GetFullname((int)adminviewModel.admUserProfile.UserId);
+                adminviewModel.UsercreatedBy = adminviewModel.admUserProfile.CreatedBy == null ? "" : await roleModel.GetFullname((int)adminviewModel.admUserProfile.CreatedBy);
 
             }
 
@@ -406,7 +411,7 @@ namespace DumpApp.Controllers
             if (adminviewModel.admTapeDevice != null)
             {
                 adminviewModel.dateCreated = adminviewModel.admTapeDevice.DateCreated != null ? adminviewModel.FormatDate(adminviewModel.admTapeDevice.DateCreated) : null;
-                adminviewModel.UsercreatedBy = adminviewModel.admTapeDevice.UserId == null ? "" : await roleModel.GetFullname((int)adminviewModel.admTapeDevice.UserId);
+                adminviewModel.UsercreatedBy = adminviewModel.admUserProfile.CreatedBy == null ? "" : await roleModel.GetFullname((int)adminviewModel.admUserProfile.CreatedBy);
 
             }
 
@@ -508,7 +513,7 @@ namespace DumpApp.Controllers
             adminviewModel.drpStatus = roleModel.ListStatus();
             if (adminviewModel.admLocation != null)
             {
-                adminviewModel.UsercreatedBy = adminviewModel.admLocation.UserId == null ? "" : await roleModel.GetFullname((int)adminviewModel.admLocation.UserId);
+                adminviewModel.UsercreatedBy = adminviewModel.admUserProfile.CreatedBy == null ? "" : await roleModel.GetFullname((int)adminviewModel.admUserProfile.CreatedBy);
 
             }
             adminviewModel.menuid = menuid;
@@ -542,6 +547,149 @@ namespace DumpApp.Controllers
                 rtv.nErrorCode = -1001;
                 rtv.sErrorText = ex.Message == null ? ex.InnerException.Message : ex.Message;
                 p.rv = rtv;
+                return (Json(JsonResponseFactory.SuccessResponse(p), JsonRequestBehavior.DenyGet));
+            }
+            return (Json(JsonResponseFactory.ErrorResponse("Error"), JsonRequestBehavior.DenyGet));
+        }
+
+
+
+
+        public ActionResult ManageDatabase(int menuid)
+        {
+            adminviewModel.admDatabase = new admDatabase();
+            adminviewModel.rv = new ReturnValues();
+            adminviewModel.menuid = menuid;
+            adminviewModel.ListOfDatabase = databseModel.ListOfDatabase();
+
+            return View(adminviewModel);
+        }
+
+
+
+        public ActionResult AddDatabase(int menuid)
+        {
+            adminviewModel.admDatabase = new admDatabase();
+            adminviewModel.rv = new ReturnValues();
+            primanager = new PriviledgeManager(menuid, _RoleId);
+            adminviewModel.roleManager = primanager.AssignRoleToUser() == null
+                    ? new PriviledgeAssignmentManager()
+                    : primanager.AssignRoleToUser();
+            adminviewModel.drpStatus = databseModel.ListStatus();
+            var redirectUrl = new UrlHelper(Request.RequestContext).Action("ManageDatabase", "Admin", new { menuid = menuid });
+            adminviewModel.Url = redirectUrl;
+
+            return View(adminviewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> AddDatabase(AdminViewModel p, string datasources)
+        {
+            var rtv = new ReturnValues();
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    p.admDatabase.Status = "Active";
+                    p.rv = await databseModel.AddDatabase(p, _userId);
+
+                    return (Json(JsonResponseFactory.SuccessResponse(p), JsonRequestBehavior.DenyGet));
+                }
+            }
+            catch (Exception ex)
+            {
+                rtv.nErrorCode = -1001;
+                rtv.sErrorText = ex.Message == null ? ex.InnerException.Message : ex.Message;
+                p.rv = rtv;
+                return (Json(JsonResponseFactory.SuccessResponse(p), JsonRequestBehavior.DenyGet));
+            }
+            return (Json(JsonResponseFactory.ErrorResponse("Error"), JsonRequestBehavior.DenyGet));
+        }
+
+
+
+        public async Task<ActionResult> EditDatabase(int h, int menuid)
+        {
+            adminviewModel.rv = new ReturnValues();
+            adminviewModel.admDatabase = await databseModel.ViewDetails(h);
+            if (adminviewModel.admDatabase != null)
+            {
+                adminviewModel.dateCreated = adminviewModel.admDatabase.DateCreated != null ? adminviewModel.FormatDate(adminviewModel.admDatabase.DateCreated) : null;
+                adminviewModel.UsercreatedBy = adminviewModel.admUserProfile.CreatedBy == null ? "" : await roleModel.GetFullname((int)adminviewModel.admUserProfile.CreatedBy);
+
+            }
+
+            primanager = new PriviledgeManager(menuid, _RoleId);
+            adminviewModel.roleManager = primanager.AssignRoleToUser() == null
+                    ? new PriviledgeAssignmentManager()
+                    : primanager.AssignRoleToUser();
+            adminviewModel.drpStatus = TapeDeviceModel.ListStatus();
+            adminviewModel.menuid = menuid;
+            var redirectUrl = new UrlHelper(Request.RequestContext).Action("ManageDatabase", "Admin", new { menuid = menuid });
+            adminviewModel.Url = redirectUrl;
+
+            return View(adminviewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> EditDatabase(AdminViewModel p)
+        {
+            var rtv = new ReturnValues();
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    p.rv = await databseModel.EditDatabase(p, _userId);
+
+                    return (Json(JsonResponseFactory.SuccessResponse(p), JsonRequestBehavior.DenyGet));
+                }
+            }
+            catch (Exception ex)
+            {
+                rtv.nErrorCode = -1001;
+                rtv.sErrorText = ex.Message == null ? ex.InnerException.Message : ex.Message;
+                p.rv = rtv;
+                return (Json(JsonResponseFactory.SuccessResponse(p), JsonRequestBehavior.DenyGet));
+            }
+            return (Json(JsonResponseFactory.ErrorResponse("Error"), JsonRequestBehavior.DenyGet));
+        }
+
+        public ActionResult ChangePassword(int menuId)
+        {
+            adminviewModel.ChangePasswordModel = new ChangePasswordModel();
+            adminviewModel.rv = new ReturnValues();
+            adminviewModel.menuid = menuId;
+            var redirectUrl = new UrlHelper(Request.RequestContext).Action("DashBoard", "Home", new { menuid = menuId });
+            adminviewModel.Url = redirectUrl;
+            primanager = new PriviledgeManager(menuId, _RoleId);
+            adminviewModel.roleManager = primanager.AssignRoleToUser() == null
+                ? new PriviledgeAssignmentManager()
+                : primanager.AssignRoleToUser();
+            return View(adminviewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> ChangePassword(AdminViewModel p)
+        {
+            var rtv = new ReturnValues();
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    p.rv = await userprofilemodel.ChangePassword(p, _userId);
+
+                    return (Json(JsonResponseFactory.SuccessResponse(p), JsonRequestBehavior.DenyGet));
+
+                }
+            }
+            catch (Exception ex)
+            {
+                rtv.nErrorCode = -1001;
+                rtv.sErrorText = ex.Message == null ? ex.InnerException.Message : ex.Message;
+
                 return (Json(JsonResponseFactory.SuccessResponse(p), JsonRequestBehavior.DenyGet));
             }
             return (Json(JsonResponseFactory.ErrorResponse("Error"), JsonRequestBehavior.DenyGet));

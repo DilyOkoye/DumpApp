@@ -66,7 +66,7 @@ namespace DumpApp.BAL.AdminModel
                 if (retV)
                 {
                     returnVal.nErrorCode = 0;
-                    returnVal.sErrorText = "Record Updated Succesfully";
+                    returnVal.sErrorText = "Record Updated Successfully";
 
                     return returnVal;
                 }

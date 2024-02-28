@@ -121,12 +121,29 @@ namespace DumpApp.Controllers
             }
             catch (Exception ex)
             {
-
+                LogManager.SaveLog("Error while logging in" + ex.Message);
             }
 
             return null;
         }
 
+        [HttpPost]
+        public async Task<JsonResult> ChangePassword(string pass, string userid, string username)
+        {
+            Login lg = new Login();
+            var result = await lg.PasswordUpdate(pass, int.Parse(userid), username);
+
+            return Json(result);
+        }
+
+        public async Task<JsonResult> ValidateOldPassword(int userid, string password, string username)
+        {
+            Login lg = new Login();
+            var result = await lg.compare(password, userid, username);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        
+        
 
         public ActionResult Logout()
         {

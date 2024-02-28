@@ -52,7 +52,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="dumpTypeCheck">Requires Initialization</label>
                             <div class="col-sm-10">
-                                @Html.CheckBoxFor(model => model.dumps.DumpTypeCheck, new { @autocomplete = "off", @style = "text-transform:uppercase", @class = "form-check-input", @id = "DumpTypeCheck" ,@readonly ="readonly"})
+                                @Html.CheckBoxFor(model => model.dumps.DumpTypeCheck, new { @autocomplete = "off", @class = "form-check-input", @id = "DumpTypeCheck" ,@disabled = "disabled" })
                             </div>
                         </div>
 
@@ -61,26 +61,32 @@
                             <label class="col-sm-2 control-label" for="inlineRadio1">Dump Type</label>
                             <div class="col-sm-10">
                                 <div class="form-check form-check-inline">
-                                    @Html.RadioButtonFor(model => model.dumps.DumpType, "Offsite", new { @autocomplete = "off", @class = "form-check-input", @name = "DumpTypeRadio", @id = "DumpTypeOffsite", required = "required", @readonly = "readonly" })
+                                    @Html.RadioButtonFor(model => model.dumps.DumpType, "Offsite", new { @autocomplete = "off", @class = "form-check-input", @name = "DumpTypeRadio", @id = "DumpTypeOffsite", @disabled = "disabled" })
 
                                     <label class="form-check-label" for="inlineRadio1">Offsite Use</label>
                                     &nbsp;&nbsp;
-                                    @Html.RadioButtonFor(model => model.dumps.DumpType, "Internal", new { @autocomplete = "off", @class = "form-check-input", @name = "DumpTypeRadio", @id = "DumpTypeInternal", required = "required", @readonly = "readonly" })
+                                    @Html.RadioButtonFor(model => model.dumps.DumpType, "Internal", new { @autocomplete = "off", @class = "form-check-input", @name = "DumpTypeRadio", @id = "DumpTypeInternal", @disabled = "disabled" })
 
                                     <label class="form-check-label" for="inlineRadio1">Internal Use</label>
                                 </div>
                             </div>
                         </div>
+                        
+                        @if (Model.dumps.DumpType == "Offsite")
+                        {
+                            <div class="form-group-separator"></div>
 
-                        <div class="form-group-separator"></div>
+                            <div class="form-group" id="divLocation">
+                                <label class="col-sm-2 control-label">Location</label>
 
-                        <div class="form-group" id="divLocation" style="display: none;">
-                            <label class="col-sm-2 control-label">Location</label>
-
-                            <div class="col-sm-10">
-                                @Html.DropDownListFor(model => model.dumps.LocationId, new SelectList(Model.drpLocation, "Value", "Text"), "Select Location", new { @autocomplete = "off", @class = "form-control single-select", @id = "LocationId", @readonly = "readonly" })
+                                <div class="col-sm-10">
+                                    @Html.DropDownListFor(model => model.dumps.LocationId, new SelectList(Model.drpLocation, "Value", "Text"), "Select Location", new { @autocomplete = "off", required = "required", @class = "form-control single-select", @id = "LocationId" })
+                                </div>
                             </div>
-                        </div>
+                        
+                        }
+                       
+                        <div class="form-group-separator"></div>
 
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="field-1">Tape Identifier</label>
@@ -129,7 +135,7 @@
                             <label class="col-sm-2 control-label">Database</label>
 
                             <div class="col-sm-10">
-                                @Html.DropDownListFor(model => model.dumps.DatebaseId, new SelectList(Model.drpDatabase, "Value", "Text"), "Select Database", new { @autocomplete = "off", @class = "form-control single-select", @id = "DatebaseId", required = "required", @readonly = "readonly" })
+                                @Html.DropDownListFor(model => model.dumps.DatebaseId, new SelectList(Model.drpDatabase, "Value", "Text"), "Select Database", new { @autocomplete = "off", @class = "form-control single-select", @id = "DatebaseId", required = "required" })
                             </div>
                         </div>
 
@@ -172,9 +178,10 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="field-3"></label>
                             <div class="col-sm-10">
-
-                                <button type="submit" value="Execute" name="button" class="btn btn-success"><i class="fa-check"></i>Execute Load</button>
-
+                                @if (Model.roleManager.CanAdd)
+                                {
+                                    <button type="submit" value="Execute" name="button" class="btn btn-success"><i class="fa-check"></i>Execute Load</button>
+                                }
                                 <input type="button" id="Return" value="Return " class="btn btn-info" onclick="foo()">
 
                             </div>

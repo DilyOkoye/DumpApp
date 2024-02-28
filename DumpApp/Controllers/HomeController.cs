@@ -5,9 +5,11 @@ using EmailNotification.BAL.Utilities;
 using System;
 using System.Threading.Tasks;
 using DumpApp.BAL.Utilities;
+using static DumpApp.Models.Helper;
 
 namespace DumpApp.Controllers
 {
+    [SessionExpire]
     public class HomeController : Controller
     {
         public AdminViewModel adminviewmodel = null;
@@ -90,6 +92,25 @@ namespace DumpApp.Controllers
             }
 
         }
+
+
+        [ChildActionOnly]
+        public async Task<ActionResult> Notification()
+        {
+            try
+            {
+                adminviewmodel.notificationResult = userprofileModel.GetNotification();
+                return PartialView("_Notification", adminviewmodel);
+
+            }
+            catch (Exception ex)
+            {
+
+                return PartialView("_Notification", adminviewmodel);
+            }
+
+        }
+
 
     }
 }

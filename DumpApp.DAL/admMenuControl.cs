@@ -7,6 +7,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
+
 namespace DumpApp.DAL
 {
     using System;
@@ -14,6 +16,7 @@ namespace DumpApp.DAL
     
     public partial class admMenuControl
     {
+        [Key]
         public int menu_id { get; set; }
         public string menu_name { get; set; }
         public string action { get; set; }

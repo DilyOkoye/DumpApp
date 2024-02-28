@@ -174,7 +174,7 @@
                         
                         <div class="login-header" style="margin: auto; width: 50%; padding: 30px; ">
                             <a href="#" class="logo">
-                                <img src="~/assets/images/idms.png" width="170" />
+                                <img src="~/assets/images/idsm.png" width="170" />
                             </a>
 
                         </div>
@@ -218,8 +218,8 @@
     <div class="modal fade" id="ChangePass">
         <div class="modal-dialog">
             <div class="modal-content animated zoomInUp">
+                <h5 style="color:black" class="modal-title"><i class="fa fa-user"></i> ENFORCE CHANGE PASSWORD</h5>
                 <div class="modal-header">
-                    <h5 class="modal-title"><i class="fa fa-user"></i> CHANGE PASSWORD</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -244,8 +244,8 @@
                                 <div class="form-group">
                                     <div class="position-relative has-icon-left">
                                         <label for="exampleInputUsername" class="sr-only">Username</label>
-                                        <input type="hidden" id="hiddenUserId" />
-                                        <input type="text" class="form-control" readonly="readonly" id="ChangeLoginId" autocomplete="off" />
+                                        <input type="hidden" id="hiddenUserId"/>
+                                        <input type="text" class="form-control" readonly="readonly" id="ChangeLoginId" autocomplete="off"/>
                                         <div class="form-control-position">
                                             <i class="icon-user"></i>
                                         </div>
@@ -254,7 +254,7 @@
                                 <div class="form-group">
                                     <div class="position-relative has-icon-left">
                                         <label for="exampleInputPassword" class="sr-only">Old Password</label>
-                                        <input type="password" class="form-control" placeholder="Old Password" id="ChangeOldPass" autocomplete="off" />
+                                        <input type="password" class="form-control" placeholder="Old Password" id="ChangeOldPass" autocomplete="off"/>
                                         <div class="form-control-position">
                                             <i class="icon-lock"></i>
                                         </div>
@@ -263,7 +263,7 @@
                                 <div class="form-group">
                                     <div class="position-relative has-icon-left">
                                         <label for="exampleInputPassword" class="sr-only">New Password</label>
-                                        <input type="password" class="form-control" disabled placeholder="New Password" id="ChangeNewPass" autocomplete="off" />
+                                        <input type="password" class="form-control" disabled placeholder="New Password" id="ChangeNewPass" autocomplete="off"/>
                                         <div class="form-control-position">
                                             <i class="icon-lock"></i>
                                         </div>
@@ -273,7 +273,7 @@
                                 <div class="form-group">
                                     <div class="position-relative has-icon-left">
                                         <label for="exampleInputPassword" class="sr-only">Confirm Password</label>
-                                        <input type="password" class="form-control" disabled placeholder="Confirm Password" id="ChangeConfirmNewPass" autocomplete="off" />
+                                        <input type="password" class="form-control" disabled placeholder="Confirm Password" id="ChangeConfirmNewPass" autocomplete="off"/>
                                         <div class="form-control-position">
                                             <i class="icon-lock"></i>
                                         </div>
@@ -313,8 +313,8 @@
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 
-    @*@Html.Hidden("ValidatePass", Url.Action("ValidateOldPassword", "Login"))
-    @Html.Hidden("ChangePass1", Url.Action("ChangePassword", "Login"))*@
+    @Html.Hidden("ValidatePass", Url.Action("ValidateOldPassword", "Authentication"))
+    @Html.Hidden("ChangePass1", Url.Action("ChangePassword", "Authentication"))
 
     <script>
         $('#ChangeNewPass, #ChangeConfirmNewPass').on('keyup', function () {

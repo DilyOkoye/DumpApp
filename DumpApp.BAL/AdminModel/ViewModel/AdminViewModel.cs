@@ -14,7 +14,7 @@ namespace DumpApp.BAL.AdminModel.ViewModel
     public class AdminViewModel
     {
 
-        public string username { get; set; }
+        public ChangePasswordModel ChangePasswordModel { get; set; }
         public string UsercreatedBy { get; set; }
         public string RoleNames { get; set; }
         public int RoleIds { get; set; }
@@ -29,6 +29,7 @@ namespace DumpApp.BAL.AdminModel.ViewModel
         public admLocation admLocation { get; set; }
         public admTapeDevice admTapeDevice { get; set; }
         public List<admRole> ListOfRole { get; set; }
+        public admDatabase admDatabase { get; set; }
 
         public List<Dumps> ListOfDumps { get; set; }
         
@@ -47,11 +48,15 @@ namespace DumpApp.BAL.AdminModel.ViewModel
         public admUserProfile admUserProfile { get; set; }
 
         public List<admTapeDevice> ListOfTapeDevices { set; get; }
+
+        public List<admDatabase> ListOfDatabase { set; get; }
         public List<admUserProfile> ListadmUserProfile { set; get; }
         //public List<Implementation.ClientProfileModel.AuditInfo> ListOfAudit { set; get; }
 
         //public List<admEmailSetUp> ListOfMails { set; get; }
         public string FullName { get; set; }
+
+        public int notificationResult { get; set; }
         public int menuid { get; set; }
         public int eventId { get; set; }
         public IEnumerable<SelectListItem> drpStatus { get; set; }

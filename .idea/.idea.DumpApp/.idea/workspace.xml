@@ -8,6 +8,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7bfddb13-5a6a-4318-a255-2f87a5444fd6" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.DumpApp/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DumpApp/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DumpApp.BAL/OperationsModel/DumpModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DumpApp.BAL/OperationsModel/DumpModel.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DumpApp.BAL/OperationsModel/SybaseDataLayer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DumpApp.BAL/OperationsModel/SybaseDataLayer.cs" afterDir="false" />
     </list>
@@ -48,7 +49,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1708981434854</updated>
-      <workItem from="1708981438449" duration="643000" />
+      <workItem from="1708981438449" duration="1277000" />
     </task>
     <servers />
   </component>

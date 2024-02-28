@@ -208,7 +208,6 @@ namespace DumpApp.BAL.OperationsModel
                 return returnVal;
             }
 
-            var dumpType = p.dumps.DumpType == "Offsite" ? 1 : 2;
             var databaseName = repoDatabase.GetNonAsync(o => o.Id == p.dumps.DatebaseId).Name;
             p.dumps.DatabaseName = databaseName;
 
@@ -225,12 +224,12 @@ namespace DumpApp.BAL.OperationsModel
                 TapeIdentifier = t.TapeIdentifier,
                 DumpName = t.DumpName,
                 DateCreated = DateTime.Now,
-                DatebaseId = t.DatebaseId,
+                DatebaseId = p.dumps.DatebaseId,
                 DumpDescription = t.DumpDescription,
                 Filename = t.Filename,
                 TapeDeviceId = t.TapeDeviceId,
                 TapeDescription = t.TapeDescription,
-                LocationId = t.LocationId,
+                LocationId = p.dumps.LocationId,
                 TapeType = t.TapeType,
                 Password = t.Password
             };
@@ -613,7 +612,7 @@ namespace DumpApp.BAL.OperationsModel
                     dumpRecord.StartTime = rtv?.StartDateTime;
                     dumpRecord.EndTime = rtv?.EndDateTime;
                     dumpRecord.TotalDuration = rtv?.TotalTime.ToString();
-                    dumpRecord.ErrorMessage = "Error While Dumping";
+                    dumpRecord.ErrorMessage = string.IsNullOrEmpty(rtv?.sErrorText) ? "Error While Loading" : rtv?.sErrorText;
                     repoDumpRepository.Update(dumpRecord);
                     await unitOfWork.Commit(loginUserId);
                     return rtv;
@@ -626,7 +625,7 @@ namespace DumpApp.BAL.OperationsModel
                     dumpRecord.JobId = context.BackgroundJob.Id;
                     dumpRecord.ErrorId = -1;
                     dumpRecord.Status = "Error";
-                    dumpRecord.ErrorMessage = e.ToString();
+                    dumpRecord.ErrorMessage = e.Message + " " + rtv?.sErrorText;
                     dumpRecord.StartTime = rtv?.StartDateTime;
                     dumpRecord.EndTime = rtv?.EndDateTime;
                     dumpRecord.TotalDuration = rtv?.TotalTime.ToString();
@@ -676,7 +675,7 @@ namespace DumpApp.BAL.OperationsModel
                     loadRecord.JobId = context.BackgroundJob.Id;
                     loadRecord.ErrorId = -1;
                     loadRecord.Status = "Error";
-                    loadRecord.ErrorMessage = "Error While Loading";
+                    loadRecord.ErrorMessage = string.IsNullOrEmpty(rtv?.sErrorText)? "Error While Loading": rtv?.sErrorText;
                     loadRecord.StartTime = rtv?.StartDateTime;
                     loadRecord.EndTime = rtv?.EndDateTime;
                     loadRecord.TotalDuration = rtv?.TotalTime.ToString();
@@ -692,7 +691,7 @@ namespace DumpApp.BAL.OperationsModel
                     loadRecord.JobId = context.BackgroundJob.Id;
                     loadRecord.ErrorId = -1;
                     loadRecord.Status = "Error";
-                    loadRecord.ErrorMessage = e.ToString();
+                    loadRecord.ErrorMessage = e.Message + " " + rtv?.sErrorText;
                     loadRecord.StartTime = rtv?.StartDateTime;
                     loadRecord.EndTime = rtv?.EndDateTime;
                     loadRecord.TotalDuration = rtv?.TotalTime.ToString();

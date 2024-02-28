@@ -197,11 +197,11 @@ namespace DumpApp.BAL.LoginModel
 
 
         }
-        private const string key = "ietech12233";
+        private const string key = "DumpApp";
         public async Task<short> compare(string psPWD, int userid, string username)
         {
 
-            string compare = Cryptors.Encrypt(psPWD, key);
+            string compare = Cryptors.EncryptLogin(psPWD, key);
 
             var comp = await repoUserProfile.Get(i => i.LoginId.ToUpper().Equals(username.ToUpper()) && i.Password == compare);
 
@@ -217,7 +217,7 @@ namespace DumpApp.BAL.LoginModel
         {
 
             short? comp = null;
-            string newpass = Cryptors.Encrypt(psPWD, userid.ToString());
+            string newpass = Cryptors.EncryptLogin(psPWD, userid.ToString());
             var pas = await repoUserProfile.Get(o => o.UserId == userid);
             if (pas != null)
             {

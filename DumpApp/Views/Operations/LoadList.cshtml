@@ -25,14 +25,7 @@
             <script type="text/javascript">
                 jQuery(document).ready(function ($) {
                     $("#example-4").dataTable().yadcf([
-                        { column_number: 1, filter_type: 'text' },
-                        { column_number: 2, filter_type: 'text' },
-                        { column_number: 3, filter_type: 'text' },
-                        { column_number: 4, filter_type: 'text' },
-                        { column_number: 5, filter_type: 'text' },
-                        { column_number: 6, filter_type: 'text' },
-                        { column_number: 7, filter_type: 'text' },
-                        { column_number: 8, filter_type: 'text' }
+                      
                     ]);
                 });
             </script>
@@ -41,7 +34,6 @@
             <table class="table uk-responsive-width table-striped table-bordered dataTable" id="example-4" role="grid" aria-describedby="example-4_info">
                 <thead>
                     <tr class="replace-inputs">
-                        <th>SNo</th>
                         <th>Dump Name</th>
                         <th>Tape Name</th>
                         <th>File Name</th>
@@ -53,13 +45,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @{int count = 0;}
                     @foreach (var row in Model.ListOfLoad)
                     {
-                        count = count + 1;
 
                         <tr>
-                            <td>@count</td>
                             <td>@row.DumpName</td>
                             <td>@row.TapeIdentifier</td>
                             <td>@row.Filename</td>

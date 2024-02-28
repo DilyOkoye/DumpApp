@@ -68,8 +68,8 @@ namespace DumpApp.BAL.AdminModel
             }
 
             dashboard.dumps = dumps;
-            dashboard.dumpPercentageRate = Math.Round(successPercentage,2);
-            dashboard.dumpAverageDuration = Math.Round(averageDuration, 2);
+            dashboard.dumpPercentageRate = Math.Ceiling(successPercentage);
+            dashboard.dumpAverageDuration = Math.Ceiling(averageDuration);
             return dashboard;
         }
 
@@ -125,8 +125,8 @@ namespace DumpApp.BAL.AdminModel
             }
 
             dashboard.load = loads;
-            dashboard.loadPercentageRate = Math.Round(successPercentage, 2); ;
-            dashboard.loadAverageDuration = Math.Round(averageDuration, 2);
+            dashboard.loadPercentageRate = Math.Ceiling(successPercentage);
+            dashboard.loadAverageDuration = Math.Ceiling(averageDuration);
             return dashboard;
         }
         

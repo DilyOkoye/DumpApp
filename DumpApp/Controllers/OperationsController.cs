@@ -7,9 +7,11 @@ using DumpApp.BAL.OperationsModel.ViewModel;
 using DumpApp.BAL.Utilities;
 using DumpApp.DAL;
 using EmailNotification.BAL.Utilities;
+using static DumpApp.Models.Helper;
 
 namespace DumpApp.Controllers
 {
+    [SessionExpire]
     public class OperationsController : Controller
     {
         public OperationsViewModel operationsViewModel = null;

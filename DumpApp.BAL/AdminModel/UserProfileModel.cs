@@ -10,6 +10,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using DumpApp.BAL.OperationsModel;
+using System.Data;
 
 namespace DumpApp.BAL.AdminModel
 {
@@ -17,7 +19,7 @@ namespace DumpApp.BAL.AdminModel
     {
         private readonly IUserProfileRepository repoadmUserProfile;
         private readonly IStatusItemRepository repoStatusItem;
-
+        private readonly IClientProfileRepository repoClientProfileRepository;
         private readonly IRoleRepository reporole;
         private readonly IUnitOfWork unitOfWork;
         private readonly IDbFactory idbfactory;
@@ -30,6 +32,7 @@ namespace DumpApp.BAL.AdminModel
             reporole = new RoleRepository(idbfactory);
             repoadmUserProfile = new UserProfileRepository(idbfactory);
             repoStatusItem = new StatusItemRepository(idbfactory);
+            repoClientProfileRepository = new ClientProfileRepository(idbfactory);
             adminviewModel = new AdminViewModel();
 
         }
@@ -83,6 +86,97 @@ namespace DumpApp.BAL.AdminModel
 
             }
             return null;
+        }
+
+        public async Task<ReturnValues> ChangePassword(AdminViewModel p, int LoginUserId)
+        {
+            var returnVal = new ReturnValues();
+            try
+            {
+                var res = repoClientProfileRepository.GetNonAsync(null);
+                var y = repoadmUserProfile.GetNonAsync(a => a.UserId == LoginUserId);
+
+                var logpass = repoadmUserProfile.GetNonAsync(c => c.Password == y.Password).Password;
+
+                string oldpass = Cryptors.EncryptLogin(p.ChangePasswordModel.OldPassword, "DumpApp");
+                if (y.Password != oldpass)
+                {
+                    returnVal.nErrorCode = -2;
+                    returnVal.sErrorText = "Incorrect Old password.";
+                    return returnVal;
+                }
+
+                else
+                {
+                    string Nwpass = Cryptors.EncryptLogin(p.ChangePasswordModel.NewPassword, "DumpApp");
+
+                    if (p.ChangePasswordModel.NewPassword == null)
+                    {
+                        returnVal.nErrorCode = -2;
+                        returnVal.sErrorText = "Enter New Password..";
+                        return returnVal;
+                    }
+                    if (oldpass == Nwpass)
+                    {
+                        returnVal.nErrorCode = -2;
+                        returnVal.sErrorText = "Old can't be the same as New password.";
+                        return returnVal;
+                    }
+
+                    else
+                    {
+                        if (p.ChangePasswordModel.ConfirmPassword != null)
+                        {
+                            string Confpass = Cryptors.EncryptLogin(p.ChangePasswordModel.ConfirmPassword, "DumpApp");
+                        }
+                        else
+                        {
+                            returnVal.nErrorCode = -2;
+                            returnVal.sErrorText = "Enter Confirm Password.";
+                        }
+
+                        if (p.ChangePasswordModel.NewPassword != p.ChangePasswordModel.ConfirmPassword)
+                        {
+                            returnVal.nErrorCode = -2;
+                            returnVal.sErrorText = "New Password and Confirm Password are not the same.";
+                            return returnVal;
+                        }
+                        y.Password = Nwpass;
+
+                        y.PasswordExpiryDate = DateTime.Now.AddDays(Convert.ToDouble(res.EnforcePasswordChangeDays.ToString()));
+
+                        repoadmUserProfile.Update(y);
+                        try
+                        {
+                            var retV = await unitOfWork.Commit(LoginUserId) > 0 ? true : false;
+
+                            if (retV)
+                            {
+                                returnVal.nErrorCode = 0;
+                                returnVal.sErrorText = "Password Changed Successfully";
+
+                                return returnVal;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            returnVal.nErrorCode = -1;
+                            returnVal.sErrorText = ex.Message == null ? ex.InnerException.Message : ex.Message;
+
+                            return returnVal;
+                        }
+
+                        return returnVal;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                returnVal.nErrorCode = -1;
+                returnVal.sErrorText = ex.Message == null ? ex.InnerException.Message : ex.Message;
+
+                return returnVal;
+            }
         }
 
         public string GetDateCreate(int dd)
@@ -239,7 +333,7 @@ namespace DumpApp.BAL.AdminModel
                          LoginId = h.LoginId,
                          FullName = h.FullName,
                          DateCreated = h.DateCreated,
-                         RoleName = h.RoleId == null?"":RoleName((int)h.RoleId),
+                         RoleName = h.RoleId == null ? "" : RoleName((int)h.RoleId),
                          MobileNo = h.MobileNo,
                          Status = h.Status,
                          EmailAddress = h.EmailAddress,
@@ -293,8 +387,8 @@ namespace DumpApp.BAL.AdminModel
             p.admUserProfile.LoggedOn = false;
             p.admUserProfile.loginstatus = 0;
             p.admUserProfile.logincount = 0;
-            p.admUserProfile.LoginId = p.admUserProfile.LoginId.ToUpper();
-            p.admUserProfile.Password = Cryptors.Encrypt(p.admUserProfile.LoginId.ToUpper(), "RevAssurance");
+            p.admUserProfile.LoginId = p.admUserProfile.LoginId;
+            p.admUserProfile.Password = Cryptors.EncryptLogin(p.admUserProfile.LoginId, "DumpApp");
 
             repoadmUserProfile.Add(p.admUserProfile);
             try
@@ -306,7 +400,7 @@ namespace DumpApp.BAL.AdminModel
 
 
                     returnVal.nErrorCode = 0;
-                    returnVal.sErrorText = "Record Added Succesfully";
+                    returnVal.sErrorText = "Record Added Successfully";
                     return returnVal;
                 }
             }
@@ -353,7 +447,7 @@ namespace DumpApp.BAL.AdminModel
                     {
 
                         returnVal.nErrorCode = 0;
-                        returnVal.sErrorText = "Record Updated Succesfully";
+                        returnVal.sErrorText = "Record Updated Successfully";
                         return returnVal;
                     }
                 }
@@ -392,13 +486,23 @@ namespace DumpApp.BAL.AdminModel
             return repoadmUserProfile.GetById(ItbId).FullName;
         }
 
-
+        public int GetNotification()
+        {
+            var result = Cryptors.GetNotifications();
+            
+            return result.Rows.Count;
+        }
 
 
 
     }
 
+    public class Notification
+    {
+        public int Count { get; set; }
+        public string Message { get; set; }
 
+    }
 
     public class UserDetails
     {
@@ -406,7 +510,6 @@ namespace DumpApp.BAL.AdminModel
         public string RoleId { get; set; }
         public string FullName { get; set; }
         public string RoleName { get; set; }
-
 
     }
 }

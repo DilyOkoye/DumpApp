@@ -98,7 +98,7 @@ namespace DumpApp.BAL.AdminModel
             if (t != null)
             {
                 returnVal.nErrorCode = -2;
-                returnVal.sErrorText = "Role Name Already Exist.";
+                returnVal.sErrorText = "Tape Device Name Already Exist.";
                 return returnVal;
             }
 
@@ -116,7 +116,7 @@ namespace DumpApp.BAL.AdminModel
                 {
 
                     returnVal.nErrorCode = 0;
-                    returnVal.sErrorText = "Record Added Succesfully";
+                    returnVal.sErrorText = "Record Added Successfully";
                     return returnVal;
                 }
             }
@@ -151,7 +151,7 @@ namespace DumpApp.BAL.AdminModel
                     if (retV)
                     {
                         returnVal.nErrorCode = 0;
-                        returnVal.sErrorText = "Record Updated Succesfully";
+                        returnVal.sErrorText = "Record Updated Successfully";
                         return returnVal;
                     }
                 }

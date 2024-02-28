@@ -129,7 +129,7 @@ namespace DumpApp.BAL.AdminModel
                 {
 
                     returnVal.nErrorCode = 0;
-                    returnVal.sErrorText = "Record Added Succesfully";
+                    returnVal.sErrorText = "Record Added Successfully";
                     return returnVal;
                 }
             }
@@ -163,7 +163,7 @@ namespace DumpApp.BAL.AdminModel
                     if (retV)
                     {
                         returnVal.nErrorCode = 0;
-                        returnVal.sErrorText = "Record Updated Succesfully";
+                        returnVal.sErrorText = "Record Updated Successfully";
                         return returnVal;
                     }
                 }
