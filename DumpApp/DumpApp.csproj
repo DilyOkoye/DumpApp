@@ -1425,6 +1425,8 @@
     <Content Include="Dump.xsc">
       <DependentUpon>Dump.xsd</DependentUpon>
     </Content>
+    <Content Include="Deployment\app.publish %285%29.zip" />
+    <Content Include="Deployment\DumpApp %284%29.zip" />
     <None Include="Dump.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
