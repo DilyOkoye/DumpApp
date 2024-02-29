@@ -215,7 +215,8 @@ namespace DumpApp.BAL.OperationsModel
             p.dumps.TapeName = tapeName;
 
             p.dumps.Password = t.DumpType == 1 ? Cryptors.Decrypt(t.Password, "DumpApp") : null;
-
+            p.dumps.DumpType = t.DumpType == 1 ? "Offsite" : "Internal";
+            p.dumps.Operation = "Load";
             var admLoad = new admLoad()
             {
                 DumpDate = DateTime.Now,
@@ -246,7 +247,7 @@ namespace DumpApp.BAL.OperationsModel
                 if (result)
                 {
                     var jobId = BackgroundJob.Enqueue(
-                        () => ExecuteLoad(p.dumps, null, loginUserId));
+                        () => ExecuteLoad(p.dumps, null, loginUserId, admLoad.Id));
 
                     if (!string.IsNullOrEmpty(jobId))
                     {
@@ -298,7 +299,7 @@ namespace DumpApp.BAL.OperationsModel
             var tapeName = repoTapeDevice.GetNonAsync(o => o.Id == p.dumps.TapeDeviceId).Name;
             p.dumps.TapeName = tapeName;
 
-
+            p.dumps.Operation = "Dump";
 
             p.dumps.Password = RandomString(10);
             var admDump = new admDump()
@@ -637,10 +638,10 @@ namespace DumpApp.BAL.OperationsModel
             return rtv;
         }
 
-        public async Task<ReturnValues> ExecuteLoad(Dumps dump, PerformContext context, int loginUserId)
+        public async Task<ReturnValues> ExecuteLoad(Dumps dump, PerformContext context, int loginUserId, int loadId)
         {
             var rtv = new ReturnValues();
-            var loadRecord = await repoLoadRepository.Get(o => o.TapeIdentifier == dump.TapeIdentifier);
+            var loadRecord = await repoLoadRepository.Get(o => o.Id == loadId);
 
             try
             {
@@ -675,7 +676,7 @@ namespace DumpApp.BAL.OperationsModel
                     loadRecord.JobId = context.BackgroundJob.Id;
                     loadRecord.ErrorId = -1;
                     loadRecord.Status = "Error";
-                    loadRecord.ErrorMessage = string.IsNullOrEmpty(rtv?.sErrorText)? "Error While Loading": rtv?.sErrorText;
+                    loadRecord.ErrorMessage = string.IsNullOrEmpty(rtv?.sErrorText) ? "Error While Loading" : rtv?.sErrorText;
                     loadRecord.StartTime = rtv?.StartDateTime;
                     loadRecord.EndTime = rtv?.EndDateTime;
                     loadRecord.TotalDuration = rtv?.TotalTime.ToString();

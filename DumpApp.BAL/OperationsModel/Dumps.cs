@@ -18,7 +18,7 @@ namespace DumpApp.BAL.OperationsModel
         public string Status { get; set; }
         public string CreatedBy { get; set; }
 
-        public bool DumpTypeCheck{ get; set; }
+        public bool DumpTypeCheck { get; set; }
 
         public bool TapeTypeCheck { get; set; }
 
@@ -29,6 +29,8 @@ namespace DumpApp.BAL.OperationsModel
         public string TapeName { get; set; }
         public string TapeName1 { get; set; }
         public string Duration { get; set; }
+
+        public string Operation { get; set; }
 
     }
 }

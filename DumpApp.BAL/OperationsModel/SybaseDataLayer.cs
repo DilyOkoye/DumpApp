@@ -42,7 +42,7 @@ namespace DumpApp.BAL.OperationsModel
                 {
                     connstring = connstring.Replace("{{Data Source}}", location.Server);
                     connstring = connstring.Replace("{{port}}", location.Port.ToString());
-                    connstring = connstring.Replace("{{database}}", database.Name);
+                    connstring = connstring.Replace("{{database}}", "master");
                     connstring = connstring.Replace("{{uid}}", location.Username);
                     connstring = connstring.Replace("{{pwd}}", location.Password);
                 }
@@ -54,7 +54,7 @@ namespace DumpApp.BAL.OperationsModel
                 {
                     connstring = connstring.Replace("{{Data Source}}", location.Server);
                     connstring = connstring.Replace("{{port}}", location.Port.ToString());
-                    connstring = connstring.Replace("{{database}}", database.Name);
+                    connstring = connstring.Replace("{{database}}", "master");
                     connstring = connstring.Replace("{{uid}}", location.Username);
                     connstring = connstring.Replace("{{pwd}}", location.Password);
                 }
@@ -79,6 +79,11 @@ namespace DumpApp.BAL.OperationsModel
                             rtv.nErrorCode = 0;
                             rtv.sErrorText = "Database Loaded Successful";
 
+                            if (dump.Operation == "Load")
+                            {
+                                SetDatabaseOnline(connstring, $"online database {database.Name}");
+                            }
+
                         }
                         LogManager.SaveLog(commandQuery + " successfully executed.");
                     }
@@ -101,6 +106,36 @@ namespace DumpApp.BAL.OperationsModel
             rtv.EndDateTime = endTime;
             rtv.TotalTime = endTime - startTime;
             return rtv;
+        }
+
+        public void SetDatabaseOnline(string connString, string commandQuery)
+        {
+            try
+            {
+                using (var connection = new AseConnection(connString))
+                {
+                    connection.Open();
+                    LogManager.SaveLog("Query" + commandQuery);
+                    LogManager.SaveLog("Connected to the database successfully.");
+
+                    using (var command = new AseCommand(commandQuery, connection))
+                    {
+                        var result = command.ExecuteNonQuery();
+                        if (result == 0)
+                        {
+                            LogManager.SaveLog(commandQuery + " Load is online");
+                        }
+                        LogManager.SaveLog(commandQuery + " Load failed to be online");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogManager.SaveLog($"StackTrace exception error occurred on trying to be online: {ex.StackTrace}");
+                LogManager.SaveLog($"Inner exception error occurred on trying to be online: {ex.InnerException}");
+                LogManager.SaveLog($"An error occurred on trying to be online: {ex.Message}");
+
+            }
         }
 
         public async Task<ReturnValues> ExecuteDumpStoredProcedure(string storedProcedureName, List<AseParameter> parameterPasses, Dumps dump)
