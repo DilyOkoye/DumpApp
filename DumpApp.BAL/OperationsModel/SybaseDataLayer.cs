@@ -29,7 +29,7 @@ namespace DumpApp.BAL.OperationsModel
         public async Task<ReturnValues> SqlDs(string commandQuery, Dumps dump)
         {
             var startTime = DateTime.Now; // Log start time
-            LogManager.SaveLog($"ExecuteLoadStoredProcedure execution start time: {startTime}");
+            LogManager.SaveLog($"{commandQuery} execution start time: {startTime}");
 
             var rtv = new ReturnValues();
             var connstring = System.Configuration.ConfigurationManager.ConnectionStrings["sybconnection"].ToString();
@@ -68,7 +68,7 @@ namespace DumpApp.BAL.OperationsModel
                 using (var connection = new AseConnection(connstring))
                 {
                     connection.Open();
-                    LogManager.SaveLog(commandQuery);
+                    LogManager.SaveLog("Query" + commandQuery);
                     LogManager.SaveLog("Connected to the database successfully.");
 
                     using (var command = new AseCommand(commandQuery, connection))
@@ -77,10 +77,10 @@ namespace DumpApp.BAL.OperationsModel
                         if (result == 0)
                         {
                             rtv.nErrorCode = 0;
-                            rtv.sErrorText = "Database Dump Successful";
+                            rtv.sErrorText = "Database Loaded Successful";
 
                         }
-                        LogManager.SaveLog("Database dump successfully executed.");
+                        LogManager.SaveLog(commandQuery + " successfully executed.");
                     }
                 }
             }
@@ -93,10 +93,10 @@ namespace DumpApp.BAL.OperationsModel
             }
 
             var endTime = DateTime.Now;
-            LogManager.SaveLog($"Procedure execution end time: {endTime}");
+            LogManager.SaveLog($"{commandQuery} end time: {endTime}");
 
             // Optionally, log the duration
-            LogManager.SaveLog($"Total execution time: {endTime - startTime}");
+            LogManager.SaveLog($"{commandQuery} Total execution time: {endTime - startTime}");
             rtv.StartDateTime = startTime;
             rtv.EndDateTime = endTime;
             rtv.TotalTime = endTime - startTime;
