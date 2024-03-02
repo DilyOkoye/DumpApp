@@ -24,13 +24,14 @@ namespace DumpApp.BAL.OperationsModel
 
         public int? LocationId { get; set; }
         public int? TapeDeviceId { get; set; }
-        public int? DatebaseId { get; set; }
+        public string DatebaseId { get; set; }
+        public string ErrorMessage { get; set; }
         public string DatabaseName { get; set; }
         public string TapeName { get; set; }
         public string TapeName1 { get; set; }
         public string Duration { get; set; }
 
         public string Operation { get; set; }
-
+        public string OperationType { get; set; }
     }
 }

@@ -7,8 +7,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.ComponentModel.DataAnnotations;
-
 namespace DumpApp.DAL
 {
     using System;
@@ -16,7 +14,6 @@ namespace DumpApp.DAL
     
     public partial class admUserLogin
     {
-        [Key]
         public System.Guid RowGuid { get; set; }
         public Nullable<int> UserId { get; set; }
         public Nullable<System.DateTime> loginDate { get; set; }

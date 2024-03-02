@@ -28,7 +28,7 @@ namespace DumpApp.DAL
         public string Password { get; set; }
         public Nullable<int> LocationId { get; set; }
         public Nullable<int> TapeDeviceId { get; set; }
-        public Nullable<int> DatebaseId { get; set; }
+        public string DatebaseId { get; set; }
         public string JobId { get; set; }
         public Nullable<int> ErrorId { get; set; }
         public string ErrorMessage { get; set; }

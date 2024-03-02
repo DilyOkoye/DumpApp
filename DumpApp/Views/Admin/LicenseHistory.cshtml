@@ -1,0 +1,64 @@
+﻿@model DumpApp.BAL.AdminModel.ViewModel.AdminViewModel
+
+@{
+    ViewBag.Title = "ManageUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">License History</h3>
+
+        <div class="panel-options">
+            <a href="#" data-toggle="panel">
+                <span class="collapse-icon">&ndash;</span>
+                <span class="expand-icon">+</span>
+            </a>
+            <a href="#" data-toggle="remove">
+                &times;
+            </a>
+        </div>
+    </div>
+    <div class="panel-body">
+
+    @if (Model.User == "SYSTEM")
+    {
+        @Html.ActionLink("Generate License", "GenerateLicense", new { menuid = Model.menuid }, new { @class = "btn btn-success waves-effect waves-light" })
+    }
+        @Html.ActionLink("Apply License", "RenewLicense", new { menuid = Model.menuid }, new { @class = "btn btn-success waves-effect waves-light" })
+
+        <br />
+        <table class="table table-striped table-bordered" id="example-35">
+            <thead>
+                <tr class="replace-inputs">
+                    <th>SNo</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Applied By</th>
+                    <th>Date Created</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{int count = 0;}
+                @foreach (var row in Model.ListOfLicenseHistory)
+                {
+                    count = count + 1;
+                    <tr>
+                        <td>@count</td>
+                        <td>@row.StartDate</td>
+                        <td>@row.EndDate</td>
+                        <td>@row.UserId</td>
+                        <td>@row.DateCreated</td>
+
+
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+
+    </div>
+</div>
+
+

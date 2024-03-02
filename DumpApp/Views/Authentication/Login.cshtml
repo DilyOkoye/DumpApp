@@ -21,7 +21,11 @@
     <link rel="stylesheet" href="~/assets/css/xenon-components.css">
     <link rel="stylesheet" href="~/assets/css/xenon-skins.css">
     <link rel="stylesheet" href="~/assets/css/custom.css">
+    <link href="~/assets/css/lobibox.min.css" rel="stylesheet" />
     <script src="~/assets/js/jquery-1.11.1.min.js"></script>
+    <script src="~/assets/js/lobibox.min.js"></script>
+    <script src="~/assets/js/notification-custom-script.js"></script>
+    <script src="~/assets/js/notifications.min.js"></script>
 
 </head>
 @{
@@ -174,7 +178,7 @@
                         
                         <div class="login-header" style="margin: auto; width: 50%; padding: 30px; ">
                             <a href="#" class="logo">
-                                <img src="~/assets/images/idsm.png" width="170" />
+                                <img src="~/assets/images/zenith1.png" width="90" />
                             </a>
 
                         </div>
@@ -201,7 +205,7 @@
 
                             <div class="info-links">
 
-                                <a href="#">Powered by Aerglo Technologies</a>
+                                <a href="#">Powered By IDSM Consulting Ltd</a>
                             </div>
 
                         </div>
@@ -383,9 +387,27 @@
             var result = data.Object;
 
             if (data.Success) {
+                console.log(result)
+                if (result.LicenseErrCode == -2) {
+                    round_error_noti(result.LicenseErrMsg)
+                    $('#ErrorDiv').show();
+                    $('#error').delay(800).slideDown(500);
+                    $('#error').html(result.LicenseErrMsg)
 
-                if (result.ErrorDisplay.ErrorCode == 0) {
+                    $('[id=BtnLogin]').prop('disabled', false);
 
+                    $("#imgLoad").hide();
+                    return;
+                }
+
+                if (result.ErrorDisplay.ErrorCode == 0)
+                {
+                    if (result.LicenseErrCode == -1)
+                    {
+                        warning_noti(result.LicenseErrMsg);
+                    }
+
+                    pos5_success_noti(result.ErrorDisplay.ErrorText);
                     $('#loading').html('')
                     window.location = result.Url
                     $("#imgLoad").hide();

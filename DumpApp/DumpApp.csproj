@@ -229,6 +229,7 @@
     <Content Include="assets\css\fonts\meteocons\font\meteocons.svg" />
     <Content Include="assets\css\fonts\meteocons\index.html" />
     <Content Include="assets\css\index.html" />
+    <Content Include="assets\css\lobibox.min.css" />
     <Content Include="assets\css\other\wysihtml5-color.css" />
     <Content Include="assets\css\sweetalert.css" />
     <Content Include="assets\css\xenon-components.css" />
@@ -300,7 +301,12 @@
     <Content Include="assets\images\user-3.png" />
     <Content Include="assets\images\user-4.png" />
     <Content Include="assets\images\user-5.png" />
+    <Content Include="assets\images\zenith.PNG" />
+    <Content Include="assets\images\zenith1.png" />
     <Content Include="assets\js\AjaxCall.js" />
+    <Content Include="assets\js\alertify.core.css" />
+    <Content Include="assets\js\alertify.default.css" />
+    <Content Include="assets\js\alertify.min.js" />
     <Content Include="assets\js\bootstrap.min.js" />
     <Content Include="assets\js\ckeditor\adapters\jquery.js" />
     <Content Include="assets\js\ckeditor\build-config.js" />
@@ -919,6 +925,7 @@
     <Content Include="assets\js\jvectormap\regions\jquery-jvectormap-world-mill-en.js" />
     <Content Include="assets\js\knob\index.html" />
     <Content Include="assets\js\knob\jquery.knob.min.js" />
+    <Content Include="assets\js\lobibox.min.js" />
     <Content Include="assets\js\min\bootstrap.min-min.js" />
     <Content Include="assets\js\min\resizeable-min.js" />
     <Content Include="assets\js\min\xenon-notes-min.js" />
@@ -931,6 +938,8 @@
     <Content Include="assets\js\multiselect\index.html" />
     <Content Include="assets\js\multiselect\js\index.html" />
     <Content Include="assets\js\multiselect\js\jquery.multi-select.js" />
+    <Content Include="assets\js\notification-custom-script.js" />
+    <Content Include="assets\js\notifications.min.js" />
     <Content Include="assets\js\resizeable.js" />
     <Content Include="assets\js\rwd-table\css\rwd-table.css" />
     <Content Include="assets\js\rwd-table\css\rwd-table.min.css" />
@@ -1509,6 +1518,9 @@
     <Content Include="Views\Admin\ChangePassword.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Shared\_Notification.cshtml" />
+    <Content Include="Views\Admin\LicenseHistory.cshtml" />
+    <Content Include="Views\Admin\GenerateLicense.cshtml" />
+    <Content Include="Views\Admin\RenewLicense.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

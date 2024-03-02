@@ -25,6 +25,7 @@ namespace DumpApp.BAL.AdminModel.ViewModel
         public string fromDate { get; set; }
         public string toDate { get; set; }
         public PriviledgeAssignmentManager roleManager { get; set; }
+        public int lincenseDuration { get; set; }
         public admRole admRole { get; set; }
         public admLocation admLocation { get; set; }
         public admTapeDevice admTapeDevice { get; set; }
@@ -55,7 +56,9 @@ namespace DumpApp.BAL.AdminModel.ViewModel
 
         //public List<admEmailSetUp> ListOfMails { set; get; }
         public string FullName { get; set; }
-
+        public string User { get; set; }
+        public admLicenseSetUpHistory admLicenseSetUpHistory { get; set; }
+        public List<ClientProfileModel.LincenseHistory> ListOfLicenseHistory { set; get; }
         public int notificationResult { get; set; }
         public int menuid { get; set; }
         public int eventId { get; set; }
@@ -65,6 +68,7 @@ namespace DumpApp.BAL.AdminModel.ViewModel
         public admClientProfile admClientProfile { get; set; }
         //public sysaudit sysaudit { get; set; }
         public ReturnValues rv { get; set; }
+        public admLicenseSetUp admLicenseSetUp { get; set; }
         public int Itbid { get; set; }
         public string currProcessing { get; set; }
         public string dateCreated { get; set; }

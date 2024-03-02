@@ -16,6 +16,7 @@ namespace DumpApp.BAL.OperationsModel.ViewModel
         public List<Dumps> ListOfLoad { set; get; }
         public PriviledgeAssignmentManager roleManager { get; set; }
         public IEnumerable<SelectListItem> drpLocation { get; set; }
+        
         public IEnumerable<SelectListItem> drpDatabase { get; set; }
         public IEnumerable<SelectListItem> drpTapeDevice{ get; set; }
         public int menuid { get; set; }

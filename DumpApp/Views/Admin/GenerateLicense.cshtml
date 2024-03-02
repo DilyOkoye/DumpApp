@@ -1,0 +1,196 @@
+﻿@model DumpApp.BAL.AdminModel.ViewModel.AdminViewModel
+
+@{
+    ViewBag.Title = "AddUserProfile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    AjaxOptions options = new AjaxOptions();
+    options.HttpMethod = "POST";
+    options.OnBegin = "OnBegin";
+    options.OnComplete = "OnComplete";
+    options.OnFailure = "OnFailure";
+    options.OnSuccess = "OnSuccess";
+    options.LoadingElementId = "divProgress";
+    options.LoadingElementDuration = 1000;
+    options.UpdateTargetId = "divResponse";
+    options.InsertionMode = InsertionMode.InsertAfter;
+}
+<script type='text/javascript'>
+    function foo() {
+        window.location = '@Model.Url';
+    }
+</script>
+
+<div class="row">
+    <div class="col-sm-12">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"> GENERATE LICENSE</h3>
+                <div class="panel-options">
+                    <a href="#" data-toggle="panel">
+                        <span class="collapse-icon">&ndash;</span>
+                        <span class="expand-icon">+</span>
+                    </a>
+                    <a href="#" data-toggle="remove">
+                        &times;
+                    </a>
+                </div>
+            </div>
+
+            @Html.AntiForgeryToken()
+            <div class="panel-body">
+
+                <div role="form" class="form-horizontal">
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="field-1">Duration (days)</label>
+
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(model => model.lincenseDuration, new { id= "lincenseDuration",@autocomplete = "off", @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="form-group-separator"></div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="field-1">License Key</label>
+
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(model => model.admLicenseSetUpHistory.LincenseKey, new {id= "LincenseKey", @autocomplete = "off", @class = "form-control",@readonly ="readonly" })
+                        </div>
+                    </div>
+
+                    <div class="form-group-separator"></div>
+
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="field-3"></label>
+                        <div class="col-sm-10">
+
+                            <button type="button" id="btnGenerateLicense" class="btn btn-success"><i class="fa-check"></i>GENERATE LICENSE</button>
+
+                            <input type="button" id="Return" value="Return " class="btn btn-info" onclick="foo()">
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+@Html.Hidden("url_generateLicense", Url.Action("GenerateNewLicense", "Admin"))
+
+<script>
+    $(document).on('click', '#btnGenerateLicense', function () {
+        alertify.confirm("Are You Sure You Want To Generate this License?", function (e) {
+            if (e) {
+                var duration = $('#lincenseDuration').val()
+
+                if (duration === null || duration === "") {
+                    alert("License Duration is Required");
+                    return;
+                }
+
+                $('#btnGenerateLicense').prop('disabled', true)
+
+
+                $.ajax({
+                    url: $("#url_generateLicense").val(),
+                    dataType: 'json',
+                    type: 'POST',
+                    cache: false,
+                    dataType: 'json',
+                    data: { duration: duration },
+                    success: function (data) {
+
+                        $('#btnGenerateLicense').prop('disabled', false)
+                        if (data.nErrorCode == 0) {
+                            $('#LincenseKey').val(data.UserKey);
+                            swal("Success!", "License Generated Successfully for " + duration + " Days, " + "Key: " + data.UserKey, "success");
+                        }
+                        else {
+
+                            swal("Error!", data.sErrorText, "error");
+                        }
+
+
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+
+                        $('#btnGenerateLicense').prop('disabled', false)
+
+                    }
+
+                });
+
+
+
+            }
+            else {
+
+            }
+            return false;
+        });
+    });
+
+
+    $(document).on('click', '#btnRenewLicense', function () {
+        alertify.confirm("Are You Sure You Want To Renew?", function (e) {
+            if (e) {
+                var key = $('#key').val()
+
+                if (key === null || key === "") {
+                    anim4_noti("License key is Required");
+                    return;
+                }
+
+                $('#btnRenewLicense').prop('disabled', true)
+
+
+                $.ajax({
+                    url: $("#url_RenewLicense").val(),
+                    dataType: 'json',
+                    type: 'POST',
+                    cache: false,
+                    dataType: 'json',
+                    data: { key: key },
+                    success: function (data) {
+
+                        $('#btnRenewLicense').prop('disabled', false)
+                        if (data.nErrorCode == 0) {
+
+                            swal("Success!", data.sErrorText, "success");
+
+                        }
+                        else {
+
+                            swal("Error!", data.sErrorText, "error");
+                        }
+
+
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+
+                        $('#btnRenewLicense').prop('disabled', false)
+
+                    }
+
+                });
+
+
+
+            }
+            else {
+
+            }
+            return false;
+        });
+    });
+</script>

@@ -33,6 +33,7 @@
           <Property Name="DateCreated" Type="datetime" />
           <Property Name="Status" Type="varchar" MaxLength="20" />
           <Property Name="LoginCount" Type="int" />
+          <Property Name="DumpWithPath" Type="bit" />
         </EntityType>
         <EntityType Name="admDatabase">
           <Key>
@@ -60,7 +61,7 @@
           <Property Name="Password" Type="varchar(max)" />
           <Property Name="LocationId" Type="int" />
           <Property Name="TapeDeviceId" Type="int" />
-          <Property Name="DatebaseId" Type="int" />
+          <Property Name="DatebaseId" Type="varchar" MaxLength="100" />
           <Property Name="JobId" Type="varchar" MaxLength="100" />
           <Property Name="ErrorId" Type="int" />
           <Property Name="ErrorMessage" Type="varchar(max)" />
@@ -80,6 +81,30 @@
           <Property Name="Name" Type="varchar" MaxLength="200" />
           <Property Name="Status" Type="varchar" MaxLength="10" />
         </EntityType>
+        <EntityType Name="admLicenseSetUp">
+          <Key>
+            <PropertyRef Name="Itbid" />
+          </Key>
+          <Property Name="Itbid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LincenseKey" Type="varchar(max)" />
+          <Property Name="StartDate" Type="date" />
+          <Property Name="EndDate" Type="varchar(max)" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="Status" Type="varchar" MaxLength="50" />
+          <Property Name="DateCreated" Type="datetime" />
+        </EntityType>
+        <EntityType Name="admLicenseSetUpHistory">
+          <Key>
+            <PropertyRef Name="Itbid" />
+          </Key>
+          <Property Name="Itbid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LincenseKey" Type="varchar(max)" />
+          <Property Name="StartDate" Type="date" />
+          <Property Name="EndDate" Type="date" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="Status" Type="varchar" MaxLength="50" />
+          <Property Name="DateCreated" Type="datetime" />
+        </EntityType>
         <EntityType Name="admLoad">
           <Key>
             <PropertyRef Name="Id" />
@@ -95,7 +120,7 @@
           <Property Name="Password" Type="varchar(max)" />
           <Property Name="LocationId" Type="int" />
           <Property Name="TapeDeviceId" Type="int" />
-          <Property Name="DatebaseId" Type="int" />
+          <Property Name="DatebaseId" Type="varchar" MaxLength="100" />
           <Property Name="JobId" Type="varchar" MaxLength="100" />
           <Property Name="ErrorId" Type="int" />
           <Property Name="ErrorMessage" Type="varchar(max)" />
@@ -235,6 +260,8 @@ warning 6002: The table/view 'DumpApp.dbo.admMenuControl' does not have a primar
           <EntitySet Name="admDatabase" EntityType="Self.admDatabase" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="admDump" EntityType="Self.admDump" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="admDumpType" EntityType="Self.admDumpType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="admLicenseSetUp" EntityType="Self.admLicenseSetUp" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="admLicenseSetUpHistory" EntityType="Self.admLicenseSetUpHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="admLoad" EntityType="Self.admLoad" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="admLocation" EntityType="Self.admLocation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="admRole" EntityType="Self.admRole" Schema="dbo" store:Type="Tables" />
@@ -277,7 +304,6 @@ warning 6002: The table/view 'DumpApp.dbo.admMenuControl' does not have a primar
         </EntityType>
         <EntityContainer Name="DumpAppEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="admAuditTrails" EntityType="Self.admAuditTrail" />
-          <EntitySet Name="admClientProfiles" EntityType="DumpAppModel.admClientProfile" />
           <EntitySet Name="admRoles" EntityType="DumpAppModel.admRole" />
           <EntitySet Name="admRoleAssignments" EntityType="DumpAppModel.admRoleAssignment" />
           <EntitySet Name="admStatusItems" EntityType="DumpAppModel.admStatusItem" />
@@ -299,22 +325,10 @@ warning 6002: The table/view 'DumpApp.dbo.admMenuControl' does not have a primar
           <EntitySet Name="admLocations" EntityType="DumpAppModel.admLocation" />
           <EntitySet Name="admDumps" EntityType="DumpAppModel.admDump" />
           <EntitySet Name="admLoads" EntityType="DumpAppModel.admLoad" />
+          <EntitySet Name="admClientProfiles" EntityType="DumpAppModel.admClientProfile" />
+          <EntitySet Name="admLicenseSetUps" EntityType="DumpAppModel.admLicenseSetUp" />
+          <EntitySet Name="admLicenseSetUpHistories" EntityType="DumpAppModel.admLicenseSetUpHistory" />
         </EntityContainer>
-        <EntityType Name="admClientProfile">
-          <Key>
-            <PropertyRef Name="BankCode" />
-          </Key>
-          <Property Name="BankCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="BankName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="BankAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="EnforcePasswordChangeDays" Type="Int32" Nullable="false" />
-          <Property Name="EnforceStrngPwd" Type="Boolean" />
-          <Property Name="SystemIdleTimeout" Type="Int32" />
-          <Property Name="UserId" Type="Int32" />
-          <Property Name="DateCreated" Type="DateTime" Precision="3" />
-          <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="LoginCount" Type="Int32" />
-        </EntityType>
         <EntityType Name="admRole">
           <Key>
             <PropertyRef Name="RoleId" />
@@ -493,7 +507,7 @@ warning 6002: The table/view 'DumpApp.dbo.admMenuControl' does not have a primar
           <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="LocationId" Type="Int32" />
           <Property Name="TapeDeviceId" Type="Int32" />
-          <Property Name="DatebaseId" Type="Int32" />
+          <Property Name="DatebaseId" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="JobId" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="ErrorId" Type="Int32" />
           <Property Name="ErrorMessage" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
@@ -520,7 +534,7 @@ warning 6002: The table/view 'DumpApp.dbo.admMenuControl' does not have a primar
           <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="LocationId" Type="Int32" />
           <Property Name="TapeDeviceId" Type="Int32" />
-          <Property Name="DatebaseId" Type="Int32" />
+          <Property Name="DatebaseId" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="JobId" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="ErrorId" Type="Int32" />
           <Property Name="ErrorMessage" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
@@ -531,6 +545,46 @@ warning 6002: The table/view 'DumpApp.dbo.admMenuControl' does not have a primar
           <Property Name="TotalDuration" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="CreatedBy" Type="Int32" />
+        </EntityType>
+        <EntityType Name="admClientProfile">
+          <Key>
+            <PropertyRef Name="BankCode" />
+          </Key>
+          <Property Name="BankCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="BankName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="BankAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="EnforcePasswordChangeDays" Type="Int32" Nullable="false" />
+          <Property Name="EnforceStrngPwd" Type="Boolean" />
+          <Property Name="SystemIdleTimeout" Type="Int32" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="DateCreated" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="LoginCount" Type="Int32" />
+          <Property Name="DumpWithPath" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="admLicenseSetUp">
+          <Key>
+            <PropertyRef Name="Itbid" />
+          </Key>
+          <Property Name="Itbid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LincenseKey" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="StartDate" Type="DateTime" Precision="0" />
+          <Property Name="EndDate" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DateCreated" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="admLicenseSetUpHistory">
+          <Key>
+            <PropertyRef Name="Itbid" />
+          </Key>
+          <Property Name="Itbid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LincenseKey" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="StartDate" Type="DateTime" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Precision="0" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DateCreated" Type="DateTime" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -550,22 +604,6 @@ warning 6002: The table/view 'DumpApp.dbo.admMenuControl' does not have a primar
                 <ScalarProperty Name="columnname" ColumnName="columnname" />
                 <ScalarProperty Name="originalvalue" ColumnName="originalvalue" />
                 <ScalarProperty Name="newvalue" ColumnName="newvalue" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="admClientProfiles">
-            <EntityTypeMapping TypeName="DumpAppModel.admClientProfile">
-              <MappingFragment StoreEntitySet="admClientProfile">
-                <ScalarProperty Name="LoginCount" ColumnName="LoginCount" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="SystemIdleTimeout" ColumnName="SystemIdleTimeout" />
-                <ScalarProperty Name="EnforceStrngPwd" ColumnName="EnforceStrngPwd" />
-                <ScalarProperty Name="EnforcePasswordChangeDays" ColumnName="EnforcePasswordChangeDays" />
-                <ScalarProperty Name="BankAddress" ColumnName="BankAddress" />
-                <ScalarProperty Name="BankName" ColumnName="BankName" />
-                <ScalarProperty Name="BankCode" ColumnName="BankCode" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -807,6 +845,49 @@ warning 6002: The table/view 'DumpApp.dbo.admMenuControl' does not have a primar
                 <ScalarProperty Name="TapeDescription" ColumnName="TapeDescription" />
                 <ScalarProperty Name="TapeIdentifier" ColumnName="TapeIdentifier" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="admClientProfiles">
+            <EntityTypeMapping TypeName="DumpAppModel.admClientProfile">
+              <MappingFragment StoreEntitySet="admClientProfile">
+                <ScalarProperty Name="DumpWithPath" ColumnName="DumpWithPath" />
+                <ScalarProperty Name="LoginCount" ColumnName="LoginCount" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="SystemIdleTimeout" ColumnName="SystemIdleTimeout" />
+                <ScalarProperty Name="EnforceStrngPwd" ColumnName="EnforceStrngPwd" />
+                <ScalarProperty Name="EnforcePasswordChangeDays" ColumnName="EnforcePasswordChangeDays" />
+                <ScalarProperty Name="BankAddress" ColumnName="BankAddress" />
+                <ScalarProperty Name="BankName" ColumnName="BankName" />
+                <ScalarProperty Name="BankCode" ColumnName="BankCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="admLicenseSetUps">
+            <EntityTypeMapping TypeName="DumpAppModel.admLicenseSetUp">
+              <MappingFragment StoreEntitySet="admLicenseSetUp">
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="LincenseKey" ColumnName="LincenseKey" />
+                <ScalarProperty Name="Itbid" ColumnName="Itbid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="admLicenseSetUpHistories">
+            <EntityTypeMapping TypeName="DumpAppModel.admLicenseSetUpHistory">
+              <MappingFragment StoreEntitySet="admLicenseSetUpHistory">
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="LincenseKey" ColumnName="LincenseKey" />
+                <ScalarProperty Name="Itbid" ColumnName="Itbid" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

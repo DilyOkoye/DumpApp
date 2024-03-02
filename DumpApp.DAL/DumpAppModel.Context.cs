@@ -28,7 +28,6 @@ namespace DumpApp.DAL
         }
     
         public virtual DbSet<admAuditTrail> admAuditTrails { get; set; }
-        public virtual DbSet<admClientProfile> admClientProfiles { get; set; }
         public virtual DbSet<admRole> admRoles { get; set; }
         public virtual DbSet<admRoleAssignment> admRoleAssignments { get; set; }
         public virtual DbSet<admStatusItem> admStatusItems { get; set; }
@@ -41,6 +40,9 @@ namespace DumpApp.DAL
         public virtual DbSet<admLocation> admLocations { get; set; }
         public virtual DbSet<admDump> admDumps { get; set; }
         public virtual DbSet<admLoad> admLoads { get; set; }
+        public virtual DbSet<admClientProfile> admClientProfiles { get; set; }
+        public virtual DbSet<admLicenseSetUp> admLicenseSetUps { get; set; }
+        public virtual DbSet<admLicenseSetUpHistory> admLicenseSetUpHistories { get; set; }
     
         public virtual ObjectResult<Isp_MenuSystemAdmin_Result> Isp_MenuSystemAdmin(Nullable<int> role_id)
         {

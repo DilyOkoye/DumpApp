@@ -32,6 +32,7 @@ namespace DumpApp.BAL.AdminModel
                 {
                     DumpName = row["DumpName"].ToString(),
                     Filename = row["Filename"].ToString(),
+                    DatebaseId = row["DatebaseId"].ToString(),
                     TapeIdentifier = row["TapeIdentifier"].ToString(),
                     DumpDate = row.IsNull("DumpDate") ? "" : $"{row["DumpDate"]:F}",
                     Duration = row["TotalDuration"].ToString(),
@@ -90,6 +91,7 @@ namespace DumpApp.BAL.AdminModel
                 {
                     DumpName = row["DumpName"].ToString(),
                     Filename = row["Filename"].ToString(),
+                    DatebaseId = row["DatebaseId"].ToString(),
                     TapeIdentifier = row["TapeIdentifier"].ToString(),
                     DumpDate = row.IsNull("DumpDate") ? "" : $"{row["DumpDate"]:F}",
                     Duration = row["TotalDuration"].ToString(),

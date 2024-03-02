@@ -22,7 +22,14 @@
         window.location = '@Model.Url';
     }
 </script>
+<div class="alert alert-success" id="searchResultsSuccess" style="display:none;">
+    <a class="close" data-dismiss="alert" href="#" aria-hidden="true">&times;</a>
 
+</div>
+<div class="alert alert-danger" id="searchResultsError" style="display:none;">
+    <a class="close" data-dismiss="alert" href="#" aria-hidden="true">&times;</a>
+
+</div>
 <div class="row">
     <div class="col-sm-12">
 
@@ -45,7 +52,10 @@
                 <div class="panel-body">
 
                     <div role="form" class="form-horizontal">
+                        <div class="text-right">
+                            <button type="button" id="btnTestConnection" name="button" value="Test" class="btn btn-warning"><i class="fa-arrow-circle-right"></i>Test Connection</button>
 
+                        </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="field-1"> Name</label>
 
@@ -70,7 +80,7 @@
                             <label class="col-sm-2 control-label" for="field-1">Is Head Office</label>
 
                             <div class="col-sm-10">
-                                @Html.CheckBoxFor(model => model.admLocation.IsHeadOffice, new { @autocomplete = "off", @class = "form-check-input"})
+                                @Html.CheckBoxFor(model => model.admLocation.IsHeadOffice, new { @autocomplete = "off", @class = "form-check-input" })
 
                             </div>
                         </div>
@@ -82,7 +92,7 @@
                             <label class="col-sm-2 control-label" for="field-1">Server</label>
 
                             <div class="col-sm-10">
-                                @Html.TextBoxFor(model => model.admLocation.Server, new { @autocomplete = "off", @class = "form-control" })
+                                @Html.TextBoxFor(model => model.admLocation.Server, new {id="Server", @autocomplete = "off", @class = "form-control" })
                             </div>
                         </div>
 
@@ -94,7 +104,7 @@
                             <label class="col-sm-2 control-label" for="field-1">Port</label>
 
                             <div class="col-sm-10">
-                                @Html.TextBoxFor(model => model.admLocation.Port, new { @autocomplete = "off", @class = "form-control" })
+                                @Html.TextBoxFor(model => model.admLocation.Port, new { id = "Port", @autocomplete = "off", @class = "form-control" })
                             </div>
                         </div>
 
@@ -104,7 +114,7 @@
                             <label class="col-sm-2 control-label" for="field-1">Username</label>
 
                             <div class="col-sm-10">
-                                @Html.TextBoxFor(model => model.admLocation.Username, new { @autocomplete = "off", @class = "form-control" })
+                                @Html.TextBoxFor(model => model.admLocation.Username, new { id = "Username", @autocomplete = "off", @class = "form-control" })
                             </div>
                         </div>
 
@@ -115,7 +125,7 @@
                             <label class="col-sm-2 control-label" for="field-1">Password</label>
 
                             <div class="col-sm-10">
-                                @Html.TextBoxFor(model => model.admLocation.Password, new { @autocomplete = "off", @class = "form-control" })
+                                @Html.TextBoxFor(model => model.admLocation.Password, new { id = "Password", @autocomplete = "off", @class = "form-control" })
                             </div>
                         </div>
 
@@ -142,3 +152,35 @@
     </div>
 </div>
 
+@Html.Hidden("TestConnection", Url.Action("TestLocationConfigConnection", "Admin"))
+<script>
+    $(document).on('click', '#btnTestConnection', function () {
+        $.ajax({
+            url: $("#TestConnection").val(),
+            type: 'POST',
+            data: {
+                server: $('#Server').val(),
+                port: $('#Port').val(),
+                username: $('#Username').val(),
+                password: $('#Password').val()
+            },
+            success: function (data) {
+                if (data.nErrorCode == 0) {
+                    $('#searchResultsSuccess').hide();
+                    $('#searchResultsSuccess').html(data.sErrorText)
+                    return;
+                }
+                else {
+                    $('#searchResultsError').delay(800).slideDown(500);
+                    $('#searchResultsError').html(data.sErrorText == null ? "Internal Error While Attempting to Connect" : data.sErrorText)
+                    return;
+                }
+            },
+            error: function () {
+                $('#searchResultsError').delay(800).slideDown(500);
+                $('#searchResultsError').html("Internal Error While Attempting to Connect")
+            }
+        });
+    });
+
+</script>

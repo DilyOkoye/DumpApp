@@ -7,26 +7,19 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.ComponentModel.DataAnnotations;
-
 namespace DumpApp.DAL
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class admClientProfile
+    public partial class admLicenseSetUpHistory
     {
-        [Key]
-        public string BankCode { get; set; }
-        public string BankName { get; set; }
-        public string BankAddress { get; set; }
-        public int EnforcePasswordChangeDays { get; set; }
-        public Nullable<bool> EnforceStrngPwd { get; set; }
-        public Nullable<int> SystemIdleTimeout { get; set; }
+        public int Itbid { get; set; }
+        public string LincenseKey { get; set; }
+        public Nullable<System.DateTime> StartDate { get; set; }
+        public Nullable<System.DateTime> EndDate { get; set; }
         public Nullable<int> UserId { get; set; }
-        public Nullable<System.DateTime> DateCreated { get; set; }
         public string Status { get; set; }
-        public Nullable<int> LoginCount { get; set; }
-        public Nullable<bool> DumpWithPath { get; set; }
+        public Nullable<System.DateTime> DateCreated { get; set; }
     }
 }

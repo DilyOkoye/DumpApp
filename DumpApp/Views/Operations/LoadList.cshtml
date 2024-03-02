@@ -24,8 +24,10 @@
         <div id="example-3_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
             <script type="text/javascript">
                 jQuery(document).ready(function ($) {
-                    $("#example-4").dataTable().yadcf([
-                      
+                    $("#example-4").dataTable({
+                        "order": [4, 'desc']
+                    }).yadcf([
+
                     ]);
                 });
             </script>
@@ -34,12 +36,11 @@
             <table class="table uk-responsive-width table-striped table-bordered dataTable" id="example-4" role="grid" aria-describedby="example-4_info">
                 <thead>
                     <tr class="replace-inputs">
-                        <th>Dump Name</th>
-                        <th>Tape Name</th>
+                        <th>Tape Id</th>
                         <th>File Name</th>
-                        <th>Dump Type</th>
-                        <th>Tape Type</th>
-                        <th>Dump Date</th>
+                        <th>Database</th>
+                        <th>Load Type</th>
+                        <th>Load Date</th>
                         <th>Status</th>
                         <th>Created By</th>
                     </tr>
@@ -49,13 +50,12 @@
                     {
 
                         <tr>
-                            <td>@row.DumpName</td>
                             <td>@row.TapeIdentifier</td>
                             <td>@row.Filename</td>
+                            <td>@row.DatebaseId</td>
                             <td>@row.DumpType</td>
-                            <td>@row.TapeType</td>
                             <td>@row.DumpDate</td>
-                            <td style="width:50px">
+                            <td style="width:80px">
                                 @switch (row.Status)
                                 {
                                     case "Loaded":
@@ -69,6 +69,7 @@
                                         break;
                                     case "Error":
                                         <span class="label label-danger">@row.Status</span>
+                                        <text>&nbsp;<br/></text> @row.ErrorMessage
                                         break;
                                     default:
                                         <span class="label label-default">@row.Status</span>

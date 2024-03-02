@@ -8,6 +8,10 @@ using DumpApp.BAL.Utilities;
 using DumpApp.DAL;
 using System.Threading.Tasks;
 using static DumpApp.Models.Helper;
+using DumpApp.BAL.OperationsModel.ViewModel;
+using DumpApp.BAL.OperationsModel;
+using DumpApp.DAL.Implementation;
+using System.Collections.Generic;
 
 namespace DumpApp.Controllers
 {
@@ -53,6 +57,72 @@ namespace DumpApp.Controllers
 
         }
 
+        public ActionResult LicenseHistory(int menuid)
+        {
+            adminviewModel.rv = new ReturnValues();
+            adminviewModel.menuid = menuid;
+            //adminviewModel.drpStatus = bankmodel.ListStatus();
+            adminviewModel.User = _userName.ToUpper();
+            adminviewModel.admLicenseSetUpHistory = new admLicenseSetUpHistory();
+            adminviewModel.ListOfLicenseHistory = ClientProfileModel.LincenseList();
+            primanager = new PriviledgeManager(menuid, _RoleId);
+            adminviewModel.roleManager = primanager.AssignRoleToUser() == null
+                    ? new PriviledgeAssignmentManager()
+                    : primanager.AssignRoleToUser();
+
+            return View(adminviewModel);
+        }
+
+        public ActionResult GenerateLicense(int menuid)
+        {
+            adminviewModel.rv = new ReturnValues();
+            adminviewModel.admLicenseSetUpHistory = new admLicenseSetUpHistory();
+            var redirectUrl = new UrlHelper(Request.RequestContext).Action("LicenseHistory", "Admin", new { menuid = menuid });
+            adminviewModel.Url = redirectUrl;
+            primanager = new PriviledgeManager(menuid, _RoleId);
+            adminviewModel.roleManager = primanager.AssignRoleToUser() == null
+                    ? new PriviledgeAssignmentManager()
+                    : primanager.AssignRoleToUser();
+
+            return View(adminviewModel);
+        }   
+
+        [HttpPost]
+        public JsonResult GenerateNewLicense(string duration)
+        {
+
+            var rtv = ClientProfileModel.GenerateLicense(duration, _userId);
+            return Json(rtv);
+
+        }
+
+        [HttpPost]
+        public JsonResult ApplyLicense(string key)
+        {
+
+            var rtv = ClientProfileModel.ApplyLicense(key, _userId);
+            return Json(rtv);
+
+        }
+
+
+        #region RenewLicense
+        public ActionResult RenewLicense(int menuid)
+        {
+            adminviewModel.rv = new ReturnValues();
+            adminviewModel.admLicenseSetUp = new admLicenseSetUp();
+            var redirectUrl = new UrlHelper(Request.RequestContext).Action("LicenseHistory", "Admin", new { menuid = menuid });
+            adminviewModel.Url = redirectUrl;
+            primanager = new PriviledgeManager(menuid, _RoleId);
+            adminviewModel.roleManager = primanager.AssignRoleToUser() == null
+                    ? new PriviledgeAssignmentManager()
+                    : primanager.AssignRoleToUser();
+
+            return View(adminviewModel);
+        }
+
+
+        #endregion
 
         public ActionResult ManageClientProfile(int menuid)
         {
@@ -451,6 +521,30 @@ namespace DumpApp.Controllers
             return (Json(JsonResponseFactory.ErrorResponse("Error"), JsonRequestBehavior.DenyGet));
         }
 
+        [HttpPost]
+        public async Task<JsonResult> TestLocationConfigConnection(string server,string port,string username, string password)
+        {
+            var rtv = new ReturnValues();
+            var sybaseDataLayer = new SybaseDataLayer();
+            rtv.nErrorCode = -1;
+            rtv.sErrorText = "Could not establish connection to " + server;
+            var p = new admLocation()
+            {
+                Password = password,
+                Server = server,
+                Port = port,
+                Username = username
+            };
+
+            var result = await sybaseDataLayer.ValidateLocationConfig(p);
+            if (result.Count > 0)
+            {
+                rtv.nErrorCode = 0;
+                rtv.sErrorText = "Response from " + server + "Successful";
+            }
+          
+            return Json(rtv, JsonRequestBehavior.AllowGet);
+        }
 
 
 
@@ -513,7 +607,7 @@ namespace DumpApp.Controllers
             adminviewModel.drpStatus = roleModel.ListStatus();
             if (adminviewModel.admLocation != null)
             {
-                adminviewModel.UsercreatedBy = adminviewModel.admUserProfile.CreatedBy == null ? "" : await roleModel.GetFullname((int)adminviewModel.admUserProfile.CreatedBy);
+                adminviewModel.UsercreatedBy = adminviewModel.admLocation.UserId == null ? "" : await roleModel.GetFullname((int)adminviewModel.admLocation.UserId);
 
             }
             adminviewModel.menuid = menuid;

@@ -168,7 +168,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Dump Name</Value>
+                                  <Value> Load Name</Value>
                                   <Style>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>="White"</Color>
@@ -236,7 +236,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Dump Type</Value>
+                                  <Value>Load Type</Value>
                                   <Style>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>="White"</Color>
@@ -542,7 +542,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Dump Date</Value>
+                                  <Value>Load Date</Value>
                                   <Style>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>="White"</Color>

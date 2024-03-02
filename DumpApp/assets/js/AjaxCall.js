@@ -16,6 +16,10 @@ function OnSuccess(data) {
         if (data.Object.rv.nErrorCode === 0) {
             console.log(data.Object.rv.sErrorText);
             swal("Success!", data.Object.rv.sErrorText, "success");
+           // alert("test")
+            if (data.Object.Url !== null) {
+                window.location.href = data.Object.Url
+            }
             
         }
 

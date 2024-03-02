@@ -22,7 +22,14 @@
         window.location = '@Model.Url';
     }
 </script>
+<div class="alert alert-success" id="searchResultsSuccess" style="display:none;">
+    <a class="close" data-dismiss="alert" href="#" aria-hidden="true">&times;</a>
 
+</div>
+<div class="alert alert-danger" id="searchResultsError" style="display:none;">
+    <a class="close" data-dismiss="alert" href="#" aria-hidden="true">&times;</a>
+
+</div>
 <div class="row">
     <div class="col-sm-12">
 
@@ -46,13 +53,13 @@
 
                     <div role="form" class="form-horizontal">
                         <div class="text-right">
-                            <button type="submit" name="button" value="Test" class="btn btn-warning"><i class="fa-arrow-circle-right"></i>Test Load Connection</button>
+                            <button type="button" id="btnTest" name="button" value="Test" class="btn btn-warning"><i class="fa-arrow-circle-right"></i>Test Load Connection</button>
 
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="dumpTypeCheck">Requires Initialization</label>
                             <div class="col-sm-10">
-                                @Html.CheckBoxFor(model => model.dumps.DumpTypeCheck, new { @autocomplete = "off", @class = "form-check-input", @id = "DumpTypeCheck" ,@disabled = "disabled" })
+                                @Html.CheckBoxFor(model => model.dumps.DumpTypeCheck, new { @autocomplete = "off", @class = "form-check-input", @id = "DumpTypeCheck", @disabled = "disabled" })
                             </div>
                         </div>
 
@@ -71,7 +78,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         @if (Model.dumps.DumpType == "Offsite")
                         {
                             <div class="form-group-separator"></div>
@@ -83,9 +90,9 @@
                                     @Html.DropDownListFor(model => model.dumps.LocationId, new SelectList(Model.drpLocation, "Value", "Text"), "Select Location", new { @autocomplete = "off", required = "required", @class = "form-control single-select", @id = "LocationId" })
                                 </div>
                             </div>
-                        
+
                         }
-                       
+
                         <div class="form-group-separator"></div>
 
                         <div class="form-group">
@@ -148,7 +155,7 @@
                                 @Html.DropDownListFor(model => model.dumps.TapeDeviceId, new SelectList(Model.drpTapeDevice, "Value", "Text"), "Select Tape Device", new { @autocomplete = "off", @class = "form-control single-select", @id = "TapeDeviceId", required = "required", @readonly = "readonly" })
                             </div>
                         </div>
-                        
+
                         <div class="form-group-separator"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="field-2">Dumped By</label>
@@ -164,7 +171,7 @@
                                 @Html.TextBoxFor(model => model.dumps.DumpDate, new { @autocomplete = "off", @class = "form-control", @id = "Filename", required = "required", @readonly = "readonly" })
                             </div>
                         </div>
-                        
+
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="field-2">Status</label>
 
@@ -183,6 +190,7 @@
                                     <button type="submit" value="Execute" name="button" class="btn btn-success"><i class="fa-check"></i>Execute Load</button>
                                 }
                                 <input type="button" id="Return" value="Return " class="btn btn-info" onclick="foo()">
+                                <a href="@Url.Action("LoadList", "Operations", new {menuId =15})" class="btn btn-primary">Go to Load List</a>
 
                             </div>
 
@@ -198,4 +206,76 @@
 
     </div>
 </div>
+@Html.Hidden("TestConnection", Url.Action("TestConnection", "Operations"))
 
+<script>
+    $(document).ready(function () {
+
+         $('#LocationId').change(function () {
+    var locationId = $(this).val();
+
+    // Send an AJAX request to the server to get databases based on the selected locationId
+             $.getJSON('@Url.Action("GetDatabases", "Operations")', { locationId: locationId }, function (databases) {
+    // Check if the #DatebaseId element exists
+    var databaseDropdown = $('#DatebaseId');
+    if (databaseDropdown.length > 0) {
+        // Clear the database dropdown before adding new options
+        databaseDropdown.empty();
+
+        // Iterate over the object properties
+        $.each(databases, function (key, value) {
+           // alert("test")
+            // Use the value of the 'Name' property as both the option value and text
+            databaseDropdown.append($('<option/>', {
+                value: value.Name,
+                text: value.Name
+            }));
+        });
+
+       }
+           else {
+        console.log("#DatebaseId element not found.");
+                 }
+});
+});
+    });
+
+    $(document).on('click', '#btnTest', function () {
+        var formData = {
+            DumpTypeCheck: $('#DumpTypeCheck').val(),
+            DumpType: $('input[name="dumps.DumpType"]:checked').val(),
+            LocationId: $('#LocationId').val(),
+            TapeIdentifier: $('#TapeIdentifier').val(),
+            DumpName: $('#DumpName').val(),
+            Filename: $('#Filename').val(),
+            DumpDescription: $('#DumpDescription').val(),
+            DatebaseId: $('#DatebaseId').val(),
+            TapeDeviceId: $('#TapeDeviceId').val(),
+            OperationType: "Load",
+            Id: $('#dumpId').val(),
+        };
+
+        $.ajax({
+            url: $("#TestConnection").val(),
+            type: 'POST', // Change to POST since you are sending data
+            contentType: 'application/json',
+            data: JSON.stringify(formData), // Serialize the data as JSON
+            success: function (data) {
+                if (data.nErrorCode == 0) {
+                    $('#searchResultsSuccess').hide();
+                    $('#searchResultsSuccess').html("Load Test Successful")
+                    return;
+                }
+                else {
+                    $('#searchResultsError').delay(800).slideDown(500);
+                    $('#searchResultsError').html(data.sErrorText == null ? "Internal Error While Attempting Test Load" : data.sErrorText)
+                    return;
+                }
+            },
+            error: function () {
+                $('#searchResultsError').delay(800).slideDown(500);
+                $('#searchResultsError').html("Internal Error While Attempting Test Load")
+            }
+        });
+    });
+</script>

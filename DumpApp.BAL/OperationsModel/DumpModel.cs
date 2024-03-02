@@ -19,6 +19,7 @@ using DumpApp.DAL.Interface;
 using DumpApp.DAL.Repositories;
 using Hangfire;
 using Hangfire.Server;
+using static DumpApp.BAL.OperationsModel.SybaseDataLayer;
 
 namespace DumpApp.BAL.OperationsModel
 {
@@ -51,14 +52,16 @@ namespace DumpApp.BAL.OperationsModel
         public List<Dumps> ListOfLoad()
         {
 
-            var d = (from h in repoLoadRepository.GetAllNonAsync()
+            var d = (from h in repoLoadRepository.GetAllNonAsync().OrderByDescending(o => o.DumpDate)
                      select new Dumps()
                      {
                          DumpName = h.DumpName,
                          DumpDescription = h.DumpDescription,
                          TapeDescription = h.TapeDescription,
                          Status = h.Status,
+                         DatebaseId = h.DatebaseId,
                          Filename = h.Filename,
+                         ErrorMessage = h.ErrorMessage,
                          DumpType = h.DumpType == null ? "" : GetDumpTypeName((int)h.DumpType),
                          DumpDate = h.DumpDate == null ? "" : $"{h.DumpDate:F}",
                          TapeType = h.TapeType,
@@ -74,13 +77,15 @@ namespace DumpApp.BAL.OperationsModel
         public List<Dumps> ListOfDumps()
         {
 
-            var d = (from h in repoDumpRepository.GetAllNonAsync()
+            var d = (from h in repoDumpRepository.GetAllNonAsync().OrderByDescending(o=>o.DumpDate)
                      select new Dumps()
                      {
                          DumpName = h.DumpName,
                          DumpDescription = h.DumpDescription,
                          TapeDescription = h.TapeDescription,
                          Status = h.Status,
+                         DatebaseId = h.DatebaseId,
+                         ErrorMessage = h.ErrorMessage,
                          Filename = h.Filename,
                          DumpType = h.DumpType == null ? "" : GetDumpTypeName((int)h.DumpType),
                          DumpDate = h.DumpDate == null ? "" : $"{h.DumpDate:F}",
@@ -157,19 +162,77 @@ namespace DumpApp.BAL.OperationsModel
             return items;
         }
 
-        public IEnumerable<SelectListItem> ListDatabase()
+        public async Task<IEnumerable<SelectListItem>> ListDatabase(int locationId)
         {
-
-            IEnumerable<System.Web.Mvc.SelectListItem> items = repoDatabase.GetAllNonAsync().AsEnumerable()
-                .Select(p => new System.Web.Mvc.SelectListItem
+            IEnumerable<System.Web.Mvc.SelectListItem> items = null;
+            var sybaseDataLayer = new SybaseDataLayer();
+            try
+            {
+                var result = await sybaseDataLayer.GetDatabaseList(locationId);
+                 items = result.AsEnumerable()
+                    .Select(p => new System.Web.Mvc.SelectListItem
                 {
                     Text = p.Name,
-                    Value = p.Id.ToString()
+                    Value = p.Name.ToString()
 
                 });
-            return items;
+                 if (items.Count() == 0)
+                 {
+                    items = repoDatabase.GetAllNonAsync().AsEnumerable()
+                        .Select(p => new System.Web.Mvc.SelectListItem
+                        {
+                            Text = p.Name,
+                            Value = p.Name.ToString()
+
+                        });
+                }
+
+                 return items;
+            }
+            catch (Exception e)
+            {
+                items = repoDatabase.GetAllNonAsync().AsEnumerable()
+                    .Select(p => new System.Web.Mvc.SelectListItem
+                    {
+                        Text = p.Name,
+                        Value = p.Id.ToString()
+
+                    });
+                return items;
+            }
         }
 
+
+        public async Task<List<SybaseDataLayer.DatabaseDetails>> DatabaseList(int locationId)
+        {
+            var databaseList = new List<DatabaseDetails>();
+            var sybaseDataLayer = new SybaseDataLayer();
+            try
+            {
+                databaseList = await sybaseDataLayer.GetDatabaseList(locationId);
+
+                if (databaseList.Count == 0)
+                {
+                    var records = repoDatabase.GetAllNonAsync().ToList();
+                    databaseList = records.Select(o => new SybaseDataLayer.DatabaseDetails
+                    {
+                        Name = o.Name
+                    }).ToList();
+                }
+
+            }
+            catch (Exception e)
+            {
+                var records = repoDatabase.GetAllNonAsync().ToList();
+                databaseList = records.Select(o => new SybaseDataLayer.DatabaseDetails
+                {
+                    Name = o.Name
+                }).ToList();
+
+            }
+
+            return databaseList;
+        }
 
         public string GetUserById(int id)
         {
@@ -208,9 +271,7 @@ namespace DumpApp.BAL.OperationsModel
                 return returnVal;
             }
 
-            var databaseName = repoDatabase.GetNonAsync(o => o.Id == p.dumps.DatebaseId).Name;
-            p.dumps.DatabaseName = databaseName;
-
+          
             var tapeName = repoTapeDevice.GetNonAsync(o => o.Id == p.dumps.TapeDeviceId).Name;
             p.dumps.TapeName = tapeName;
 
@@ -237,7 +298,7 @@ namespace DumpApp.BAL.OperationsModel
 
             if (button == "Test")
             {
-                await ExecuteTestLoad(p.dumps);
+               return await ExecuteTestLoad(p.dumps);
             }
 
             try
@@ -255,6 +316,7 @@ namespace DumpApp.BAL.OperationsModel
                         admLoad.Status = "Processing";
                         repoLoadRepository.Update(admLoad);
                         await unitOfWork.Commit(loginUserId);
+                        returnVal.Url = "Operations/LoadList?menuId=15";
                         returnVal.nErrorCode = 0;
                         returnVal.sErrorText = "Load operation in progress, Check back later to check Load Status";
 
@@ -284,18 +346,8 @@ namespace DumpApp.BAL.OperationsModel
         {
             var returnVal = new ReturnValues();
 
-            var t = await repoDumpRepository.Get(c => c.TapeIdentifier.ToUpper() == p.dumps.TapeIdentifier.ToUpper());
-            if (t != null)
-            {
-                returnVal.nErrorCode = -2;
-                returnVal.sErrorText = "Tape Identifier Already Exist.";
-                return returnVal;
-            }
-
             var dumpType = p.dumps.DumpType == "Offsite" ? 1 : 2;
-            var databaseName = repoDatabase.GetNonAsync(o => o.Id == p.dumps.DatebaseId).Name;
-            p.dumps.DatabaseName = databaseName;
-
+          
             var tapeName = repoTapeDevice.GetNonAsync(o => o.Id == p.dumps.TapeDeviceId).Name;
             p.dumps.TapeName = tapeName;
 
@@ -323,7 +375,7 @@ namespace DumpApp.BAL.OperationsModel
 
             if (button == "Test")
             {
-                await ExecuteTestDump(p.dumps);
+               return await ExecuteTestDump(p.dumps);
             }
 
             try
@@ -376,9 +428,7 @@ namespace DumpApp.BAL.OperationsModel
             }
 
             var dumpType = p.dumps.DumpType == "Offsite" ? 1 : 2;
-            var databaseName = repoDatabase.GetNonAsync(o => o.Id == p.dumps.DatebaseId).Name;
-            p.dumps.DatabaseName = databaseName;
-
+           
             var tapeName = repoTapeDevice.GetNonAsync(o => o.Id == p.dumps.TapeDeviceId).Name;
             p.dumps.TapeName = tapeName;
 
@@ -403,7 +453,7 @@ namespace DumpApp.BAL.OperationsModel
 
             if (button == "Test")
             {
-                await ExecuteTestDump(p.dumps);
+                return await ExecuteTestDump(p.dumps);
             }
 
             try
@@ -453,17 +503,17 @@ namespace DumpApp.BAL.OperationsModel
             {
                 case true when dump.DumpType == "Offsite":
                     query =
-                        $"dump {dump.DatabaseName}  to {dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}' with init go";
+                        $"dump {dump.DatebaseId}  to {dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}' with init go";
                     break;
                 case false when dump.DumpType == "Offsite":
                     query =
-                        $"dump {dump.DatabaseName}  to {dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}'";
+                        $"dump {dump.DatebaseId}  to {dump.TapeName} file= '{dump.Filename}' with passwd = '{dump.Password}'";
                     break;
                 case true when dump.DumpType == "Internal":
-                    query = $"dump {dump.DatabaseName}  to {dump.TapeName} file= '{dump.Filename}' with init go";
+                    query = $"dump {dump.DatebaseId}  to {dump.TapeName} file= '{dump.Filename}' with init go";
                     break;
                 case false when dump.DumpType == "Internal":
-                    query = $"dump {dump.DatabaseName}  to {dump.TapeName} file= '{dump.Filename}'";
+                    query = $"dump {dump.DatebaseId}  to {dump.TapeName} file= '{dump.Filename}'";
                     break;
             }
 
@@ -478,17 +528,17 @@ namespace DumpApp.BAL.OperationsModel
             {
                 case true when dump.DumpType == "Offsite":
                     query =
-                        $"load database {dump.DatabaseName}  to '{path + dump.Filename}' with passwd = '{dump.Password}' with init go";
+                        $"load database {dump.DatebaseId}  to '{path + dump.Filename}' with passwd = '{dump.Password}' with init go";
                     break;
                 case false when dump.DumpType == "Offsite":
                     query =
-                        $"load database {dump.DatabaseName}  to '{path + dump.Filename}' with passwd = '{dump.Password}'";
+                        $"load database {dump.DatebaseId}  to '{path + dump.Filename}' with passwd = '{dump.Password}'";
                     break;
                 case true when dump.DumpType == "Internal":
-                    query = $"load database {dump.DatabaseName}  to '{path + dump.Filename}'  with init go";
+                    query = $"load database {dump.DatebaseId}  to '{path + dump.Filename}'  with init go";
                     break;
                 case false when dump.DumpType == "Internal":
-                    query = $"load database  {dump.DatabaseName}  to '{path + dump.Filename}'";
+                    query = $"load database  {dump.DatebaseId}  to '{path + dump.Filename}'";
                     break;
             }
 
@@ -503,17 +553,17 @@ namespace DumpApp.BAL.OperationsModel
             {
                 case true when dump.DumpType == "Offsite":
                     query =
-                        $"dump database {dump.DatabaseName}  to '{path + dump.Filename}' with passwd = '{dump.Password}' with init go";
+                        $"dump database {dump.DatebaseId}  to '{path + dump.Filename}' with passwd = '{dump.Password}' with init go";
                     break;
                 case false when dump.DumpType == "Offsite":
                     query =
-                        $"dump database {dump.DatabaseName}  to '{path + dump.Filename}' with passwd = '{dump.Password}'";
+                        $"dump database {dump.DatebaseId}  to '{path + dump.Filename}' with passwd = '{dump.Password}'";
                     break;
                 case true when dump.DumpType == "Internal":
-                    query = $"dump database {dump.DatabaseName}  to '{path + dump.Filename}'  with init go";
+                    query = $"dump database {dump.DatebaseId}  to '{path + dump.Filename}'  with init go";
                     break;
                 case false when dump.DumpType == "Internal":
-                    query = $"dump database  {dump.DatabaseName}  to '{path + dump.Filename}'";
+                    query = $"dump database  {dump.DatebaseId}  to '{path + dump.Filename}'";
                     break;
             }
 
@@ -528,17 +578,17 @@ namespace DumpApp.BAL.OperationsModel
             {
                 case true when dump.DumpType == "Offsite":
                     query =
-                        $"dump database {dump.DatabaseName}  to '{path + dump.Filename}' with passwd = '{dump.Password}' with init go";
+                        $"dump database {dump.DatebaseId}  to '{path + dump.Filename}' with passwd = '{dump.Password}' with init go";
                     break;
                 case false when dump.DumpType == "Offsite":
                     query =
-                        $"dump database {dump.DatabaseName}  to '{path + dump.Filename}' with passwd = '{dump.Password}'";
+                        $"dump database {dump.DatebaseId}  to '{path + dump.Filename}' with passwd = '{dump.Password}'";
                     break;
                 case true when dump.DumpType == "Internal":
-                    query = $"dump database {dump.DatabaseName}  to '{path + dump.Filename}'  with init go";
+                    query = $"dump database {dump.DatebaseId}  to '{path + dump.Filename}'  with init go";
                     break;
                 case false when dump.DumpType == "Internal":
-                    query = $"dump database  {dump.DatabaseName}  to '{path + dump.Filename}'";
+                    query = $"dump database  {dump.DatebaseId}  to '{path + dump.Filename}'";
                     break;
             }
 
@@ -553,17 +603,17 @@ namespace DumpApp.BAL.OperationsModel
             {
                 case true when dump.DumpType == "Offsite":
                     query =
-                        $"load database {dump.DatabaseName}  from '{path + dump.Filename}' with passwd = '{dump.Password}' with init go";
+                        $"load database {dump.DatebaseId}  from '{path + dump.Filename}' with passwd = '{dump.Password}' with init go";
                     break;
                 case false when dump.DumpType == "Offsite":
                     query =
-                        $"load database {dump.DatabaseName}  from '{path + dump.Filename}' with passwd = '{dump.Password}'";
+                        $"load database {dump.DatebaseId}  from '{path + dump.Filename}' with passwd = '{dump.Password}'";
                     break;
                 case true when dump.DumpType == "Internal":
-                    query = $"load database {dump.DatabaseName}  from '{path + dump.Filename}'  with init go";
+                    query = $"load database {dump.DatebaseId}  from '{path + dump.Filename}'  with init go";
                     break;
                 case false when dump.DumpType == "Internal":
-                    query = $"load database  {dump.DatabaseName}  from '{path + dump.Filename}'";
+                    query = $"load database  {dump.DatebaseId}  from '{path + dump.Filename}'";
                     break;
             }
 
@@ -716,7 +766,7 @@ namespace DumpApp.BAL.OperationsModel
 
         public async Task<ReturnValues> ExecuteTestLoad(Dumps dump)
         {
-            string path = System.Configuration.ConfigurationManager.AppSettings["LoadPath"];
+            string path = System.Configuration.ConfigurationManager.AppSettings["DumpPath"];
 
             var sybaseLayer = new SybaseDataLayer();
 

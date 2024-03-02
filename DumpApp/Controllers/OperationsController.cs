@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 using DumpApp.BAL.AdminModel;
 using DumpApp.BAL.OperationsModel;
 using DumpApp.BAL.OperationsModel.ViewModel;
 using DumpApp.BAL.Utilities;
 using DumpApp.DAL;
 using EmailNotification.BAL.Utilities;
+using Microsoft.Reporting.Map.WebForms.BingMaps;
 using static DumpApp.Models.Helper;
 
 namespace DumpApp.Controllers
@@ -67,7 +69,7 @@ namespace DumpApp.Controllers
             return View(operationsViewModel);
         }
 
-        public ActionResult AddNewDump(int menuid)
+        public async Task<ActionResult> AddNewDump(int menuid)
         {
             operationsViewModel.dumps = new Dumps();
             operationsViewModel.rv = new ReturnValues();
@@ -76,13 +78,54 @@ namespace DumpApp.Controllers
                 ? new PriviledgeAssignmentManager()
                 : primanager.AssignRoleToUser();
             operationsViewModel.drpLocation = dumpModel.ListLocation();
-            operationsViewModel.drpDatabase = dumpModel.ListDatabase();
+            operationsViewModel.drpDatabase = await dumpModel.ListDatabase(1);
             operationsViewModel.drpTapeDevice = dumpModel.ListTapeDevice();
             var redirectUrl = new UrlHelper(Request.RequestContext).Action("DumpList", "Operations", new { menuid = menuid });
             operationsViewModel.Url = redirectUrl;
 
             return View(operationsViewModel);
         }
+
+        [HttpPost]
+        public async Task<JsonResult> TestConnection(Dumps dumps)
+        {
+            var rtv = new ReturnValues();
+            rtv.nErrorCode = -1;
+            var p = new OperationsViewModel()
+            {
+                dumps = new Dumps()
+                {
+                    Filename = dumps.Filename,
+                    DumpTypeCheck = dumps.DumpTypeCheck,
+                    DumpType = dumps.DumpType,
+                    LocationId = dumps.LocationId,
+                    TapeIdentifier = dumps.TapeIdentifier ,
+                    DumpName  = dumps.DumpName,
+                    DumpDescription = dumps.DumpDescription,
+                    DatebaseId = dumps.DatebaseId,
+                    TapeDeviceId = dumps.TapeDeviceId ,
+                    OperationType = dumps.OperationType,
+                    Id = dumps.Id
+                }
+            };
+
+            if (p.dumps.OperationType == "AddDump")
+            {
+                rtv = await dumpModel.ProcessDump(p, _userId, "Test");
+                return Json(rtv, JsonRequestBehavior.AllowGet);
+            }
+            else if (p.dumps.OperationType == "EditDump")
+            {
+                rtv = await dumpModel.EditDump(p, _userId, "Test");
+                return Json(rtv, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                rtv = await dumpModel.ProcessLoad(p, _userId, "Test");
+                return Json(rtv, JsonRequestBehavior.AllowGet);
+            }
+        }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -108,12 +151,20 @@ namespace DumpApp.Controllers
             return (Json(JsonResponseFactory.ErrorResponse("Error"), JsonRequestBehavior.DenyGet));
         }
 
+
+        public async Task<JsonResult> GetDatabases(int locationId)
+        {
+            var databaseList =await dumpModel.DatabaseList(locationId);
+            return Json(databaseList, JsonRequestBehavior.AllowGet);
+        }
+        
+
         public async Task<ActionResult> EditDump(int h, int menuid)
         {
             operationsViewModel.rv = new ReturnValues();
             operationsViewModel.dumps = await dumpModel.ViewDetails(h);
             operationsViewModel.drpLocation = dumpModel.ListLocation();
-            operationsViewModel.drpDatabase = dumpModel.ListDatabase();
+            operationsViewModel.drpDatabase =await dumpModel.ListDatabase(operationsViewModel.dumps.DumpType =="Offsite"? (int)operationsViewModel.dumps.LocationId:1);
             operationsViewModel.drpTapeDevice = dumpModel.ListTapeDevice();
             operationsViewModel.menuid = menuid;
 
@@ -156,7 +207,7 @@ namespace DumpApp.Controllers
             operationsViewModel.rv = new ReturnValues();
             operationsViewModel.dumps = await dumpModel.ViewDetails(h);
             operationsViewModel.drpLocation = dumpModel.ListLocation();
-            operationsViewModel.drpDatabase = dumpModel.ListDatabase();
+            operationsViewModel.drpDatabase = await dumpModel.ListDatabase(operationsViewModel.dumps.DumpType == "Offsite" ? (int)operationsViewModel.dumps.LocationId : 1);
             operationsViewModel.drpTapeDevice = dumpModel.ListTapeDevice();
             operationsViewModel.menuid = menuid;
 

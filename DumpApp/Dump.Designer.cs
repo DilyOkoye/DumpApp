@@ -1160,7 +1160,7 @@ namespace DumpApp {
                 this.columnPassword.MaxLength = 2147483647;
                 this.columnlocationName.MaxLength = 256;
                 this.columnDeviceName.MaxLength = 256;
-                this.columnDatabaseName.MaxLength = 256;
+                this.columnDatabaseName.MaxLength = 100;
                 this.columnFullName.MaxLength = 50;
                 this.columnJobId.MaxLength = 100;
                 this.columnErrorMessage.MaxLength = 2147483647;
@@ -1722,7 +1722,7 @@ namespace DumpApp {
                 this.columnPassword.MaxLength = 2147483647;
                 this.columnlocationName.MaxLength = 256;
                 this.columnDeviceName.MaxLength = 256;
-                this.columnDatabaseName.MaxLength = 256;
+                this.columnDatabaseName.MaxLength = 100;
                 this.columnFullName.MaxLength = 50;
                 this.columnJobId.MaxLength = 100;
                 this.columnErrorMessage.MaxLength = 2147483647;

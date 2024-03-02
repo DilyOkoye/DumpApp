@@ -6,7 +6,6 @@
     <edmx:Diagrams>
       <Diagram DiagramId="7bb0c8b5f15543b18bb194b70cf4ceee" Name="Diagram1">
         <EntityTypeShape EntityType="DumpAppModel.admAuditTrail" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DumpAppModel.admClientProfile" Width="1.5" PointX="3.75" PointY="0.75" />
         <EntityTypeShape EntityType="DumpAppModel.admRole" Width="1.5" PointX="0.75" PointY="4.75" />
         <EntityTypeShape EntityType="DumpAppModel.admRoleAssignment" Width="1.5" PointX="2.75" PointY="4.75" />
         <EntityTypeShape EntityType="DumpAppModel.admStatusItem" Width="1.5" PointX="4.75" PointY="4.75" />
@@ -19,6 +18,9 @@
         <EntityTypeShape EntityType="DumpAppModel.admLocation" Width="1.5" PointX="7.375" PointY="10.75" />
         <EntityTypeShape EntityType="DumpAppModel.admDump" Width="1.5" PointX="9.375" PointY="3.75" />
         <EntityTypeShape EntityType="DumpAppModel.admLoad" Width="1.5" PointX="9.375" PointY="9.75" />
+        <EntityTypeShape EntityType="DumpAppModel.admClientProfile" Width="1.5" PointX="3.375" PointY="0.75" />
+        <EntityTypeShape EntityType="DumpAppModel.admLicenseSetUp" Width="1.5" PointX="11.375" PointY="0.75" />
+        <EntityTypeShape EntityType="DumpAppModel.admLicenseSetUpHistory" Width="1.5" PointX="11.375" PointY="4.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

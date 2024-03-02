@@ -14,6 +14,7 @@ namespace DumpApp.BAL.LoginModel
         private readonly IUserProfileRepository repoUserProfile;
         private readonly IClientProfileRepository repoClientProfile;
         private readonly IUserLoginRepository repoUserlogin;
+        private readonly ILicenseRepository repoLincence;
         private readonly IUnitOfWork unitOfWork;
         private readonly IDbFactory idbfactory;
 
@@ -24,6 +25,7 @@ namespace DumpApp.BAL.LoginModel
             repoUserProfile = new UserProfileRepository(idbfactory);
             repoUserlogin = new UserLoginRepository(idbfactory);
             repoClientProfile = new ClientProfileRepository(idbfactory);
+            repoLincence = new LicenseRepository(idbfactory);
 
         }
         public void LogUserLogin(admUserLogin user, int UserId, string AccountNo)
@@ -89,6 +91,40 @@ namespace DumpApp.BAL.LoginModel
                     };
                     return returnProp;
                 }
+
+                #region Check License
+                if (Username.ToUpper() != "SYSTEM")
+                {
+                    var linc = await repoLincence.Get(null);
+                    if (linc != null)
+                    {
+
+                        string dt = Cryptors.Decrypt(linc.EndDate,"DumpApp");
+                        double days = (Convert.ToDateTime(dt) - DateTime.Now).TotalDays;
+                        if (DateTime.Now > Convert.ToDateTime(dt))
+                        {
+
+                            returnProp.LicenseErrCode = -2;
+                            returnProp.LicenseErrMsg = string.Format("This Application License has Expired. Please contact {1} ", days, "IT for Renewal");
+
+                            return returnProp;
+
+                        }
+
+
+                        else if (Convert.ToInt32(Math.Abs(days)) <= 31)
+                        {
+
+                            returnProp.LicenseErrCode = -1;
+                            returnProp.LicenseErrMsg = string.Format("Your License will be Expiring in {0} Days time . Please contact {1} ", (Convert.ToInt32(Math.Abs(days))), "IT Limited for Renewal");
+
+
+                        }
+
+                    }
+
+                }
+                #endregion
 
                 if (admUserProfile.logincount >= cp.LoginCount)
                 {

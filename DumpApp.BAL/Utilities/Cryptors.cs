@@ -52,22 +52,15 @@ namespace DumpApp.BAL.Utilities
 
         public static string Decrypt(string strEncrypted, string strKey)
         {
-            try
-            {
-                TripleDESCryptoServiceProvider objDESCrypto = new TripleDESCryptoServiceProvider();
-                MD5CryptoServiceProvider objHashMD5 = new MD5CryptoServiceProvider();
-                byte[] byteHash, byteBuff;
-                byteHash = objHashMD5.ComputeHash(ASCIIEncoding.ASCII.GetBytes(strKey)); // Use the key for hashing
-                objDESCrypto.Key = byteHash;
-                objDESCrypto.Mode = CipherMode.ECB; // Note: Same note on ECB mode
-                byteBuff = Convert.FromBase64String(strEncrypted);
-                string strDecrypted = ASCIIEncoding.ASCII.GetString(objDESCrypto.CreateDecryptor().TransformFinalBlock(byteBuff, 0, byteBuff.Length));
-                return strDecrypted;
-            }
-            catch (Exception ex)
-            {
-                return "Error in decryption: " + ex.Message;
-            }
+            TripleDESCryptoServiceProvider objDESCrypto = new TripleDESCryptoServiceProvider();
+            MD5CryptoServiceProvider objHashMD5 = new MD5CryptoServiceProvider();
+            byte[] byteHash, byteBuff;
+            byteHash = objHashMD5.ComputeHash(ASCIIEncoding.ASCII.GetBytes(strKey)); // Use the key for hashing
+            objDESCrypto.Key = byteHash;
+            objDESCrypto.Mode = CipherMode.ECB; // Note: Same note on ECB mode
+            byteBuff = Convert.FromBase64String(strEncrypted);
+            string strDecrypted = ASCIIEncoding.ASCII.GetString(objDESCrypto.CreateDecryptor().TransformFinalBlock(byteBuff, 0, byteBuff.Length));
+            return strDecrypted;
         }
 
         public static DataTable GetTop20DumpRecords()
