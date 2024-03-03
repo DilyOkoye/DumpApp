@@ -168,7 +168,7 @@
             },
             success: function (data) {
                 if (data.nErrorCode == 0) {
-                    $('#searchResultsSuccess').hide();
+                    $('#searchResultsSuccess').show();
                     $('#searchResultsSuccess').html(data.sErrorText)
                     return;
                 }

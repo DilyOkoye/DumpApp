@@ -481,7 +481,7 @@ namespace DumpApp.Controllers
             if (adminviewModel.admTapeDevice != null)
             {
                 adminviewModel.dateCreated = adminviewModel.admTapeDevice.DateCreated != null ? adminviewModel.FormatDate(adminviewModel.admTapeDevice.DateCreated) : null;
-                adminviewModel.UsercreatedBy = adminviewModel.admUserProfile.CreatedBy == null ? "" : await roleModel.GetFullname((int)adminviewModel.admUserProfile.CreatedBy);
+                adminviewModel.UsercreatedBy = adminviewModel.admTapeDevice.UserId == null ? "" : await roleModel.GetFullname((int)adminviewModel.admTapeDevice.UserId);
 
             }
 

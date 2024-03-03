@@ -262,17 +262,19 @@
             data: JSON.stringify(formData), // Serialize the data as JSON
             success: function (data) {
                 if (data.nErrorCode == 0) {
-                    $('#searchResultsSuccess').hide();
+                    $('#searchResultsSuccess').show();
                     $('#searchResultsSuccess').html("Load Test Successful")
                     return;
                 }
                 else {
+                    $('#searchResultsSuccess').hide();
                     $('#searchResultsError').delay(800).slideDown(500);
                     $('#searchResultsError').html(data.sErrorText == null ? "Internal Error While Attempting Test Load" : data.sErrorText)
                     return;
                 }
             },
             error: function () {
+                $('#searchResultsSuccess').hide();
                 $('#searchResultsError').delay(800).slideDown(500);
                 $('#searchResultsError').html("Internal Error While Attempting Test Load")
             }
