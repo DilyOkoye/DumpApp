@@ -69,7 +69,7 @@ namespace DumpApp.BAL.LoginModel
                 var cp = await repoClientProfile.Get(null);
                 try
                 {
-                    admUserProfile = await repoUserProfile.Get(p => p.LoginId.ToUpper().Equals(Username.ToUpper().Trim()) && p.Status == "Active");
+                    admUserProfile = await repoUserProfile.Get(p => p.LoginId.ToUpper().Equals(Username.ToUpper().Trim()));
                 }
                 catch (Exception ex)
                 {
@@ -87,7 +87,18 @@ namespace DumpApp.BAL.LoginModel
                     {
                         ErrorCode = -101,
                         ErrorText =
-                            $"Login ID Credentials Does Not Exist. Please contact {cp.BankName} local contact center"
+                            $"Login Credentials Does Not Exist. Please contact {cp.BankName} local contact center"
+                    };
+                    return returnProp;
+                }
+
+                if (admUserProfile.Status == "In-Active")
+                {
+                    returnProp.ErrorDisplay = new ErrorDisplay()
+                    {
+                        ErrorCode = -101,
+                        ErrorText =
+                            $"User In-Active. Please contact {cp.BankName} local contact center"
                     };
                     return returnProp;
                 }

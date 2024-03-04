@@ -230,7 +230,7 @@ namespace DumpApp.Controllers
             adminviewModel.drpStatus = roleModel.ListStatus();
             if (adminviewModel.admRole != null)
             {
-                adminviewModel.UsercreatedBy = adminviewModel.admUserProfile.CreatedBy == null ? "" : await roleModel.GetFullname((int)adminviewModel.admUserProfile.CreatedBy);
+                adminviewModel.UsercreatedBy = adminviewModel.admRole.UserId == null ? "" : await roleModel.GetFullname((int)adminviewModel.admRole.UserId);
 
             }
             adminviewModel.menuid = menuid;

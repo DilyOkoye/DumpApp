@@ -128,6 +128,34 @@ namespace DumpApp.Controllers
 
 
         [HttpPost]
+        public async Task<JsonResult> LoadDatabaseOperation(Dumps dumps)
+        {
+            var rtv = new ReturnValues();
+            rtv.nErrorCode = -1;
+            var p = new OperationsViewModel()
+            {
+                dumps = new Dumps()
+                {
+                    Filename = dumps.Filename,
+                    DumpTypeCheck = dumps.DumpTypeCheck,
+                    DumpType = dumps.DumpType,
+                    LocationId = dumps.LocationId,
+                    TapeIdentifier = dumps.TapeIdentifier,
+                    DumpName = dumps.DumpName,
+                    DumpDescription = dumps.DumpDescription,
+                    DatebaseId = dumps.DatebaseId,
+                    TapeDeviceId = dumps.TapeDeviceId,
+                    OperationType = dumps.OperationType,
+                    Id = dumps.Id
+                }
+            };
+
+            rtv = await dumpModel.ProcessLoad(p, _userId, "Execute");
+            return Json(rtv, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<JsonResult> AddNewDump(OperationsViewModel p, string button)
         {

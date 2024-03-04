@@ -54,16 +54,17 @@
         </div>
     </div>
     <div class="col-sm-6">
-        <div class="panel panel-default">
+        <div style="overflow-x: auto; overflow-y: auto;" class="panel panel-default">
             <div class="panel-heading">Last 20 Dump(s)</div>
             <table class="table">
                 <thead>
                 <tr>
 
-                    <th width="20%">Tape Identifier</th>
-                    <th width="20%">Dump Date</th>
-                    <th width="20%">Database</th>
-                    <th width="20%">Status</th>
+                    <th>TapeId</th>
+                    <th>Filename</th>
+                    <th>Date</th>
+                    <th>DB</th>
+                    <th>Status</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -76,6 +77,7 @@
 
 
                         <td>@row.TapeIdentifier</td>
+                        <td>@row.Filename</td>
                         <td>@row.DumpDate</td>
                         <td>@row.DatebaseId</td>
                         <td style="width:50px">
@@ -107,16 +109,17 @@
 
     <div class="col-sm-6">
         <div class="table-responsive">
-            <div class="panel panel-default">
+            <div style="overflow-x: auto; overflow-y: auto;" class="panel panel-default">
                 <div class="panel-heading">Last 20 Load(s)</div>
                 <table class="table">
                     <thead>
                     <tr>
 
-                        <th width="20%">Tape Identifier</th>
-                        <th width="20%">Dump Date</th>
-                        <th width="20%">Database</th>
-                        <th width="20%">Status</th>
+                        <th>TapeId</th>
+                        <th>Filename</th>
+                        <th>Date</th>
+                        <th>DB</th>
+                        <th>Status</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -128,6 +131,7 @@
 
 
                             <td>@row.TapeIdentifier</td>
+                            <td>@row.Filename</td>
                             <td>@row.DumpDate</td>
                             <td>@row.DatebaseId</td>
                             <td style="width:50px">

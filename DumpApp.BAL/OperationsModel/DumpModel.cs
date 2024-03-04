@@ -263,7 +263,7 @@ namespace DumpApp.BAL.OperationsModel
         {
             var returnVal = new ReturnValues();
 
-            var t = await repoDumpRepository.Get(c => c.TapeIdentifier.ToUpper() == p.dumps.TapeIdentifier.ToUpper());
+            var t = await repoDumpRepository.Get(c => c.Id == p.dumps.Id);
             if (t is null)
             {
                 returnVal.nErrorCode = -2;
@@ -522,25 +522,10 @@ namespace DumpApp.BAL.OperationsModel
 
         public string GetTestLoadQuery(Dumps dump, string path)
         {
-            var query = string.Empty;
+            string query;
 
-            switch (dump.DumpTypeCheck)
-            {
-                case true when dump.DumpType == "Offsite":
-                    query =
-                        $"load database {dump.DatebaseId}  to '{path + dump.Filename}' with passwd = '{dump.Password}' with init go";
-                    break;
-                case false when dump.DumpType == "Offsite":
-                    query =
-                        $"load database {dump.DatebaseId}  to '{path + dump.Filename}' with passwd = '{dump.Password}'";
-                    break;
-                case true when dump.DumpType == "Internal":
-                    query = $"load database {dump.DatebaseId}  to '{path + dump.Filename}'  with init go";
-                    break;
-                case false when dump.DumpType == "Internal":
-                    query = $"load database  {dump.DatebaseId}  to '{path + dump.Filename}'";
-                    break;
-            }
+            query =
+                $"load database tempdb  from {path + dump.TapeName} with listonly";
 
             return query;
         }
@@ -553,17 +538,17 @@ namespace DumpApp.BAL.OperationsModel
             {
                 case true when dump.DumpType == "Offsite":
                     query =
-                        $"dump database {dump.DatebaseId}  to '{path + dump.Filename}' with passwd = '{dump.Password}' with init go";
+                        $"dump database model  to 'test' with passwd = '{dump.Password}'";
                     break;
                 case false when dump.DumpType == "Offsite":
                     query =
-                        $"dump database {dump.DatebaseId}  to '{path + dump.Filename}' with passwd = '{dump.Password}'";
+                        $"dump database model  to '{path}test' with passwd = '{dump.Password}'";
                     break;
                 case true when dump.DumpType == "Internal":
-                    query = $"dump database {dump.DatebaseId}  to '{path + dump.Filename}'  with init go";
+                    query = $"dump database model  to '{path}test'";
                     break;
                 case false when dump.DumpType == "Internal":
-                    query = $"dump database  {dump.DatebaseId}  to '{path + dump.Filename}'";
+                    query = $"dump database  model  to '{path}test'";
                     break;
             }
 
@@ -757,6 +742,7 @@ namespace DumpApp.BAL.OperationsModel
 
         public async Task<ReturnValues> ExecuteTestDump(Dumps dump)
         {
+            
             string path = System.Configuration.ConfigurationManager.AppSettings["DumpPath"];
 
             var sybaseLayer = new SybaseDataLayer();

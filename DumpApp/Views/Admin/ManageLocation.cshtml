@@ -54,7 +54,9 @@
                         <td>@row.Server</td>
                         <td>@row.Port</td>
                         <td>@row.Username</td>
-                        <td>@row.Password</td>
+                        <td>
+                            @string.Concat(Enumerable.Repeat("*", 8))
+                        </td>
                         <td>
                             @if (@row.Status == "Active")
                             {

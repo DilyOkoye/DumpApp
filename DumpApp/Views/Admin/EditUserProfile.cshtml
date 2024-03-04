@@ -47,13 +47,13 @@
                     <div role="form" class="form-horizontal">
 
                         <div class="form-group">
-                            <label class="col-sm-2 control-label" for="field-1">Login Id</label>
+                            <label class="col-sm-2 control-label" for="field-1">Login Name</label>
 
                             <div class="col-sm-10">
-                                @Html.HiddenFor(model => model.admUserProfile.UserId, new { @autocomplete = "off", @style = "text-transform:uppercase", @class = "form-control", @id = "LoginId", required = "required" })
+                                @Html.HiddenFor(model => model.admUserProfile.UserId, new { @autocomplete = "off",  @class = "form-control", @id = "LoginId", required = "required" })
 
 
-                                @Html.TextBoxFor(model => model.admUserProfile.LoginId, new { @autocomplete = "off", @style = "text-transform:uppercase", @class = "form-control", @id = "LoginId", required = "required" })
+                                @Html.TextBoxFor(model => model.admUserProfile.LoginId, new { @autocomplete = "off", @class = "form-control", @id = "LoginId", required = "required" })
                             </div>
                         </div>
 
