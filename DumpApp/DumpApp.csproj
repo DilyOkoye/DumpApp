@@ -1436,6 +1436,7 @@
     </Content>
     <Content Include="Deployment\DumpApp %285%29.zip" />
     <Content Include="Deployment\app.publish %289%29.zip" />
+    <Content Include="Deployment\Dump.zip" />
     <None Include="Dump.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
